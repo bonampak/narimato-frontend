@@ -1,6 +1,7 @@
 import React from "react";
 import Head from "next/head";
 import Image from "next/image";
+import Select from "react-select";
 import { useRouter } from "next/router";
 import CreatableSelect from "react-select/creatable";
 
@@ -244,6 +245,34 @@ function editCard() {
                                                     };
                                                 }
                                             )}
+                                        />
+
+                                        <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">
+                                            Is Parent Card?
+                                        </h1>
+                                        <Select
+                                            className="border-black border-2 my-2 w-full"
+                                            onChange={(e) => {
+                                                setFormInput({
+                                                    ...formInput,
+                                                    isParent: e.value
+                                                });
+                                            }}
+                                            defaultValue={
+                                                card.isParent
+                                                    ? {
+                                                          value: true,
+                                                          label: "Yes"
+                                                      }
+                                                    : {
+                                                          value: false,
+                                                          label: "No"
+                                                      }
+                                            }
+                                            options={[
+                                                { value: true, label: "Yes" },
+                                                { value: false, label: "No" }
+                                            ]}
                                         />
                                         {/* Submit Button */}
                                         <div className="flex justify-center mt-8">

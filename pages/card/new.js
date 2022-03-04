@@ -194,10 +194,10 @@ function createCard() {
                                             }
                                         )}
                                     />
+
                                     <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">
                                         Is Parent Card?
                                     </h1>
-
                                     <Select
                                         className="border-black border-2 my-2 w-full"
                                         onChange={(e) => {
