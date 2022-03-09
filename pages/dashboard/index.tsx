@@ -25,6 +25,18 @@ const Dashboard: NextPage = () => {
                         </span>
                     </section>
 
+                    {user?.organisation && (
+                        <section className="my-4 w-full p-5 rounded bg-blue-200 bg-opacity-90">
+                            <p className="text-lg">You are currently signed in with organisation &rsquo;{user.organisation.name}&rsquo;</p>
+                        </section>
+                    )}
+
+                    {!user?.organisation && (
+                        <section className="my-4 w-full p-5 rounded bg-blue-200 bg-opacity-90">
+                            <p className="text-lg">You are not signed in with any organisation</p>
+                        </section>
+                    )}
+
                     <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">
                         <h2 className="text-2xl font-bold">Nothing here yet</h2>
                         <p className="text-lg">This is the dashboard :)</p>
