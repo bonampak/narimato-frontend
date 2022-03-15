@@ -17,8 +17,8 @@ import type { AxiosResponse, AxiosError } from "axios";
 const CreateCard: NextPage = () => {
     const router: NextRouter = useRouter();
 
-    const [imageUrl, setImageUrl] = React.useState<null | string>(null);
-    const [previewImage, setPreviewImage] = React.useState<null | any>(null);
+    const [imageUrl, setImageUrl] = React.useState<null | string>(process.env.NODE_ENV !== "production" ? "http://localhost:3000/samp.jpg" : null);
+    const [previewImage, setPreviewImage] = React.useState<null | any>(process.env.NODE_ENV !== "production" ? "http://localhost:3000/samp.jpg" : null);
 
     const [hashtags, setHashtags] = React.useState<any[]>([]);
     const [selectedHashtags, setSelectedHashtags] = React.useState<any[]>([]);

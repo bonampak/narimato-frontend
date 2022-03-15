@@ -15,7 +15,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     const router: NextRouter = useRouter();
     const [isLoading, setIsLoading] = React.useState(false);
 
-    const [queryClient] = React.useState(() => new QueryClient({ defaultOptions: { queries: { retry: false } } }));
+    const [queryClient] = React.useState(() => new QueryClient({ defaultOptions: { queries: { retry: false, refetchOnWindowFocus: false } } }));
 
     React.useEffect(() => {
         // Google Tag Manager Init
