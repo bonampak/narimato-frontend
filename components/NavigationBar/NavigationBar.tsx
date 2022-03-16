@@ -17,8 +17,7 @@ const NavigationBar = () => {
         onSuccess: (response: AxiosResponse) => {
             const { data } = response.data;
             setShowPlayButton(data);
-        },
-        refetchOnWindowFocus: false
+        }
     });
 
     return (
@@ -89,6 +88,14 @@ const NavigationBar = () => {
 
                             <Link href="/organisations/manage">
                                 <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">Manage Organisations</a>
+                            </Link>
+
+                            <Link href="/hashtags/new">
+                                <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">Add Hashtag</a>
+                            </Link>
+
+                            <Link href="/hashtags/manage">
+                                <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">Manage Hashtags</a>
                             </Link>
 
                             <span className="block py-2.5 px-4 text-xs opacity-40 uppercase border-y-[0.5px] my-2">In Preview</span>

@@ -8,7 +8,7 @@ import { NextRouter, useRouter } from "next/router";
 
 import { withAuth, uploadImage } from "../../../utils";
 import { LoadingComponent, NavigationBarComponent } from "../../../components";
-import { cardGetAllHashtags, organisationGetOne, organisationUpdate } from "../../../api";
+import { hashtagGetAllTitles, organisationGetOne, organisationUpdate } from "../../../api";
 
 import type { NextPage } from "next";
 import type { AxiosResponse, AxiosError } from "axios";
@@ -40,7 +40,7 @@ const UpdateOrganisation: NextPage = () => {
         enabled: !!organisationId
     });
 
-    const { isLoading: isLoadingHashtag } = useQuery("hashtags", cardGetAllHashtags, {
+    const { isLoading: isLoadingHashtag } = useQuery("hashtags", hashtagGetAllTitles, {
         onSuccess: (response: AxiosResponse) => {
             const { data } = response.data;
             setHashtags(data);

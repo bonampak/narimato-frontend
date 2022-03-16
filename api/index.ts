@@ -5,7 +5,7 @@ export const authLogin = async (data: any) => await $http.post("/auth/login", da
 export const cardGetAll = async () => await $http.get(`/cards/`);
 export const cardGetAllByMe = async () => await $http.get(`/cards/user/me`);
 export const cardGetAllByUser = async (userId: string) => await $http.get(`/cards/user/${userId}`);
-export const cardGetAllHashtags = async () => await $http.get(`/cards/hashtags`);
+export const cardGetAllWithHashtags = async () => await $http.get(`/cards/with-hashtags`);
 export const cardCreate = async (data: any) => await $http.post(`/cards/`, data);
 export const cardGetOne = async (cardId: string) => await $http.get(`/cards/${cardId}`);
 export const cardDelete = async (cardId: string) => await $http.delete(`/cards/${cardId}`);
@@ -20,11 +20,13 @@ export const gameGetOne = async (gameId: string) => await $http.get(`/games/${ga
 export const gameDelete = async (gameId: string) => await $http.delete(`/games/${gameId}`);
 export const gameUpdate = async (gameId: string, data: any) => await $http.put(`/games/${gameId}`, data);
 
+// Game Play
 export const gameNewCard = async (gameId: string) => await $http.post(`games/${gameId}/card/new`);
 export const gameNewHashtag = async (gameId: string) => await $http.post(`games/${gameId}/hashtag/new`);
 export const gameAddLeftSwipedCard = async (gameId: string, data: any) => await $http.post(`games/${gameId}/card/add-left-swiped-card`, data);
 export const gameAddRightSwipedCard = async (gameId: string, data: any) => await $http.post(`games/${gameId}/card/add-right-swiped-card`, data);
 export const gameUpdateRightSwipedCards = async (gameId: string, data: any) => await $http.put(`games/${gameId}/card/update-right-swiped-cards`, data);
+
 export const gameAddLeftSwipedHashtag = async (gameId: string, data: any) => await $http.post(`games/${gameId}/hashtag/add-left-swiped-hashtag`, data);
 export const gameAddRightSwipedHashtag = async (gameId: string, data: any) => await $http.post(`games/${gameId}/hashtag/add-right-swiped-hashtag`, data);
 
@@ -42,6 +44,14 @@ export const userGetOne = async (userId: string) => await $http.get(`/users/${us
 export const userDelete = async (userId: string) => await $http.delete(`/users/${userId}`);
 export const userUpdate = async (userId: string, data: any) => await $http.put(`/users/${userId}`, data);
 export const userUpdateRole = async (userId: string, data: any) => await $http.patch(`/users/${userId}/update-role`, data);
+
+export const hashtagGetAll = async () => await $http.get(`/hashtags/`);
+export const hashtagGetAllTitles = async () => await $http.get(`/hashtags/titles`);
+export const hashtagGetAllWithParents = async () => await $http.get(`/hashtags/with-parents`);
+export const hashtagCreate = async (data: any) => await $http.post(`/hashtags/`, data);
+export const hashtagGetOne = async (hashtagId: string) => await $http.get(`/hashtags/${hashtagId}`);
+export const hashtagDelete = async (hashtagId: string) => await $http.delete(`/hashtags/${hashtagId}`);
+export const hashtagUpdate = async (hashtagId: string, data: any) => await $http.put(`/hashtags/${hashtagId}`, data);
 
 // export const demoGetAll = async () => await $http.get(`/demos/`);
 // export const demoGetAllByMe = async () => await $http.get(`/demos/mine`);

@@ -9,7 +9,7 @@ import { NextRouter, useRouter } from "next/router";
 import { uploadGreyImage } from "../../assets";
 import { withAuth, uploadImage } from "../../utils";
 import { NavigationBarComponent } from "../../components";
-import { cardGetAllHashtags, cardCreate } from "../../api";
+import { hashtagGetAllTitles, cardCreate } from "../../api";
 
 import type { NextPage } from "next";
 import type { AxiosResponse, AxiosError } from "axios";
@@ -23,7 +23,7 @@ const CreateCard: NextPage = () => {
     const [hashtags, setHashtags] = React.useState<any[]>([]);
     const [selectedHashtags, setSelectedHashtags] = React.useState<any[]>([]);
 
-    const {} = useQuery("hashtags", cardGetAllHashtags, {
+    const {} = useQuery("hashtags", hashtagGetAllTitles, {
         onSuccess: (response: AxiosResponse) => {
             const { data } = response.data;
             setHashtags(data);
@@ -112,17 +112,6 @@ const CreateCard: NextPage = () => {
                                             return { value: hashtag._id, label: hashtag.title };
                                         })}
                                         onChange={(selectedHashtags: any) => setSelectedHashtags(selectedHashtags)}
-                                    />
-
-                                    <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Is Parent Card?</h1>
-                                    <Select
-                                        name="isParent"
-                                        className="border-black border-2 my-2 w-full"
-                                        defaultValue={{ value: false, label: "No" }}
-                                        options={[
-                                            { value: true, label: "Yes" },
-                                            { value: false, label: "No" }
-                                        ]}
                                     />
 
                                     <div className="flex justify-center mt-8">

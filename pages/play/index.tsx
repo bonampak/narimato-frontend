@@ -74,6 +74,8 @@ const PlayCards: NextPage = () => {
         onError: (error: AxiosError) => {
             // Out of Cards for the Hashtag, Enter hashTagSwipeMode
             setPlayState({ isLoading: true, gameMode: "hashtag" });
+
+            console.log(error.response ? error.response.data.message : error.message);
         }
     });
 

@@ -33,7 +33,7 @@ function VoteCard({ gameId, rightSwipedCards, setPlayState }: VoteCardProps) {
     const { tempRightSwipedCards, newRightSwipedCard, voteRandomIndex } = voteCardState;
 
     React.useEffect(() => {
-        if (typeof tempRightSwipedCards[voteRandomIndex] === undefined) {
+        if (filteredCardsBySameHashtag.length === 0) {
             setPlayState({ isLoading: true, gameMode: "swipe" });
         }
     });
@@ -99,7 +99,7 @@ function VoteCard({ gameId, rightSwipedCards, setPlayState }: VoteCardProps) {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-8">
                     <div className="cursor-pointer" onClick={() => handleCardClick(newRightSwipedCard._id)}>
                         <div className="h-52 w-52 md:h-[30vw] md:w-[30vw] relative mx-auto">
-                            <Image src={newRightSwipedCard.imageUrlUrlUrlUrl} layout="fill" objectFit="cover" placeholder="blur" blurDataURL={LoadingImagePlacepholder} alt={newRightSwipedCard.title} />
+                            <Image src={newRightSwipedCard.imageUrl} layout="fill" objectFit="cover" placeholder="blur" blurDataURL={LoadingImagePlacepholder} alt={newRightSwipedCard.title} />
                         </div>
                         <h1 className="font-bold max-w-xs text-[4vh] mx-auto text-center mt-3">{newRightSwipedCard.title}</h1>
                         {/* <p className="text-center text-[4vh]">
@@ -114,7 +114,7 @@ function VoteCard({ gameId, rightSwipedCards, setPlayState }: VoteCardProps) {
                     <div className="cursor-pointer" onClick={() => handleCardClick(tempRightSwipedCards[voteRandomIndex]._id)}>
                         <div className="h-52 w-52 md:h-[30vw] md:w-[30vw] relative mx-auto">
                             <Image
-                                src={tempRightSwipedCards[voteRandomIndex].imageUrlUrlUrlUrl}
+                                src={tempRightSwipedCards[voteRandomIndex].imageUrl}
                                 layout="fill"
                                 objectFit="cover"
                                 placeholder="blur"
