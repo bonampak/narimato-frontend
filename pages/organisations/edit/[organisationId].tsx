@@ -8,7 +8,7 @@ import { NextRouter, useRouter } from "next/router";
 
 import { withAuth, uploadImage } from "../../../utils";
 import { LoadingComponent, NavigationBarComponent } from "../../../components";
-import { hashtagGetAllTitles, organisationGetOne, organisationUpdate } from "../../../api";
+import { hashtagGetAllWithParents, organisationGetOne, organisationUpdate } from "../../../api";
 
 import type { NextPage } from "next";
 import type { AxiosResponse, AxiosError } from "axios";
@@ -40,10 +40,11 @@ const UpdateOrganisation: NextPage = () => {
         enabled: !!organisationId
     });
 
-    const { isLoading: isLoadingHashtag } = useQuery("hashtags", hashtagGetAllTitles, {
+    const { isLoading: isLoadingHashtag } = useQuery("hashtags", hashtagGetAllWithParents, {
         onSuccess: (response: AxiosResponse) => {
             const { data } = response.data;
-            setHashtags(data);
+            // setHashtags(data);
+            setHashtags(data.filter((hashtag: any) => hashtag.parentHashtag === null));
         },
         onError: (error: AxiosError) => {
             toast.error(error.response ? error.response.data.message : error.message);
@@ -94,7 +95,7 @@ const UpdateOrganisation: NextPage = () => {
                                     <form onSubmit={handleSubmit}>
                                         <label htmlFor="upload-button">
                                             <div className="flex justify-center relative">
-                                                <Image src={previewImage || logoUrl} width={500} height={500} alt="organisation-image" />
+                                                <img src={previewImage || logoUrl} width={500} height={500} alt="organisation-image" />
                                                 {!previewImage && <div className="absolute w-full py-2.5 bottom-1/3 bg-blue-600 text-white text-xs text-center leading-4">Click here upload</div>}
                                             </div>
                                         </label>

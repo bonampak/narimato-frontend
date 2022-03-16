@@ -9,7 +9,7 @@ import { NextRouter, useRouter } from "next/router";
 import { uploadGreyImage } from "../../assets";
 import { withAuth, uploadImage } from "../../utils";
 import { NavigationBarComponent } from "../../components";
-import { hashtagGetAllTitles, organisationCreate } from "../../api";
+import { hashtagGetAllWithParents, organisationCreate } from "../../api";
 
 import type { NextPage } from "next";
 import type { AxiosResponse, AxiosError } from "axios";
@@ -23,10 +23,10 @@ const CreateOrganisation: NextPage = () => {
     const [hashtags, setHashtags] = React.useState<any[]>([]);
     const [selectedHashtags, setSelectedHashtags] = React.useState<any[]>([]);
 
-    const {} = useQuery("hashtags", hashtagGetAllTitles, {
+    const {} = useQuery("hashtags", hashtagGetAllWithParents, {
         onSuccess: (response: AxiosResponse) => {
             const { data } = response.data;
-            setHashtags(data);
+            setHashtags(data.filter((hashtag: any) => hashtag.parentHashtag === null));
         },
         onError: (error: AxiosError) => {
             toast.error(error.response ? error.response.data.message : error.message);
