@@ -115,6 +115,7 @@ function HashtagCard({ playState, setPlayState }: HashtagCardProps) {
 
                         <div className="mt-4 mb-8">
                             <h1 className="font-bold md:max-w-xs text-[5vh] mx-auto text-center">{hashtag.title}</h1>
+                            <p className="font-bold md:max-w-xs text-[2vh] mx-auto text-center">{hashtag.description}</p>
                         </div>
 
                         {setPlayState && (
@@ -140,6 +141,7 @@ function HashtagCard({ playState, setPlayState }: HashtagCardProps) {
 
                                 <div className="mt-4 w-full">
                                     <h1 className="font-bold md:max-w-xs text-[5vh] mx-auto text-center">{hashtag.title}</h1>
+                                    <p className="font-bold md:max-w-xs text-[2vh] mx-auto text-center">{hashtag.description}</p>
                                 </div>
                             </div>
                             {setPlayState && (

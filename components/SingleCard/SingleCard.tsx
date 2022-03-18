@@ -133,6 +133,7 @@ function SingleCard({ card, playState, setPlayState }: SingleCardProps) {
 
                         <div className="mt-4 mb-8">
                             <h1 className="font-bold md:max-w-xs text-[4vh] mx-auto text-center">{card.title}</h1>
+                            <p className="font-bold md:max-w-xs text-[2vh] mx-auto text-center">{card.description}</p>
                             {!setPlayState && (
                                 <p className="text-center text-[4vh]">
                                     {card.hashtags.map((hashtag: any) => (
@@ -167,6 +168,7 @@ function SingleCard({ card, playState, setPlayState }: SingleCardProps) {
 
                                 <div className="mt-4 w-full">
                                     <h1 className="font-bold md:max-w-xs text-[4vh] mx-auto text-center">{card.title}</h1>
+                                    <p className="font-bold md:max-w-xs text-[2vh] mx-auto text-center">{card.description}</p>
                                     {!setPlayState && (
                                         <p className="text-center text-[4vh]">
                                             {card.hashtags.map((hashtag: any) => (
