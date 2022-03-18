@@ -8,7 +8,6 @@
     ],
     "sub_header": "We are creating a unique workspace culture! We help you to build your SKILL MAP! Choose the cards that best suit you!",
     "CTA_button_text": "Get Started",
-
     "section_1_header": "How It Works!",
     "section_1_cards": [
         {
@@ -24,6 +23,12 @@
             "body": "View Results after you have played cards, using a complex algorithm we rank your matches."
         }
     ],
+    "footer_extra_text": "All rights reserved.",
 
-    "footer_extra_text": "All rights reserved."
+    "navigation_bar": {
+        "play_btn": {
+            "with_cards": "Play Cards",
+            "with_cards_desc": "Play cards to build up your rank"
+        }
+    }
 }

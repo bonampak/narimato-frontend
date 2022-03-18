@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 
 import { useUser } from "../../utils";
 import { gameCheckIfNewCard } from "../../api";
+import Text from "../../text.json";
 
 import type { AxiosResponse } from "axios";
 
@@ -54,7 +55,11 @@ const NavigationBar = () => {
 
                     {showPlayButton ? (
                         <Link href="/play">
-                            <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">Play Cards</a>
+                            <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">
+                                {Text.navigation_bar.play_btn.with_cards}
+                                <br />
+                                <span className="text-xs">{Text.navigation_bar.play_btn.with_cards_desc}</span>
+                            </a>
                         </Link>
                     ) : (
                         <span className="block py-2.5 px-4 rounded transition duration-200 opacity-40 hover:text-white">{isCheckingForNewCard ? "Loading" : "No new Card"}</span>
