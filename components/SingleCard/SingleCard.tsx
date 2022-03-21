@@ -3,8 +3,8 @@ import React from "react";
 import Image from "next/image";
 import { toast } from "react-toastify";
 import { useMutation } from "react-query";
+import TinderCard from "react-tinder-card";
 import { useKeyPressEvent } from "react-use";
-import { useSwipeable } from "react-swipeable";
 
 import { LoadingImagePlacepholder } from "../../assets";
 import { CardYesButton, CardNoButton, LoadingComponent } from "../../components";
@@ -20,6 +20,7 @@ type SingleCardProps = {
 
 function SingleCard({ card, playState, setPlayState }: SingleCardProps) {
     const cardId = card._id;
+    const tinderCardRef = React.createRef<any>();
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -50,20 +51,6 @@ function SingleCard({ card, playState, setPlayState }: SingleCardProps) {
             toast.error("Something went wrong, please try again.");
         }
     });
-
-    let reactSwipeableHandler = null;
-
-    if (setPlayState) {
-        // Key Press Event Handlers
-        useKeyPressEvent("ArrowRight", () => handleAnswerClick(true));
-        useKeyPressEvent("ArrowLeft", () => handleAnswerClick(false));
-
-        // Swipe Event Handlers
-        reactSwipeableHandler = useSwipeable({
-            onSwipedRight: () => handleAnswerClick(true),
-            onSwipedLeft: () => handleAnswerClick(false)
-        });
-    }
 
     const handleAnswerClick = async (answer: boolean) => {
         // If loading something, don't do anything
@@ -119,12 +106,26 @@ function SingleCard({ card, playState, setPlayState }: SingleCardProps) {
         setIsLoading(false);
     };
 
+    if (setPlayState) {
+        // Key Press Event Handlers
+        useKeyPressEvent("ArrowRight", () => tinderCardRef.current.swipe("right"));
+        useKeyPressEvent("ArrowLeft", () => tinderCardRef.current.swipe("left"));
+    }
+
+    // Swipe Event Handlers
+    const handleSwipe = (direction: string) => {
+        if (!setPlayState) return;
+
+        if (direction === "right") handleAnswerClick(true);
+        if (direction === "left") handleAnswerClick(false);
+    };
+
     return (
         <>
             {isLoading ? <LoadingComponent /> : null}
 
             {!isLoading && (
-                <div {...(reactSwipeableHandler ? reactSwipeableHandler : {})}>
+                <TinderCard ref={tinderCardRef} onSwipe={handleSwipe} preventSwipe={["up", "down", setPlayState ? "" : "right", setPlayState ? "" : "left"]}>
                     {/* Potrait View */}
                     <div className="mt-2 mb-5 p-4 hidden portrait:block">
                         <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
@@ -148,7 +149,7 @@ function SingleCard({ card, playState, setPlayState }: SingleCardProps) {
                         {setPlayState && (
                             <div className="flex justify-center mb-4">
                                 <CardNoButton onClickHandler={() => handleAnswerClick(false)} />
-                                <CardYesButton onClickHandler={(e) => handleAnswerClick(true)} />
+                                <CardYesButton onClickHandler={() => handleAnswerClick(true)} />
                             </div>
                         )}
                     </div>
@@ -158,7 +159,7 @@ function SingleCard({ card, playState, setPlayState }: SingleCardProps) {
                         <div className="grid grid-cols-4">
                             {setPlayState && (
                                 <div className="flex justify-center my-auto">
-                                    <CardNoButton onClickHandler={() => handleAnswerClick(false)} />
+                                    <CardNoButton onClickHandler={() => handleAnswerClick(true)} />
                                 </div>
                             )}
                             <div className={setPlayState ? "col-span-2" : "col-span-full"}>
@@ -183,12 +184,12 @@ function SingleCard({ card, playState, setPlayState }: SingleCardProps) {
 
                             {setPlayState && (
                                 <div className="flex justify-center my-auto">
-                                    <CardYesButton onClickHandler={(e) => handleAnswerClick(true)} />
+                                    <CardYesButton onClickHandler={() => handleAnswerClick(true)} />
                                 </div>
                             )}
                         </div>
                     </div>
-                </div>
+                </TinderCard>
             )}
         </>
     );

@@ -2,9 +2,9 @@ import React from "react";
 import Image from "next/image";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
-import { useKeyPressEvent } from "react-use";
-import { useSwipeable } from "react-swipeable";
 import { useMutation } from "react-query";
+import TinderCard from "react-tinder-card";
+import { useKeyPressEvent } from "react-use";
 
 import { LoadingImagePlacepholder } from "../../assets";
 import { CardYesButton, CardNoButton, LoadingComponent } from "../../components";
@@ -19,6 +19,7 @@ type HashtagCardProps = {
 
 function HashtagCard({ playState, setPlayState }: HashtagCardProps) {
     const router = useRouter();
+    const tinderCardRef = React.createRef<any>();
 
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
     const [hashtag, setHashtag] = React.useState<null | any>(null);
@@ -52,14 +53,15 @@ function HashtagCard({ playState, setPlayState }: HashtagCardProps) {
     });
 
     // Key Press Event Handlers
-    useKeyPressEvent("ArrowRight", () => handleHashtagClick(true));
-    useKeyPressEvent("ArrowLeft", () => handleHashtagClick(false));
+    useKeyPressEvent("ArrowRight", () => tinderCardRef.current.swipe("right"));
+    useKeyPressEvent("ArrowLeft", () => tinderCardRef.current.swipe("left"));
 
     // Swipe Event Handlers
-    const reactSwipeableHandler = useSwipeable({
-        onSwipedLeft: () => handleHashtagClick(false),
-        onSwipedRight: () => handleHashtagClick(true)
-    });
+    const handleSwipe = (direction: string) => {
+        if (!setPlayState || isLoading) return;
+        if (direction === "right") handleHashtagClick(true);
+        if (direction === "left") handleHashtagClick(false);
+    };
 
     const handleHashtagClick = async (answer: boolean) => {
         // If loading something, don't do anything
@@ -106,7 +108,7 @@ function HashtagCard({ playState, setPlayState }: HashtagCardProps) {
             {isLoading && <LoadingComponent />}
 
             {!isLoading && hashtag && (
-                <div {...reactSwipeableHandler}>
+                <TinderCard ref={tinderCardRef} onSwipe={handleSwipe} preventSwipe={["up", "down", setPlayState ? "" : "right", setPlayState ? "" : "left"]}>
                     {/* Potrait */}
                     <div className="mt-2 mb-5 p-4 hidden portrait:block">
                         <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
@@ -121,7 +123,7 @@ function HashtagCard({ playState, setPlayState }: HashtagCardProps) {
                         {setPlayState && (
                             <div className="flex justify-center mb-4">
                                 <CardNoButton onClickHandler={() => handleHashtagClick(false)} />
-                                <CardYesButton onClickHandler={(e) => handleHashtagClick(true)} />
+                                <CardYesButton onClickHandler={() => handleHashtagClick(true)} />
                             </div>
                         )}
                     </div>
@@ -146,12 +148,12 @@ function HashtagCard({ playState, setPlayState }: HashtagCardProps) {
                             </div>
                             {setPlayState && (
                                 <div className="flex justify-center my-auto">
-                                    <CardYesButton onClickHandler={(e) => handleHashtagClick(true)} />
+                                    <CardYesButton onClickHandler={() => handleHashtagClick(true)} />
                                 </div>
                             )}
                         </div>
                     </div>
-                </div>
+                </TinderCard>
             )}
         </>
     );
