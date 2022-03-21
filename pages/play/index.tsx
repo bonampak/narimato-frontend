@@ -102,7 +102,7 @@ const PlayCards: NextPage = () => {
 
                     {gameId && !isCreatingGame && !isAddingNewCard && !isLoading && (
                         <>
-                            <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">Play Cards</section>
+                            {/* <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">Play Cards</section> */}
 
                             {gameMode === "swipe" && typeof allCards[currentCard - 1] !== undefined && (
                                 <SingleCard card={allCards[currentCard - 1]} playState={playState} setPlayState={setPlayState} />
