@@ -34,6 +34,7 @@ export const organisationGetAll = async () => await $http.get(`/organisations/`)
 export const organisationCreate = async (data: any) => await $http.post(`/organisations/`, data);
 export const organisationGetOne = async (organisationId: string) => await $http.get(`/organisations/${organisationId}`);
 export const organisationGetOneBySlugUrl = async (slugUrl: string) => await $http.get(`/organisations/slug/${slugUrl}`);
+export const organisationGetOneExportData = async (organisationId: string) => await $http.get(`/organisations/export/${organisationId}`);
 export const organisationDelete = async (organisationId: string) => await $http.delete(`/organisations/${organisationId}`);
 export const organisationUpdate = async (organisationId: string, data: any) => await $http.put(`/organisations/${organisationId}`, data);
 

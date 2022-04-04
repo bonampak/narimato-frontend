@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { NextRouter, useRouter } from "next/router";
 
 import { withAuth } from "../../../utils";
-import { organisationGetOne } from "../../../api";
+import { organisationGetOne, organisationGetOneExportData } from "../../../api";
 import { LoadingComponent, NavigationBarComponent } from "../../../components";
 
 import type { NextPage } from "next";
@@ -16,11 +16,25 @@ const ExportOrganisation: NextPage = () => {
 
     const { organisationId } = router.query;
     const [organisation, setOrganisation] = React.useState<null | any>(null);
+    const [organisationExportData, setOrganisationExportData] = React.useState<null | any>(null);
 
     const { isLoading } = useQuery(["organisation", organisationId], () => organisationGetOne(organisationId as string), {
         onSuccess: (response: AxiosResponse) => {
             const { data } = response.data;
             setOrganisation(data);
+        },
+        onError: (error: AxiosError) => {
+            toast.error(error.response ? error.response.data.message : error.message, {
+                onClose: () => router.push("/dashboard")
+            });
+        },
+        enabled: !!organisationId
+    });
+
+    const { isLoading: isLoadingExport } = useQuery(["organisation-export", organisationId], () => organisationGetOneExportData(organisationId as string), {
+        onSuccess: (response: AxiosResponse) => {
+            const { data } = response.data;
+            setOrganisationExportData(data);
         },
         onError: (error: AxiosError) => {
             toast.error(error.response ? error.response.data.message : error.message, {
@@ -40,14 +54,66 @@ const ExportOrganisation: NextPage = () => {
                 <NavigationBarComponent />
 
                 <div className="flex-1 p-10 text-2xl font-bold max-h-screen overflow-y-auto">
-                    {isLoading && !organisation && <LoadingComponent />}
+                    {(isLoading || isLoadingExport) && !organisation && !organisationExportData && <LoadingComponent />}
 
-                    {!isLoading && organisation && (
+                    {!isLoading && !isLoadingExport && organisation && (
                         <div className="items-center justify-center">
                             <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">Organisation - {organisation.name}</section>
 
                             <div className="mb-10">
-                                <h1>working on it...</h1>
+                                <div className="overflow-x-auto">
+                                    <table className="table-auto w-full">
+                                        <thead className="bg-blue-600">
+                                            <tr>
+                                                <th className="px-4 py-2 text-xs text-white text-left">User </th>
+                                                <th className="px-4 py-2 text-xs text-white text-left" />
+                                                <th className="px-4 py-2 text-xs text-white text-left" />
+                                            </tr>
+                                        </thead>
+                                        <tbody className="text-sm">
+                                            {organisationExportData.users.map((user: any, index: number) => (
+                                                <React.Fragment key={user._id}>
+                                                    <tr className="bg">
+                                                        <td colSpan={4} className="px-4 py-3 " />
+                                                    </tr>
+
+                                                    <tr className="bg-green-300">
+                                                        <td colSpan={4} className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
+                                                            {++index} &mdash; {user.codeName}
+                                                        </td>
+                                                    </tr>
+
+                                                    {(() => {
+                                                        const myGame = organisationExportData.games.find((game: any) => game.user === user._id);
+
+                                                        const allCards = myGame.rightSwipedCards.concat(myGame.leftSwipedCards);
+                                                        const allHashtags = myGame.rightSwipedHashtags.concat(myGame.leftSwipedHashtags);
+
+                                                        return allHashtags.map((hashtag: any, mapIndex: number) => (
+                                                            <React.Fragment key={mapIndex}>
+                                                                <tr className="bg-gray-500">
+                                                                    <td colSpan={4} className="text-xl px-4 py-2 text-white font-medium">
+                                                                        {hashtag.title} - {myGame.rightSwipedHashtags.map((hashtag: any) => hashtag._id).includes(hashtag._id) ? "✅" : "❌"}
+                                                                    </td>
+                                                                </tr>
+
+                                                                {allCards.map((card: any, index: number) => (
+                                                                    <tr key={card._id}>
+                                                                        <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{++index}</td>
+                                                                        <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{card.title}</td>
+                                                                        <td className="border px-4 py-2 border-blue-500 text-center font-medium">
+                                                                            {myGame.rightSwipedCards.map((card: any) => card._id).includes(card._id) ? "✅" : "❌"}
+                                                                        </td>
+                                                                    </tr>
+                                                                ))}
+                                                            </React.Fragment>
+                                                        ));
+                                                    })()}
+                                                </React.Fragment>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     )}
