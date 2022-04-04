@@ -42,7 +42,7 @@ const Dashboard: NextPage = () => {
                         <p className="text-lg">This is the dashboard :)</p>
                     </section>
 
-                    <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">
+                    {/* <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">
                         <h2 className="text-2xl font-bold">Quick Links</h2>
                         <ul className="list-disc list-inside mt-5">
                             <li>
@@ -66,7 +66,7 @@ const Dashboard: NextPage = () => {
                                 </Link>
                             </li>
                         </ul>
-                    </section>
+                    </section> */}
                 </div>
             </div>
         </>
