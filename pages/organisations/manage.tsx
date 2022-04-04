@@ -87,6 +87,9 @@ const ManageOrganisation: NextPage = () => {
                                                                 <Link href={`/organisations/edit/${organisation._id}`}>
                                                                     <a className="px-2">Edit</a>
                                                                 </Link>
+                                                                <Link href={`/organisations/export/${organisation._id}`}>
+                                                                    <a className="px-2 text-green-600">Export</a>
+                                                                </Link>
                                                                 <button onClick={() => handleDeleteOrganisation(organisation._id)} className="px-2">
                                                                     <a className="text-red-600">Delete</a>
                                                                 </button>
