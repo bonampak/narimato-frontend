@@ -71,15 +71,17 @@ const AboutMe = () => {
                                                     {allHashtags.map((hashtag: any, index: number) => {
                                                         return (
                                                             <React.Fragment key={index}>
-                                                                <h1 className="text-2xl font-bold my-3">
-                                                                    {hashtag.title} - {myGame.rightSwipedHashtags.map((hashtag: any) => hashtag._id).includes(hashtag._id) ? "✅" : "❌"}
-                                                                </h1>
+                                                                <tr className="bg-gray-500">
+                                                                    <td colSpan={4} className="text-xl px-4 py-2 text-white font-medium">
+                                                                        {hashtag.title} - {myGame.rightSwipedHashtags.map((hashtag: any) => hashtag._id).includes(hashtag._id) ? "✅" : "❌"}
+                                                                    </td>
+                                                                </tr>
 
                                                                 {allCards
                                                                     .filter((card: any) => card.hashtags.map((h: any) => h._id).includes(hashtag._id))
                                                                     .map((card: any) => (
                                                                         <tr key={card._id}>
-                                                                            <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{index + 1}</td>
+                                                                            <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{++index}</td>
                                                                             <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{card.title}</td>
                                                                             <td className="border px-4 py-2 border-blue-500 text-center font-medium">
                                                                                 {myGame.rightSwipedCards.map((card: any) => card._id).includes(card._id) ? "✅" : "❌"}
