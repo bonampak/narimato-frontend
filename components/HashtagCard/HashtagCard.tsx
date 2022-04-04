@@ -108,17 +108,19 @@ function HashtagCard({ playState, setPlayState }: HashtagCardProps) {
             {isLoading && <LoadingComponent />}
 
             {!isLoading && hashtag && (
-                <TinderCard ref={tinderCardRef} onSwipe={handleSwipe} preventSwipe={["up", "down", setPlayState ? "" : "right", setPlayState ? "" : "left"]}>
+                <>
                     {/* Potrait */}
                     <div className="mt-2 mb-5 p-4 hidden portrait:block">
-                        <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
-                            <Image src={hashtag.imageUrl} alt="hashtag-image" layout="fill" objectFit="cover" placeholder="blur" blurDataURL={LoadingImagePlacepholder} />
-                        </div>
+                        <TinderCard ref={tinderCardRef} onSwipe={handleSwipe} preventSwipe={["up", "down", setPlayState ? "" : "right", setPlayState ? "" : "left"]}>
+                            <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
+                                <Image src={hashtag.imageUrl} alt="hashtag-image" layout="fill" objectFit="cover" placeholder="blur" blurDataURL={LoadingImagePlacepholder} />
+                            </div>
 
-                        <div className="mt-4 mb-8">
-                            <h1 className="font-bold md:max-w-xs text-[5vh] mx-auto text-center">{hashtag.title}</h1>
-                            <p className="font-bold md:max-w-xs text-[2vh] mx-auto text-center">{hashtag.description}</p>
-                        </div>
+                            <div className="mt-4 mb-8">
+                                <h1 className="font-bold md:max-w-xs text-[5vh] mx-auto text-center">{hashtag.title}</h1>
+                                <p className="font-bold md:max-w-xs text-[2vh] mx-auto text-center">{hashtag.description}</p>
+                            </div>
+                        </TinderCard>
 
                         {setPlayState && (
                             <div className="flex justify-center mb-4">
@@ -137,14 +139,16 @@ function HashtagCard({ playState, setPlayState }: HashtagCardProps) {
                                 </div>
                             )}
                             <div className={setPlayState ? "col-span-2" : "col-span-full"}>
-                                <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
-                                    <Image src={hashtag.imageUrl} layout="fill" objectFit="cover" placeholder="blur" blurDataURL={LoadingImagePlacepholder} alt="hashtag" />
-                                </div>
+                                <TinderCard ref={tinderCardRef} onSwipe={handleSwipe} preventSwipe={["up", "down", setPlayState ? "" : "right", setPlayState ? "" : "left"]}>
+                                    <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
+                                        <Image src={hashtag.imageUrl} layout="fill" objectFit="cover" placeholder="blur" blurDataURL={LoadingImagePlacepholder} alt="hashtag" />
+                                    </div>
 
-                                <div className="mt-4 w-full">
-                                    <h1 className="font-bold md:max-w-xs text-[5vh] mx-auto text-center">{hashtag.title}</h1>
-                                    <p className="font-bold md:max-w-xs text-[2vh] mx-auto text-center">{hashtag.description}</p>
-                                </div>
+                                    <div className="mt-4 w-full">
+                                        <h1 className="font-bold md:max-w-xs text-[5vh] mx-auto text-center">{hashtag.title}</h1>
+                                        <p className="font-bold md:max-w-xs text-[2vh] mx-auto text-center">{hashtag.description}</p>
+                                    </div>
+                                </TinderCard>
                             </div>
                             {setPlayState && (
                                 <div className="flex justify-center my-auto">
@@ -153,7 +157,7 @@ function HashtagCard({ playState, setPlayState }: HashtagCardProps) {
                             )}
                         </div>
                     </div>
-                </TinderCard>
+                </>
             )}
         </>
     );

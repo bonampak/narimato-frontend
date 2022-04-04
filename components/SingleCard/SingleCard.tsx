@@ -125,26 +125,28 @@ function SingleCard({ card, playState, setPlayState }: SingleCardProps) {
             {isLoading ? <LoadingComponent /> : null}
 
             {!isLoading && (
-                <TinderCard ref={tinderCardRef} onSwipe={handleSwipe} preventSwipe={["up", "down", setPlayState ? "" : "right", setPlayState ? "" : "left"]}>
+                <>
                     {/* Potrait View */}
                     <div className="mt-2 mb-5 p-4 hidden portrait:block">
-                        <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
-                            <Image src={card.imageUrl} layout="fill" objectFit="cover" placeholder="blur" blurDataURL={LoadingImagePlacepholder} alt={card.title} />
-                        </div>
+                        <TinderCard ref={tinderCardRef} onSwipe={handleSwipe} preventSwipe={["up", "down", setPlayState ? "" : "right", setPlayState ? "" : "left"]}>
+                            <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
+                                <Image src={card.imageUrl} layout="fill" objectFit="cover" placeholder="blur" blurDataURL={LoadingImagePlacepholder} alt={card.title} />
+                            </div>
 
-                        <div className="mt-4 mb-8">
-                            <h1 className="font-bold md:max-w-xs text-[4vh] mx-auto text-center">{card.title}</h1>
-                            <p className="font-bold md:max-w-xs text-[2vh] mx-auto text-center">{card.description}</p>
-                            {!setPlayState && (
-                                <p className="text-center text-[4vh]">
-                                    {card.hashtags.map((hashtag: any) => (
-                                        <span key={hashtag._id} className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
-                                            #{hashtag.title}
-                                        </span>
-                                    ))}
-                                </p>
-                            )}
-                        </div>
+                            <div className="mt-4 mb-8">
+                                <h1 className="font-bold md:max-w-xs text-[4vh] mx-auto text-center">{card.title}</h1>
+                                <p className="font-bold md:max-w-xs text-[2vh] mx-auto text-center">{card.description}</p>
+                                {!setPlayState && (
+                                    <p className="text-center text-[4vh]">
+                                        {card.hashtags.map((hashtag: any) => (
+                                            <span key={hashtag._id} className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
+                                                #{hashtag.title}
+                                            </span>
+                                        ))}
+                                    </p>
+                                )}
+                            </div>
+                        </TinderCard>
 
                         {setPlayState && (
                             <div className="flex justify-center mb-4">
@@ -163,23 +165,25 @@ function SingleCard({ card, playState, setPlayState }: SingleCardProps) {
                                 </div>
                             )}
                             <div className={setPlayState ? "col-span-2" : "col-span-full"}>
-                                <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
-                                    <Image src={card.imageUrl} layout="fill" objectFit="cover" placeholder="blur" blurDataURL={LoadingImagePlacepholder} alt={card.title} />
-                                </div>
+                                <TinderCard ref={tinderCardRef} onSwipe={handleSwipe} preventSwipe={["up", "down", setPlayState ? "" : "right", setPlayState ? "" : "left"]}>
+                                    <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
+                                        <Image src={card.imageUrl} layout="fill" objectFit="cover" placeholder="blur" blurDataURL={LoadingImagePlacepholder} alt={card.title} />
+                                    </div>
 
-                                <div className="mt-4 w-full">
-                                    <h1 className="font-bold md:max-w-xs text-[4vh] mx-auto text-center">{card.title}</h1>
-                                    <p className="font-bold md:max-w-xs text-[2vh] mx-auto text-center">{card.description}</p>
-                                    {!setPlayState && (
-                                        <p className="text-center text-[4vh]">
-                                            {card.hashtags.map((hashtag: any) => (
-                                                <span key={hashtag._id} className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
-                                                    #{hashtag.title}
-                                                </span>
-                                            ))}
-                                        </p>
-                                    )}
-                                </div>
+                                    <div className="mt-4 w-full">
+                                        <h1 className="font-bold md:max-w-xs text-[4vh] mx-auto text-center">{card.title}</h1>
+                                        <p className="font-bold md:max-w-xs text-[2vh] mx-auto text-center">{card.description}</p>
+                                        {!setPlayState && (
+                                            <p className="text-center text-[4vh]">
+                                                {card.hashtags.map((hashtag: any) => (
+                                                    <span key={hashtag._id} className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
+                                                        #{hashtag.title}
+                                                    </span>
+                                                ))}
+                                            </p>
+                                        )}
+                                    </div>
+                                </TinderCard>
                             </div>
 
                             {setPlayState && (
@@ -189,7 +193,7 @@ function SingleCard({ card, playState, setPlayState }: SingleCardProps) {
                             )}
                         </div>
                     </div>
-                </TinderCard>
+                </>
             )}
         </>
     );
