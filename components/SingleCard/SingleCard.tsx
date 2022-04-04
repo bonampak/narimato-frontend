@@ -161,7 +161,7 @@ function SingleCard({ card, playState, setPlayState }: SingleCardProps) {
                         <div className="grid grid-cols-4">
                             {setPlayState && (
                                 <div className="flex justify-center my-auto">
-                                    <CardNoButton onClickHandler={() => handleAnswerClick(true)} />
+                                    <CardNoButton onClickHandler={() => handleAnswerClick(false)} />
                                 </div>
                             )}
                             <div className={setPlayState ? "col-span-2" : "col-span-full"}>
