@@ -3,10 +3,12 @@ import Head from "next/head";
 import { useQuery } from "react-query";
 import { toast } from "react-toastify";
 import { NextRouter, useRouter } from "next/router";
+// @ts-ignore
+import ReactHTMLTableToExcel from "react-html-table-to-excel";
 
 import { withAuth } from "../../../utils";
-import { organisationGetOne, organisationGetOneExportData } from "../../../api";
 import { LoadingComponent, NavigationBarComponent } from "../../../components";
+import { organisationGetOne, organisationGetOneExportData } from "../../../api";
 
 import type { NextPage } from "next";
 import type { AxiosResponse, AxiosError } from "axios";
@@ -60,9 +62,20 @@ const ExportOrganisation: NextPage = () => {
                         <div className="items-center justify-center">
                             <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">Organisation - {organisation.name}</section>
 
+                            <div className="flex justify-end">
+                                <ReactHTMLTableToExcel
+                                    id="organisation-data-export-button"
+                                    className="my-3 py-1 px-2 rounded-lg bg-blue-600 text-white text-lg"
+                                    table="organisation-data-export"
+                                    filename={`${organisation.name}-data-export`}
+                                    sheet="page 1"
+                                    buttonText="Export as Excel Sheet"
+                                />
+                            </div>
+
                             <div className="mb-10">
                                 <div className="overflow-x-auto">
-                                    <table className="table-auto w-full">
+                                    <table className="table-auto w-full" id="organisation-data-export">
                                         <thead className="bg-blue-600">
                                             <tr>
                                                 <th className="px-4 py-2 text-xs text-white text-left">User </th>
@@ -74,11 +87,11 @@ const ExportOrganisation: NextPage = () => {
                                             {organisationExportData.users.map((user: any, index: number) => (
                                                 <React.Fragment key={user._id}>
                                                     <tr className="bg">
-                                                        <td colSpan={4} className="px-4 py-3 " />
+                                                        <td colSpan={3} className="px-4 py-2 " />
                                                     </tr>
 
                                                     <tr className="bg-green-300">
-                                                        <td colSpan={4} className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
+                                                        <td colSpan={3} className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
                                                             {++index} &mdash; {user.codeName}
                                                         </td>
                                                     </tr>
@@ -92,7 +105,7 @@ const ExportOrganisation: NextPage = () => {
                                                         return allHashtags.map((hashtag: any, mapIndex: number) => (
                                                             <React.Fragment key={mapIndex}>
                                                                 <tr className="bg-gray-500">
-                                                                    <td colSpan={4} className="text-xl px-4 py-2 text-white font-medium">
+                                                                    <td colSpan={3} className="text-xl px-4 py-2 text-white font-medium">
                                                                         {hashtag.title} - {myGame.rightSwipedHashtags.map((hashtag: any) => hashtag._id).includes(hashtag._id) ? "✅" : "❌"}
                                                                     </td>
                                                                 </tr>
