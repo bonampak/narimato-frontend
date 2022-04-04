@@ -68,9 +68,9 @@ const AboutMe = () => {
                                                     </tr>
                                                 </thead>
                                                 <tbody className="text-sm">
-                                                    {allHashtags.map((hashtag: any, index: number) => {
+                                                    {allHashtags.map((hashtag: any, mapIndex: number) => {
                                                         return (
-                                                            <React.Fragment key={index}>
+                                                            <React.Fragment key={mapIndex}>
                                                                 <tr className="bg-gray-500">
                                                                     <td colSpan={4} className="text-xl px-4 py-2 text-white font-medium">
                                                                         {hashtag.title} - {myGame.rightSwipedHashtags.map((hashtag: any) => hashtag._id).includes(hashtag._id) ? "✅" : "❌"}
@@ -79,7 +79,7 @@ const AboutMe = () => {
 
                                                                 {allCards
                                                                     .filter((card: any) => card.hashtags.map((h: any) => h._id).includes(hashtag._id))
-                                                                    .map((card: any) => (
+                                                                    .map((card: any, index: number) => (
                                                                         <tr key={card._id}>
                                                                             <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{++index}</td>
                                                                             <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{card.title}</td>
