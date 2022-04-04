@@ -61,7 +61,7 @@ const Dashboard: NextPage = () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/logout">
+                                <Link href="/auth/logout">
                                     <a className="text-blue-600 text-base lg:md:sm:text-lg">Logout</a>
                                 </Link>
                             </li>
