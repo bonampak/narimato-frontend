@@ -51,6 +51,11 @@ const Dashboard: NextPage = () => {
                                 </Link>
                             </li>
                             <li>
+                                <Link href="/play">
+                                    <a className="text-blue-600 text-base lg:md:sm:text-lg">Play Cards</a>
+                                </Link>
+                            </li>
+                            <li>
                                 <Link href="/dashboard/about-me">
                                     <a className="text-blue-600 text-base lg:md:sm:text-lg">About Me</a>
                                 </Link>
