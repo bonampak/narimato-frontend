@@ -1,6 +1,7 @@
 import React from "react";
 import Head from "next/head";
 import Link from "next/link";
+import Image from "next/image";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { useMutation, useQuery } from "react-query";
@@ -64,6 +65,7 @@ const AllCard: NextPage = () => {
                                         <thead className="bg-blue-600">
                                             <tr>
                                                 <th className="px-4 py-2 text-xs text-white text-left">---</th>
+                                                <th className="px-4 py-2 text-xs text-white text-left">Thumbnail</th>
                                                 <th className="px-4 py-2 text-xs text-white text-left">Title</th>
                                                 <th className="px-4 py-2 text-xs text-white text-left">Hashtags</th>
                                                 <th className="px-4 py-2 text-xs text-white text-left" />
@@ -74,6 +76,9 @@ const AllCard: NextPage = () => {
                                                 return (
                                                     <tr key={card._id}>
                                                         <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{++index}</td>
+                                                        <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
+                                                            <Image src={card.imageUrl} alt={card.title} width={50} height={50} quality={5} />
+                                                        </td>
                                                         <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{card.title}</td>
                                                         <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
                                                             {card.hashtags.length > 0 ? card.hashtags.map((hashtag: any) => `${hashtag.title}, `) : "---"}
