@@ -99,6 +99,8 @@ const ExportOrganisation: NextPage = () => {
                                                     {(() => {
                                                         const myGame = organisationExportData.games.find((game: any) => game.user === user._id);
 
+                                                        if (!myGame) return <></>;
+
                                                         const allCards = myGame.rightSwipedCards.concat(myGame.leftSwipedCards);
                                                         const allHashtags = myGame.rightSwipedHashtags.concat(myGame.leftSwipedHashtags);
 
