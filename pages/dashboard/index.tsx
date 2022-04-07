@@ -1,13 +1,26 @@
+import React from "react";
 import Head from "next/head";
 import Link from "next/link";
+import { useQuery } from "react-query";
 
+import { gameCheckIfNewCard } from "../../api";
 import { useUser, withAuth } from "../../utils";
 import { NavigationBarComponent } from "../../components";
 
 import type { NextPage } from "next";
+import type { AxiosResponse } from "axios";
 
 const Dashboard: NextPage = () => {
     const { user } = useUser();
+
+    const [showPlayButton, setShowPlayButton] = React.useState<boolean>(false);
+
+    const {} = useQuery("check-for-new-card", gameCheckIfNewCard, {
+        onSuccess: (response: AxiosResponse) => {
+            const { data } = response.data;
+            setShowPlayButton(data);
+        }
+    });
 
     return (
         <>
@@ -37,36 +50,18 @@ const Dashboard: NextPage = () => {
                         </section>
                     )}
 
-                    <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">
-                        <h2 className="text-2xl font-bold">Nothing here yet</h2>
-                        <p className="text-lg">This is the dashboard :)</p>
-                    </section>
-
-                    {/* <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">
-                        <h2 className="text-2xl font-bold">Quick Links</h2>
-                        <ul className="list-disc list-inside mt-5">
-                            <li>
-                                <Link href="/dashboard">
-                                    <a className="text-blue-600 text-base lg:md:sm:text-lg">Dashboard</a>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/play">
-                                    <a className="text-blue-600 text-base lg:md:sm:text-lg">Play Cards</a>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/dashboard/about-me">
-                                    <a className="text-blue-600 text-base lg:md:sm:text-lg">About Me</a>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/auth/logout">
-                                    <a className="text-blue-600 text-base lg:md:sm:text-lg">Logout</a>
-                                </Link>
-                            </li>
-                        </ul>
-                    </section> */}
+                    {showPlayButton ? (
+                        <section className="my-4 w-max p-5 rounded bg-blue-600">
+                            <Link href="/play">
+                                <a className="text-white">Start / Continue Survey</a>
+                            </Link>
+                        </section>
+                    ) : (
+                        <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">
+                            <h2 className="text-2xl font-bold">Nothing here yet</h2>
+                            <p className="text-lg">This is the dashboard :)</p>
+                        </section>
+                    )}
                 </div>
             </div>
         </>
