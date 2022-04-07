@@ -112,7 +112,7 @@ function HashtagCard({ playState, setPlayState }: HashtagCardProps) {
                     {/* Potrait */}
                     <div className="mt-2 mb-5 p-4 hidden portrait:block">
                         <TinderCard ref={tinderCardRef} onSwipe={handleSwipe} preventSwipe={["up", "down", setPlayState ? "" : "right", setPlayState ? "" : "left"]}>
-                            <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
+                            <div className="h-52 w-52 lg:h-96 lg:w-96 relative mx-auto">
                                 <Image src={hashtag.imageUrl} alt="hashtag-image" layout="fill" objectFit="cover" placeholder="blur" blurDataURL={LoadingImagePlacepholder} />
                             </div>
 
@@ -140,7 +140,7 @@ function HashtagCard({ playState, setPlayState }: HashtagCardProps) {
                             )}
                             <div className={setPlayState ? "col-span-2" : "col-span-full"}>
                                 <TinderCard ref={tinderCardRef} onSwipe={handleSwipe} preventSwipe={["up", "down", setPlayState ? "" : "right", setPlayState ? "" : "left"]}>
-                                    <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
+                                    <div className="h-52 w-52 lg:h-96 lg:w-96 relative mx-auto">
                                         <Image src={hashtag.imageUrl} layout="fill" objectFit="cover" placeholder="blur" blurDataURL={LoadingImagePlacepholder} alt="hashtag" />
                                     </div>
 
