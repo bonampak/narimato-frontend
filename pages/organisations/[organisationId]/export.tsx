@@ -65,7 +65,7 @@ const ExportOrganisation: NextPage = () => {
                             <div className="flex justify-end">
                                 <ReactHTMLTableToExcel
                                     id="organisation-data-export-button"
-                                    className="my-3 py-1 px-2 rounded-lg bg-blue-600 text-white text-lg"
+                                    className="my-3 py-1 px-2 rounded bg-blue-600 text-white text-lg"
                                     table="organisation-data-export"
                                     filename={`${organisation.name}-data-export`}
                                     sheet="page 1"

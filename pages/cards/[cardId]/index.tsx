@@ -4,9 +4,9 @@ import { useQuery } from "react-query";
 import { toast } from "react-toastify";
 import { NextRouter, useRouter } from "next/router";
 
-import { withAuth } from "../../utils";
-import { cardGetOne } from "../../api";
-import { LoadingComponent, NavigationBarComponent, SingleCard } from "../../components";
+import { withAuth } from "../../../utils";
+import { cardGetOne } from "../../../api";
+import { LoadingComponent, NavigationBarComponent, SingleCard } from "../../../components";
 
 import type { NextPage } from "next";
 import type { AxiosResponse, AxiosError } from "axios";

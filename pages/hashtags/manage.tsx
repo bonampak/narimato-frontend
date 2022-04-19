@@ -86,7 +86,7 @@ const AllHashtag: NextPage = () => {
                                                                 {/* <Link href={`/hashtags/${hashtag._id}`}>
                                                                     <a className="text-green-600 px-2">View</a>
                                                                 </Link> */}
-                                                                <Link href={`/hashtags/edit/${hashtag._id}`}>
+                                                                <Link href={`/hashtags/${hashtag._id}/edit`}>
                                                                     <a className="px-2">Edit</a>
                                                                 </Link>
                                                                 <button onClick={() => handleDeleteHashtag(hashtag._id)} className="px-2">

@@ -3,9 +3,9 @@ import React from "react";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
-import { useSortBy, useTable } from "react-table";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import { useSortBy, useTable } from "react-table";
 import { useMutation, useQuery } from "react-query";
 
 import { withAuth } from "../../utils";
@@ -156,7 +156,7 @@ const AllCard: NextPage = () => {
                                                                 <Link href={`/cards/${card._id}`}>
                                                                     <a className="text-green-600 px-2">View</a>
                                                                 </Link>
-                                                                <Link href={`/cards/edit/${card._id}`}>
+                                                                <Link href={`/cards/${card._id}/edit/`}>
                                                                     <a className="px-2">Edit</a>
                                                                 </Link>
                                                                 <button onClick={() => handleDeleteCard(card._id)} className="px-2">

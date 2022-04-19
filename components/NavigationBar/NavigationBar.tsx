@@ -103,6 +103,14 @@ const NavigationBar = () => {
                                 <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">Manage Hashtags</a>
                             </Link>
 
+                            <Link href="/projects/new">
+                                <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">Add Project</a>
+                            </Link>
+
+                            <Link href="/projects/manage">
+                                <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">Manage Projects</a>
+                            </Link>
+
                             <span className="block py-2.5 px-4 text-xs opacity-40 uppercase border-y-[0.5px] my-2">In Preview</span>
 
                             <a href="https://hexa-mypd.herokuapp.com/app.html" className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">
