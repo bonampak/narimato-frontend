@@ -1,7 +1,9 @@
+/* eslint-disable react/jsx-key */
 import React from "react";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
+import { useSortBy, useTable } from "react-table";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { useMutation, useQuery } from "react-query";
@@ -42,6 +44,72 @@ const AllCard: NextPage = () => {
     async function handleDeleteCard(cardId: string) {
         if (confirm("Are you sure you want to delete this card?")) deleteCard(cardId);
     }
+
+    // React-Table Setup
+    // const columns = React.useMemo(
+    //     () => [
+    //         { Header: "Column 1", accessor: "col1" },
+    //         { Header: "Column 2", accessor: "col2" }
+    //     ],
+    //     []
+    // );
+    // const data = React.useMemo(
+    //     () => [
+    //         { col1: "Hello", col2: "World" },
+    //         { col1: "react-table", col2: "rocks" },
+    //         { col1: "whatever", col2: "you want" }
+    //     ],
+    //     []
+    // );
+    // const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data }, useSortBy);
+
+    // return (
+    //     // apply the table props
+    //     <table className="table-auto w-full" {...getTableProps()}>
+    //         <thead className="bg-blue-600">
+    //             {/* // Loop over the header rows */}
+    //             {headerGroups.map((headerGroup) => (
+    //                 // Apply the header row props
+    //                 <tr {...headerGroup.getHeaderGroupProps()}>
+    //                     {/* // Loop over the headers in each row */}
+    //                     {headerGroup.headers.map((column) => (
+    //                         // Apply the header cell props
+    //                         <th className="px-4 py-2 text-xs text-white text-left" {...column.getHeaderProps(column.getSortByToggleProps())}>
+    //                             {/* // Render the header */}
+    //                             {column.render("Header")}
+    //                             <span className="mx-2">{column.isSorted ? "🔼" : "🔽"}</span>
+    //                         </th>
+    //                     ))}
+    //                 </tr>
+    //             ))}
+    //         </thead>
+    //         {/* Apply the table body props */}
+    //         <tbody {...getTableBodyProps()}>
+    //             {
+    //                 // Loop over the table rows
+    //                 rows.map((row) => {
+    //                     // Prepare the row for display
+    //                     prepareRow(row);
+    //                     return (
+    //                         // Apply the row props
+    //                         <tr {...row.getRowProps()}>
+    //                             {/* // Loop over the rows cells */}
+    //                             {row.cells.map((cell) => {
+    //                                 // Apply the cell props
+    //                                 return (
+    //                                     <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium" {...cell.getCellProps()}>
+    //                                         {/* // Render the cell contents */}
+    //                                         {cell.render("Cell")}
+    //                                     </td>
+    //                                 );
+    //                             })}
+    //                         </tr>
+    //                     );
+    //                 })
+    //             }
+    //         </tbody>
+    //     </table>
+    // );
 
     return (
         <>
