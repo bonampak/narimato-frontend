@@ -56,9 +56,8 @@ const PlaySurvey: NextPage = () => {
             }
         },
         onError: (error: AxiosError) => {
-            toast.error(error.response ? error.response.data.message : error.message, {
-                onClose: () => router.push("/dashboard")
-            });
+            toast.error(error.response ? error.response.data.message : error.message);
+            router.push("/dashboard");
         }
     });
 
