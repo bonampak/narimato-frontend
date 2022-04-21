@@ -16,8 +16,8 @@ import type { AxiosResponse, AxiosError } from "axios";
 const CreateOrganisation: NextPage = () => {
     const router: NextRouter = useRouter();
 
-    const [logoUrl, setLogoUrl] = React.useState<null | string>(null);
-    const [previewImage, setPreviewImage] = React.useState<null | any>(null);
+    const [logoUrl, setLogoUrl] = React.useState<null | string>(process.env.NODE_ENV !== "production" ? "http://localhost:3000/lsamp.png" : null);
+    const [previewImage, setPreviewImage] = React.useState<null | any>(process.env.NODE_ENV !== "production" ? "http://localhost:3000/lsamp.png" : null);
 
     const { isLoading: isCreatingOrganisation, mutate: createOrganisation } = useMutation(organisationCreate, {
         onSuccess: (response: AxiosResponse) => {
