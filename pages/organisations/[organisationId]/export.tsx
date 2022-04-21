@@ -97,18 +97,18 @@ const ExportOrganisation: NextPage = () => {
                                                     </tr>
 
                                                     {(() => {
-                                                        const myGame = organisationExportData.games.find((game: any) => game.user === user._id);
+                                                        const mySurvey = organisationExportData.surveys.find((survey: any) => survey.user === user._id);
 
-                                                        if (!myGame) return <></>;
+                                                        if (!mySurvey) return <></>;
 
-                                                        const allCards = myGame.rightSwipedCards.concat(myGame.leftSwipedCards);
-                                                        const allHashtags = myGame.rightSwipedHashtags.concat(myGame.leftSwipedHashtags);
+                                                        const allCards = mySurvey.rightSwipedCards.concat(mySurvey.leftSwipedCards);
+                                                        const allHashtags = mySurvey.rightSwipedHashtags.concat(mySurvey.leftSwipedHashtags);
 
                                                         return allHashtags.map((hashtag: any, mapIndex: number) => (
                                                             <React.Fragment key={mapIndex}>
                                                                 <tr className="bg-gray-500">
                                                                     <td colSpan={3} className="text-xl px-4 py-2 text-white font-medium">
-                                                                        {hashtag.title} - {myGame.rightSwipedHashtags.map((hashtag: any) => hashtag._id).includes(hashtag._id) ? "✅" : "❌"}
+                                                                        {hashtag.title} - {mySurvey.rightSwipedHashtags.map((hashtag: any) => hashtag._id).includes(hashtag._id) ? "✅" : "❌"}
                                                                     </td>
                                                                 </tr>
 
@@ -117,7 +117,7 @@ const ExportOrganisation: NextPage = () => {
                                                                         <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{++index}</td>
                                                                         <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{card.title}</td>
                                                                         <td className="border px-4 py-2 border-blue-500 text-center font-medium">
-                                                                            {myGame.rightSwipedCards.map((card: any) => card._id).includes(card._id) ? "✅" : "❌"}
+                                                                            {mySurvey.rightSwipedCards.map((card: any) => card._id).includes(card._id) ? "✅" : "❌"}
                                                                         </td>
                                                                     </tr>
                                                                 ))}

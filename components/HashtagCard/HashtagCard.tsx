@@ -8,7 +8,7 @@ import { useKeyPressEvent } from "react-use";
 
 import { LoadingImagePlacepholder } from "../../assets";
 import { CardYesButton, CardNoButton, LoadingComponent } from "../../components";
-import { gameAddLeftSwipedHashtag, gameAddRightSwipedHashtag, gameNewHashtag } from "../../api";
+import { surveyAddLeftSwipedHashtag, surveyAddRightSwipedHashtag, surveyNewHashtag } from "../../api";
 
 import type { AxiosResponse, AxiosError } from "axios";
 
@@ -24,26 +24,26 @@ function HashtagCard({ playState, setPlayState }: HashtagCardProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
     const [hashtag, setHashtag] = React.useState<null | any>(null);
 
-    const { mutateAsync: addNewHashtag } = useMutation(gameNewHashtag, {
+    const { mutateAsync: addNewHashtag } = useMutation(surveyNewHashtag, {
         onSuccess: (response: AxiosResponse) => {
             const { data } = response.data;
             setHashtag(data);
         },
         onError: (error: AxiosError) => {
-            setPlayState({ isLoading: true, gameMode: "swipe", finalHashTagSwipeMode: true });
+            setPlayState({ isLoading: true, surveyMode: "swipe", finalHashTagSwipeMode: true });
         }
     });
 
-    const { mutateAsync: addRightSwipedHashtag } = useMutation((context: any) => gameAddRightSwipedHashtag(playState.gameId as string, context), {
+    const { mutateAsync: addRightSwipedHashtag } = useMutation((context: any) => surveyAddRightSwipedHashtag(playState.surveyId as string, context), {
         onSuccess: (response: AxiosResponse) => {
-            setPlayState({ isLoading: true, gameMode: "swipe" });
+            setPlayState({ isLoading: true, surveyMode: "swipe" });
         },
         onError: (error: AxiosError) => {
             toast.error("Something went wrong, please try again.");
         }
     });
 
-    const { mutateAsync: addLeftSwipedHashtag } = useMutation((context: any) => gameAddLeftSwipedHashtag(playState.gameId as string, context), {
+    const { mutateAsync: addLeftSwipedHashtag } = useMutation((context: any) => surveyAddLeftSwipedHashtag(playState.surveyId as string, context), {
         onSuccess: (response: AxiosResponse) => {
             setHashtag(null);
         },
@@ -82,7 +82,7 @@ function HashtagCard({ playState, setPlayState }: HashtagCardProps) {
     React.useEffect(async () => {
         // Generate a new hashtag if one doesn't exist and the finalHashtagSwipe mode is not set
         if (!hashtag && !playState.finalHashTagSwipeMode) {
-            await addNewHashtag(playState.gameId);
+            await addNewHashtag(playState.surveyId);
 
             // Stop Loading
             setIsLoading(false);

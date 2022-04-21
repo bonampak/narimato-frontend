@@ -8,17 +8,17 @@ import { useMergeState, withAuth, ArrayMethods } from "../../utils";
 import { SingleCard, VoteCard, HashtagCard, LoadingComponent, NavigationBarComponent } from "../../components";
 
 import type { NextPage } from "next";
-import { gameCreate, gameNewCard } from "../../api";
+import { surveyCreate, surveyNewCard } from "../../api";
 import { AxiosResponse, AxiosError } from "axios";
 
-const PlayCards: NextPage = () => {
+const PlaySurvey: NextPage = () => {
     const router: NextRouter = useRouter();
 
     const [playState, setPlayState] = useMergeState({
         isLoading: false,
 
-        // Game
-        gameId: null,
+        // Survey
+        surveyId: null,
         allCards: [],
         rightSwipedCards: [],
         leftSwipedCards: [],
@@ -26,33 +26,33 @@ const PlayCards: NextPage = () => {
         finalHashTagSwipeMode: false,
 
         // Mode
-        gameMode: "hashtag"
+        surveyMode: "hashtag"
     });
 
-    const { isLoading, gameId, allCards, rightSwipedCards, currentCard, gameMode } = playState;
+    const { isLoading, surveyId, allCards, rightSwipedCards, currentCard, surveyMode } = playState;
 
-    const { isLoading: isCreatingGame, mutate: startGame } = useMutation(gameCreate, {
+    const { isLoading: isCreatingSurvey, mutate: startSurvey } = useMutation(surveyCreate, {
         onSuccess: (response: AxiosResponse) => {
             const { data } = response.data;
 
-            // Check if we're continuing a game
+            // Check if we're continuing a survey
             if (data.continue) {
                 const allCards = data.leftSwipedCards.concat(data.rightSwipedCards);
 
                 setPlayState({
-                    gameId: data._id,
+                    surveyId: data._id,
                     allCards: allCards,
                     rightSwipedCards: data.rightSwipedCards,
                     leftSwipedCards: data.leftSwipedCards,
                     currentCard: allCards.length,
-                    gameMode: allCards.length > 0 ? "swipe" : "hashtag"
+                    surveyMode: allCards.length > 0 ? "swipe" : "hashtag"
                 });
             }
 
-            // Check if we're not continuing a game
+            // Check if we're not continuing a survey
             if (!data.continue) {
-                // Set GameId and continue play flow
-                setPlayState({ gameId: data._id });
+                // Set SurveyId and continue play flow
+                setPlayState({ surveyId: data._id });
             }
         },
         onError: (error: AxiosError) => {
@@ -62,7 +62,7 @@ const PlayCards: NextPage = () => {
         }
     });
 
-    const { isLoading: isAddingNewCard, mutateAsync: addNewCard } = useMutation(gameNewCard, {
+    const { isLoading: isAddingNewCard, mutateAsync: addNewCard } = useMutation(surveyNewCard, {
         onSuccess: (response: AxiosResponse) => {
             const { data, success } = response.data;
 
@@ -73,20 +73,20 @@ const PlayCards: NextPage = () => {
         },
         onError: (error: AxiosError) => {
             // Out of Cards for the Hashtag, Enter hashTagSwipeMode
-            setPlayState({ isLoading: true, gameMode: "hashtag" });
+            setPlayState({ isLoading: true, surveyMode: "hashtag" });
 
             console.log(error.response ? error.response.data.message : error.message);
         }
     });
 
-    // Create a Game or Continue a game
-    React.useEffect(() => startGame({}), []);
+    // Create a Survey or Continue a survey
+    React.useEffect(() => startSurvey({}), []);
 
     // @ts-ignore
     React.useEffect(async () => {
-        if (gameMode === "swipe") await addNewCard(gameId);
+        if (surveyMode === "swipe") await addNewCard(surveyId);
         setPlayState({ isLoading: false });
-    }, [gameMode]);
+    }, [surveyMode]);
 
     return (
         <>
@@ -98,17 +98,17 @@ const PlayCards: NextPage = () => {
                 <NavigationBarComponent />
 
                 <div className="flex-1 p-10 text-2xl font-bold max-h-screen overflow-y-auto">
-                    {isCreatingGame || isAddingNewCard || isLoading ? <LoadingComponent /> : null}
+                    {isCreatingSurvey || isAddingNewCard || isLoading ? <LoadingComponent /> : null}
 
-                    {gameId && !isCreatingGame && !isAddingNewCard && !isLoading && (
+                    {surveyId && !isCreatingSurvey && !isAddingNewCard && !isLoading && (
                         <>
                             {/* <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">Play Cards</section> */}
 
-                            {gameMode === "swipe" && typeof allCards[currentCard - 1] !== undefined && (
+                            {surveyMode === "swipe" && typeof allCards[currentCard - 1] !== undefined && (
                                 <SingleCard card={allCards[currentCard - 1]} playState={playState} setPlayState={setPlayState} />
                             )}
-                            {gameMode === "vote" && <VoteCard gameId={gameId} setPlayState={setPlayState} rightSwipedCards={rightSwipedCards} />}
-                            {gameMode === "hashtag" && <HashtagCard playState={playState} setPlayState={setPlayState} />}
+                            {surveyMode === "vote" && <VoteCard surveyId={surveyId} setPlayState={setPlayState} rightSwipedCards={rightSwipedCards} />}
+                            {surveyMode === "hashtag" && <HashtagCard playState={playState} setPlayState={setPlayState} />}
                         </>
                     )}
                 </div>
@@ -117,4 +117,4 @@ const PlayCards: NextPage = () => {
     );
 };
 
-export default withAuth(PlayCards);
+export default withAuth(PlaySurvey);

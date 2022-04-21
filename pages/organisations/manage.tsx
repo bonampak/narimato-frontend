@@ -67,6 +67,7 @@ const ManageOrganisation: NextPage = () => {
                                                 <th className="px-4 py-2 text-xs text-white text-left">Name</th>
                                                 <th className="px-4 py-2 text-xs text-white text-left">URL</th>
                                                 <th className="px-4 py-2 text-xs text-white text-left" />
+                                                <th className="px-4 py-2 text-xs text-white text-left" />
                                             </tr>
                                         </thead>
                                         <tbody className="text-sm">
@@ -86,6 +87,13 @@ const ManageOrganisation: NextPage = () => {
                                                                 <Link href={`/projects/org/${organisation._id}`}>
                                                                     <a className="px-2 text-blue-600">Projects</a>
                                                                 </Link>
+                                                                <Link href={`/surveys/org/${organisation._id}`}>
+                                                                    <a className="px-2 text-blue-600">Surveys</a>
+                                                                </Link>
+                                                            </div>
+                                                        </td>
+                                                        <td className="border px-4 py-2 text-yellow-600 border-blue-500 font-medium">
+                                                            <div className="divide-x-2 divide-neutral-900 divide-double">
                                                                 <Link href={`/organisations/${organisation._id}/edit`}>
                                                                     <a className="px-2">Edit</a>
                                                                 </Link>

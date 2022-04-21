@@ -3,17 +3,17 @@ import Image from "next/image";
 import { useKeyPressEvent } from "react-use";
 
 import { LoadingComponent } from "../../components";
-import { gameUpdateRightSwipedCards } from "../../api";
+import { surveyUpdateRightSwipedCards } from "../../api";
 import { LoadingImagePlacepholder } from "../../assets";
 import { useMergeState, ArrayMethods } from "../../utils";
 
 type VoteCardProps = {
-    gameId: string;
+    surveyId: string;
     rightSwipedCards: any[];
     setPlayState: any;
 };
 
-function VoteCard({ gameId, rightSwipedCards, setPlayState }: VoteCardProps) {
+function VoteCard({ surveyId, rightSwipedCards, setPlayState }: VoteCardProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
     const filteredCardsBySameHashtag = rightSwipedCards.slice(1).filter((card: any) =>
@@ -34,7 +34,7 @@ function VoteCard({ gameId, rightSwipedCards, setPlayState }: VoteCardProps) {
 
     React.useEffect(() => {
         if (filteredCardsBySameHashtag.length === 0) {
-            setPlayState({ isLoading: true, gameMode: "swipe" });
+            setPlayState({ isLoading: true, surveyMode: "swipe" });
         }
     });
 
@@ -81,11 +81,11 @@ function VoteCard({ gameId, rightSwipedCards, setPlayState }: VoteCardProps) {
             newlyGeneratedRightSwipedCards = ArrayMethods.insertItem(rightSwipedCards.slice(1), voteRandomIndexCardInRightSwipedCards + 1, newRightSwipedCard);
         }
 
-        await gameUpdateRightSwipedCards(gameId, {
+        await surveyUpdateRightSwipedCards(surveyId, {
             cardIds: newlyGeneratedRightSwipedCards.map((card: any) => card._id)
         });
 
-        setPlayState({ isLoading: true, rightSwipedCards: newlyGeneratedRightSwipedCards, gameMode: "swipe" });
+        setPlayState({ isLoading: true, rightSwipedCards: newlyGeneratedRightSwipedCards, surveyMode: "swipe" });
     };
 
     useKeyPressEvent("ArrowLeft", () => handleCardClick(newRightSwipedCard._id));

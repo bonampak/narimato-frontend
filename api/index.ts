@@ -11,24 +11,24 @@ export const cardGetOne = async (cardId: string) => await $http.get(`/cards/${ca
 export const cardDelete = async (cardId: string) => await $http.delete(`/cards/${cardId}`);
 export const cardUpdate = async (cardId: string, data: any) => await $http.put(`/cards/${cardId}`, data);
 
-export const gameGetAll = async () => await $http.get(`/games/`);
-export const gameGetAllByMe = async () => await $http.get(`/games/user/me`);
-export const gameCheckIfNewCard = async () => await $http.get(`/games/user/check-new-card`);
-export const gameGetAllByUser = async (userId: string) => await $http.get(`/games/user/${userId}`);
-export const gameCreate = async (data: any) => await $http.post(`/games/`, data);
-export const gameGetOne = async (gameId: string) => await $http.get(`/games/${gameId}`);
-export const gameDelete = async (gameId: string) => await $http.delete(`/games/${gameId}`);
-export const gameUpdate = async (gameId: string, data: any) => await $http.put(`/games/${gameId}`, data);
+export const surveyGetAll = async () => await $http.get(`/surveys/`);
+export const surveyGetAllByMe = async () => await $http.get(`/surveys/user/me`);
+export const surveyGetAllByOrganisation = async (organisationId: string) => await $http.get(`/surveys/org/${organisationId}`);
+export const surveyCheckIfNewCard = async () => await $http.get(`/surveys/user/check-new-card`);
+export const surveyGetAllByUser = async (userId: string) => await $http.get(`/surveys/user/${userId}`);
+export const surveyCreate = async (data: any) => await $http.post(`/surveys/`, data);
+export const surveyGetOne = async (surveyId: string) => await $http.get(`/surveys/${surveyId}`);
+export const surveyDelete = async (surveyId: string) => await $http.delete(`/surveys/${surveyId}`);
+export const surveyUpdate = async (surveyId: string, data: any) => await $http.put(`/surveys/${surveyId}`, data);
 
-// Game Play
-export const gameNewCard = async (gameId: string) => await $http.post(`games/${gameId}/card/new`);
-export const gameNewHashtag = async (gameId: string) => await $http.post(`games/${gameId}/hashtag/new`);
-export const gameAddLeftSwipedCard = async (gameId: string, data: any) => await $http.post(`games/${gameId}/card/add-left-swiped-card`, data);
-export const gameAddRightSwipedCard = async (gameId: string, data: any) => await $http.post(`games/${gameId}/card/add-right-swiped-card`, data);
-export const gameUpdateRightSwipedCards = async (gameId: string, data: any) => await $http.put(`games/${gameId}/card/update-right-swiped-cards`, data);
-
-export const gameAddLeftSwipedHashtag = async (gameId: string, data: any) => await $http.post(`games/${gameId}/hashtag/add-left-swiped-hashtag`, data);
-export const gameAddRightSwipedHashtag = async (gameId: string, data: any) => await $http.post(`games/${gameId}/hashtag/add-right-swiped-hashtag`, data);
+// Survey Play
+export const surveyNewCard = async (surveyId: string) => await $http.post(`surveys/${surveyId}/card/new`);
+export const surveyNewHashtag = async (surveyId: string) => await $http.post(`surveys/${surveyId}/hashtag/new`);
+export const surveyAddLeftSwipedCard = async (surveyId: string, data: any) => await $http.post(`surveys/${surveyId}/card/add-left-swiped-card`, data);
+export const surveyAddRightSwipedCard = async (surveyId: string, data: any) => await $http.post(`surveys/${surveyId}/card/add-right-swiped-card`, data);
+export const surveyUpdateRightSwipedCards = async (surveyId: string, data: any) => await $http.put(`surveys/${surveyId}/card/update-right-swiped-cards`, data);
+export const surveyAddLeftSwipedHashtag = async (surveyId: string, data: any) => await $http.post(`surveys/${surveyId}/hashtag/add-left-swiped-hashtag`, data);
+export const surveyAddRightSwipedHashtag = async (surveyId: string, data: any) => await $http.post(`surveys/${surveyId}/hashtag/add-right-swiped-hashtag`, data);
 
 export const organisationGetAll = async () => await $http.get(`/organisations/`);
 export const organisationCreate = async (data: any) => await $http.post(`/organisations/`, data);

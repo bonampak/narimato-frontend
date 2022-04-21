@@ -8,7 +8,7 @@ import { useKeyPressEvent } from "react-use";
 
 import { LoadingImagePlacepholder } from "../../assets";
 import { CardYesButton, CardNoButton, LoadingComponent } from "../../components";
-import { gameAddRightSwipedCard, gameAddLeftSwipedCard, gameNewCard } from "../../api";
+import { surveyAddRightSwipedCard, surveyAddLeftSwipedCard, surveyNewCard } from "../../api";
 
 import type { AxiosResponse, AxiosError } from "axios";
 
@@ -24,7 +24,7 @@ function SingleCard({ card, playState, setPlayState }: SingleCardProps) {
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-    const { mutateAsync: addRightSwipedCard } = useMutation((context: any) => gameAddRightSwipedCard(playState.gameId as string, context), {
+    const { mutateAsync: addRightSwipedCard } = useMutation((context: any) => surveyAddRightSwipedCard(playState.surveyId as string, context), {
         onSuccess: (response: AxiosResponse) => {
             // Get the Card Data
             const card = playState.allCards.find((card: any) => card._id === cardId);
@@ -38,7 +38,7 @@ function SingleCard({ card, playState, setPlayState }: SingleCardProps) {
         }
     });
 
-    const { mutateAsync: addLeftSwipedCard } = useMutation((context: any) => gameAddLeftSwipedCard(playState.gameId as string, context), {
+    const { mutateAsync: addLeftSwipedCard } = useMutation((context: any) => surveyAddLeftSwipedCard(playState.surveyId as string, context), {
         onSuccess: (response: AxiosResponse) => {
             // Get the Card Data
             const card = playState.allCards.find((card: any) => card._id === cardId);
@@ -68,18 +68,18 @@ function SingleCard({ card, playState, setPlayState }: SingleCardProps) {
         // If the answer is true and number of cards in rightSwipedCards bucket is greater than 2
         if (answer && playState.rightSwipedCards.length >= 2) {
             // Enter Vote mode to rank rightSwipedCards
-            setPlayState({ isLoading: true, gameMode: "vote" });
+            setPlayState({ isLoading: true, surveyMode: "vote" });
             return;
         }
 
-        // Get new Card based on yes/leftSwiped Cards from the Database / Check if the game is over
+        // Get new Card based on yes/leftSwiped Cards from the Database / Check if the survey is over
         try {
             // Get a new card
-            const { data: newCard } = await gameNewCard(playState.gameId as string);
+            const { data: newCard } = await surveyNewCard(playState.surveyId as string);
 
             if (newCard.success) {
                 // Add the new Cards to the allCards bucket
-                // Update the current Card Number +1 and continue game
+                // Update the current Card Number +1 and continue survey
                 setPlayState({
                     allCards: [...playState.allCards, newCard.data],
                     currentCard: playState.currentCard + 1
@@ -93,12 +93,12 @@ function SingleCard({ card, playState, setPlayState }: SingleCardProps) {
             if (playState.allCards.length === playState.currentCard && playState.rightSwipedCards.length >= 2 && answer) {
                 // If the current Card is equal to number of Cards and answer is true
                 // Enter Vote mode to rank rightSwipedCards
-                setPlayState({ isLoading: true, gameMode: "vote" });
+                setPlayState({ isLoading: true, surveyMode: "vote" });
                 return;
             }
 
             // Out of Cards for the Card, Enter hashTagSwipeMode
-            setPlayState({ isLoading: true, gameMode: "hashtag" });
+            setPlayState({ isLoading: true, surveyMode: "hashtag" });
             return;
         }
 

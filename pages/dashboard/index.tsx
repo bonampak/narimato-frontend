@@ -3,7 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useQuery } from "react-query";
 
-import { gameCheckIfNewCard } from "../../api";
+import { surveyCheckIfNewCard } from "../../api";
 import { useUser, withAuth } from "../../utils";
 import { NavigationBarComponent } from "../../components";
 
@@ -15,7 +15,7 @@ const Dashboard: NextPage = () => {
 
     const [showPlayButton, setShowPlayButton] = React.useState<boolean>(false);
 
-    const {} = useQuery("check-for-new-card", gameCheckIfNewCard, {
+    const {} = useQuery("check-for-new-card", surveyCheckIfNewCard, {
         onSuccess: (response: AxiosResponse) => {
             const { data } = response.data;
             setShowPlayButton(data);

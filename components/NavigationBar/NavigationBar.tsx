@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useQuery } from "react-query";
 
 import { useUser } from "../../utils";
-import { gameCheckIfNewCard } from "../../api";
+import { surveyCheckIfNewCard } from "../../api";
 import Text from "../../text.json";
 
 import type { AxiosResponse } from "axios";
@@ -14,7 +14,7 @@ const NavigationBar = () => {
     const [showPlayButton, setShowPlayButton] = React.useState<boolean>(false);
     const [isMobileNavExpanded, setIsMobileNavExpanded] = React.useState<boolean>(false);
 
-    const { isLoading: isCheckingForNewCard } = useQuery("check-for-new-card", gameCheckIfNewCard, {
+    const { isLoading: isCheckingForNewCard } = useQuery("check-for-new-card", surveyCheckIfNewCard, {
         onSuccess: (response: AxiosResponse) => {
             const { data } = response.data;
             setShowPlayButton(data);
@@ -109,6 +109,10 @@ const NavigationBar = () => {
 
                             <Link href="/projects/manage">
                                 <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">Manage Projects</a>
+                            </Link>
+
+                            <Link href="/surveys/manage">
+                                <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">Manage Surveys</a>
                             </Link>
 
                             <span className="block py-2.5 px-4 text-xs opacity-40 uppercase border-y-[0.5px] my-2">In Preview</span>
