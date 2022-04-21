@@ -1,25 +1,12 @@
 import React from "react";
 import Link from "next/link";
-import { useQuery } from "react-query";
 
 import { useUser } from "../../utils";
-import { surveyCheckIfNewCard } from "../../api";
-import Text from "../../text.json";
-
-import type { AxiosResponse } from "axios";
 
 const NavigationBar = () => {
     const { user } = useUser();
 
-    const [showPlayButton, setShowPlayButton] = React.useState<boolean>(false);
     const [isMobileNavExpanded, setIsMobileNavExpanded] = React.useState<boolean>(false);
-
-    const { isLoading: isCheckingForNewCard } = useQuery("check-for-new-card", surveyCheckIfNewCard, {
-        onSuccess: (response: AxiosResponse) => {
-            const { data } = response.data;
-            setShowPlayButton(data);
-        }
-    });
 
     return (
         <>
@@ -53,17 +40,13 @@ const NavigationBar = () => {
                         <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">Dashboard</a>
                     </Link>
 
-                    {showPlayButton ? (
-                        <Link href="/play">
-                            <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">
-                                {Text.navigation_bar.play_btn.with_cards}
-                                <br />
-                                <span className="text-xs">{Text.navigation_bar.play_btn.with_cards_desc}</span>
-                            </a>
-                        </Link>
-                    ) : (
-                        <span className="block py-2.5 px-4 rounded transition duration-200 opacity-40 hover:text-white">{isCheckingForNewCard ? "Loading" : "No new Card"}</span>
-                    )}
+                    <Link href="/survey">
+                        <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">
+                            Start a Survey
+                            <br />
+                            <span className="text-xs">Play cards to build up your rank</span>
+                        </a>
+                    </Link>
 
                     {user && !user.organisation && (
                         <Link href="/dashboard/about-me">

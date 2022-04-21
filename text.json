@@ -23,12 +23,5 @@
             "body": "View Results after you have played cards, using a complex algorithm we rank your matches."
         }
     ],
-    "footer_extra_text": "All rights reserved.",
-
-    "navigation_bar": {
-        "play_btn": {
-            "with_cards": "Play Cards",
-            "with_cards_desc": "Play cards to build up your rank"
-        }
-    }
+    "footer_extra_text": "All rights reserved."
 }
