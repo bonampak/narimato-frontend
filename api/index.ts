@@ -39,6 +39,7 @@ export const organisationDelete = async (organisationId: string) => await $http.
 export const organisationUpdate = async (organisationId: string, data: any) => await $http.put(`/organisations/${organisationId}`, data);
 
 export const userGetAll = async () => await $http.get(`/users/`);
+export const userGetAllByOrganisation = async (organisationId: string) => await $http.get(`/users/org/${organisationId}`);
 export const userGetMe = async () => await $http.get(`/users/me`);
 export const userCreate = async (data: any) => await $http.post(`/users/`, data);
 export const userGetOne = async (userId: string) => await $http.get(`/users/${userId}`);
