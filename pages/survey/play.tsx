@@ -84,7 +84,7 @@ const PlaySurvey: NextPage = () => {
     React.useEffect(() => {
         if (!router.isReady) return;
         startSurvey({ project: projectId });
-    }, []);
+    }, [router.isReady]);
 
     // @ts-ignore
     React.useEffect(async () => {
