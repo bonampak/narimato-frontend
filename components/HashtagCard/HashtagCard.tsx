@@ -95,9 +95,9 @@ function HashtagCard({ playState, setPlayState }: HashtagCardProps) {
             // Update Loading State
             setPlayState({ isLoading: true });
 
-            // Take a while before redirecting to about-me (result)
+            // Take a while before redirecting to survey-result (result)
             toast.success("Generating result...", {
-                onClose: () => router.push(`/dashboard/about-me`),
+                onClose: () => router.push(`/surveys/${playState.surveyId}`),
                 autoClose: 1500
             });
         }
