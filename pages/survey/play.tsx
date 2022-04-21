@@ -29,6 +29,8 @@ const PlaySurvey: NextPage = () => {
         surveyMode: "hashtag"
     });
 
+    const { projectId } = router.query;
+
     const { isLoading, surveyId, allCards, rightSwipedCards, currentCard, surveyMode } = playState;
 
     const { isLoading: isCreatingSurvey, mutate: startSurvey } = useMutation(surveyCreate, {
@@ -79,7 +81,10 @@ const PlaySurvey: NextPage = () => {
     });
 
     // Create a Survey or Continue a survey
-    React.useEffect(() => startSurvey({}), []);
+    React.useEffect(() => {
+        if (!router.isReady) return;
+        startSurvey({ project: projectId });
+    }, []);
 
     // @ts-ignore
     React.useEffect(async () => {
