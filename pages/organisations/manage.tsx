@@ -64,8 +64,8 @@ const ManageOrganisation: NextPage = () => {
                                         <thead className="bg-blue-600">
                                             <tr>
                                                 <th className="px-4 py-2 text-xs text-white text-left">---</th>
+                                                <th className="px-4 py-2 text-xs text-white text-left">Name</th>
                                                 <th className="px-4 py-2 text-xs text-white text-left">URL</th>
-                                                <th className="px-4 py-2 text-xs text-white text-left">Org Name</th>
                                                 <th className="px-4 py-2 text-xs text-white text-left" />
                                             </tr>
                                         </thead>

@@ -6,8 +6,8 @@ import { useMutation, useQuery } from "react-query";
 import { NextRouter, useRouter } from "next/router";
 
 import { withAuth, uploadImage } from "../../../utils";
+import { organisationGetOne, organisationUpdate } from "../../../api";
 import { LoadingComponent, NavigationBarComponent } from "../../../components";
-import { hashtagGetAllWithParents, organisationGetOne, organisationUpdate } from "../../../api";
 
 import type { NextPage } from "next";
 import type { AxiosResponse, AxiosError } from "axios";
@@ -21,14 +21,10 @@ const UpdateOrganisation: NextPage = () => {
     const [logoUrl, setLogoUrl] = React.useState<null | string>(null);
     const [previewImage, setPreviewImage] = React.useState<null | any>(null);
 
-    const [hashtags, setHashtags] = React.useState<any[]>([]);
-    const [selectedHashtags, setSelectedHashtags] = React.useState<any[]>([]);
-
     const { isLoading: isLoadingOrganisation } = useQuery(["organisation", organisationId], () => organisationGetOne(organisationId as string), {
         onSuccess: (response: AxiosResponse) => {
             const { data } = response.data;
             setLogoUrl(data.logoUrl);
-            setSelectedHashtags(data.hashtags.map((hashtag: any) => hashtag._id));
             setOrganisation(data);
         },
         onError: (error: AxiosError) => {
@@ -37,18 +33,6 @@ const UpdateOrganisation: NextPage = () => {
             });
         },
         enabled: !!organisationId
-    });
-
-    const { isLoading: isLoadingHashtag } = useQuery("hashtags", hashtagGetAllWithParents, {
-        onSuccess: (response: AxiosResponse) => {
-            const { data } = response.data;
-            // setHashtags(data);
-            setHashtags(data.filter((hashtag: any) => hashtag.parentHashtag === null));
-        },
-        onError: (error: AxiosError) => {
-            toast.error(error.response ? error.response.data.message : error.message);
-            router.push("/dashboard");
-        }
     });
 
     const { isLoading: isUpdatingOrganisation, mutate: updateOrganisation } = useMutation((context) => organisationUpdate(organisationId as string, context), {
@@ -68,7 +52,6 @@ const UpdateOrganisation: NextPage = () => {
         const formDataToJSON: any = Object.fromEntries(formData);
 
         formDataToJSON["logoUrl"] = logoUrl;
-        formDataToJSON["hashtags"] = selectedHashtags.map((hashtag) => hashtag.value || hashtag);
 
         updateOrganisation(formDataToJSON);
     };
@@ -83,9 +66,9 @@ const UpdateOrganisation: NextPage = () => {
                 <NavigationBarComponent />
 
                 <div className="flex-1 text-2xl font-bold max-h-screen overflow-y-auto">
-                    {isLoadingOrganisation || isLoadingHashtag || (!organisation && <LoadingComponent />)}
+                    {isLoadingOrganisation || (!organisation && <LoadingComponent />)}
 
-                    {!isLoadingOrganisation && !isLoadingHashtag && organisation && (
+                    {!isLoadingOrganisation && organisation && (
                         <div className="flex-1 p-10 text-2xl font-bold max-h-screen overflow-y-auto">
                             <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">Update Organisation - {organisation.name}</section>
 
@@ -133,17 +116,6 @@ const UpdateOrganisation: NextPage = () => {
                                                 className="border-black border-2 my-2 w-full p-2"
                                                 placeholder="haikoto.com/{slug}"
                                                 required
-                                            />
-
-                                            <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Hashtags (Parent Cards)</h1>
-                                            <Select
-                                                isMulti
-                                                className="border-black border-2 my-2 w-full"
-                                                options={hashtags.map((hashtag: any) => {
-                                                    return { value: hashtag._id, label: hashtag.title };
-                                                })}
-                                                defaultValue={organisation.hashtags.map((hashtag: any) => ({ value: hashtag._id, label: hashtag.title }))}
-                                                onChange={(selectedHashtags: any) => setSelectedHashtags(selectedHashtags)}
                                             />
 
                                             <div className="flex justify-center mt-8">

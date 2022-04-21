@@ -1,15 +1,14 @@
 import React from "react";
 import Head from "next/head";
 import Image from "next/image";
-import Select from "react-select";
 import { toast } from "react-toastify";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { NextRouter, useRouter } from "next/router";
 
 import { uploadGreyImage } from "../../assets";
 import { withAuth, uploadImage } from "../../utils";
 import { NavigationBarComponent } from "../../components";
-import { hashtagGetAllWithParents, organisationCreate } from "../../api";
+import { organisationCreate } from "../../api";
 
 import type { NextPage } from "next";
 import type { AxiosResponse, AxiosError } from "axios";
@@ -19,20 +18,6 @@ const CreateOrganisation: NextPage = () => {
 
     const [logoUrl, setLogoUrl] = React.useState<null | string>(null);
     const [previewImage, setPreviewImage] = React.useState<null | any>(null);
-
-    const [hashtags, setHashtags] = React.useState<any[]>([]);
-    const [selectedHashtags, setSelectedHashtags] = React.useState<any[]>([]);
-
-    const {} = useQuery("hashtags", hashtagGetAllWithParents, {
-        onSuccess: (response: AxiosResponse) => {
-            const { data } = response.data;
-            setHashtags(data.filter((hashtag: any) => hashtag.parentHashtag === null));
-        },
-        onError: (error: AxiosError) => {
-            toast.error(error.response ? error.response.data.message : error.message);
-            router.push("/dashboard");
-        }
-    });
 
     const { isLoading: isCreatingOrganisation, mutate: createOrganisation } = useMutation(organisationCreate, {
         onSuccess: (response: AxiosResponse) => {
@@ -51,7 +36,6 @@ const CreateOrganisation: NextPage = () => {
         const formDataToJSON: any = Object.fromEntries(formData);
 
         formDataToJSON["logoUrl"] = logoUrl;
-        formDataToJSON["hashtags"] = selectedHashtags.map((hashtag) => hashtag.value);
 
         createOrganisation(formDataToJSON);
     };
@@ -106,16 +90,6 @@ const CreateOrganisation: NextPage = () => {
 
                                     <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Organisation Slug Url</h1>
                                     <input name="slugUrl" type="text" className="border-black border-2 my-2 w-full p-2" placeholder="haikoto.com/{slug}" required />
-
-                                    <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Hashtags (Parent Cards)</h1>
-                                    <Select
-                                        isMulti
-                                        className="border-black border-2 my-2 w-full"
-                                        options={hashtags.map((hashtag: any) => {
-                                            return { value: hashtag._id, label: hashtag.title };
-                                        })}
-                                        onChange={(selectedHashtags: any) => setSelectedHashtags(selectedHashtags)}
-                                    />
 
                                     <div className="flex justify-center mt-8">
                                         <button
