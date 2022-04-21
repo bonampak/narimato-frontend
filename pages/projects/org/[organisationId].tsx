@@ -12,7 +12,7 @@ import { LoadingComponent, NavigationBarComponent } from "../../../components";
 import type { NextPage } from "next";
 import type { AxiosResponse, AxiosError } from "axios";
 
-const MyProject: NextPage = () => {
+const ProjectsByOrganisation: NextPage = () => {
     const router: NextRouter = useRouter();
 
     const { organisationId } = router.query;
@@ -88,4 +88,4 @@ const MyProject: NextPage = () => {
     );
 };
 
-export default withAuth(MyProject);
+export default withAuth(ProjectsByOrganisation);

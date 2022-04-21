@@ -13,7 +13,7 @@ import { LoadingComponent, NavigationBarComponent } from "../../../components";
 import type { NextPage } from "next";
 import type { AxiosResponse, AxiosError } from "axios";
 
-const MySurvey: NextPage = () => {
+const SurveysByOrganisation: NextPage = () => {
     const router: NextRouter = useRouter();
 
     const { organisationId } = router.query;
@@ -92,4 +92,4 @@ const MySurvey: NextPage = () => {
     );
 };
 
-export default withAuth(MySurvey);
+export default withAuth(SurveysByOrganisation);
