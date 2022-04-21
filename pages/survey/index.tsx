@@ -59,6 +59,8 @@ const StartASurvey: NextPage = () => {
                             <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">
                                 {!isLoading && projects ? (
                                     <ul className="list-inside list-disc">
+                                        {projects.length === 0 && <p>Your organisation has no survey project yet.</p>}
+
                                         {projects.map((project: any, index: number) => (
                                             <li className="mb-2" key={project._id}>
                                                 <Link href={`/survey/play?projectId=${project._id}`}>
