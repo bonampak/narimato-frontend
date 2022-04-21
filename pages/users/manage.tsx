@@ -82,8 +82,9 @@ const ManageUser: NextPage = () => {
                                         <thead className="bg-blue-600">
                                             <tr>
                                                 <th className="px-4 py-2 text-xs text-white text-left">---</th>
-                                                <th className="px-4 py-2 text-xs text-white text-left">User ID - Role</th>
+                                                <th className="px-4 py-2 text-xs text-white text-left">Role</th>
                                                 <th className="px-4 py-2 text-xs text-white text-left">CodeName</th>
+                                                <th className="px-4 py-2 text-xs text-white text-left">Organisation</th>
                                                 <th className="px-4 py-2 text-xs text-white text-left" />
                                             </tr>
                                         </thead>
@@ -93,6 +94,7 @@ const ManageUser: NextPage = () => {
                                                     <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{++index}</td>
                                                     <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{user.role}</td>
                                                     <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{user.codeName}</td>
+                                                    <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{user?.organisation?.name || "---"}</td>
                                                     <td className="border px-4 py-2 text-yellow-600 border-blue-500 font-medium">
                                                         <div className="divide-x-2 divide-neutral-900 divide-double">
                                                             <button onClick={() => handleUpgradeUser(user._id)}>
