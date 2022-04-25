@@ -20,7 +20,8 @@ const LoginOrSignup: NextPage = () => {
             const { data } = response.data;
             setCookies("auth-token", data.token, { maxAge: 60 * 60 });
             toast.success("Login successful, redirecting...");
-            setInterval(() => router.reload(), 2000);
+            // setInterval(() => router.reload(), 2000);
+            setInterval(() => window.location.replace("/dashboard"), 2000);
         },
         onError: (error: AxiosError) => {
             toast.error(error.response ? error.response.data.message : error.message);

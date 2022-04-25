@@ -37,9 +37,9 @@ const CompanyLoginOrSignup: NextPage = () => {
         onSuccess: (response: AxiosResponse) => {
             const { data, message } = response.data;
             setCookies("auth-token", data.token, { maxAge: 60 * 60 });
-            toast.success(message, {
-                onClose: () => router.reload()
-            });
+            toast.success(message);
+            // setInterval(() => router.reload(), 2000);
+            setInterval(() => window.location.replace("/dashboard"), 2000);
         },
         onError: (error: AxiosError) => {
             toast.error(error.response ? error.response.data.message : error.message);
