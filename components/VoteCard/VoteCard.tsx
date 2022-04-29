@@ -98,10 +98,17 @@ function VoteCard({ surveyId, rightSwipedCards, setPlayState }: VoteCardProps) {
             {!isLoading && filteredCardsBySameHashtag.length > 0 && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-8">
                     <div className="cursor-pointer" onClick={() => handleCardClick(newRightSwipedCard._id)}>
-                        <div className="h-52 w-52 md:h-[30vw] md:w-[30vw] relative mx-auto">
-                            <Image src={newRightSwipedCard.imageUrl} layout="fill" objectFit="cover" placeholder="blur" blurDataURL={LoadingImagePlacepholder} alt={newRightSwipedCard.title} />
-                        </div>
-                        <h1 className="font-bold max-w-xs text-[4vh] mx-auto text-center mt-3">{newRightSwipedCard.title}</h1>
+                        {newRightSwipedCard.imageUrl ? (
+                            <div className="flex justify-center">
+                                <img src={newRightSwipedCard.imageUrl} alt={newRightSwipedCard.title} className={["w-full aspect-square"].join(" ")} />
+                            </div>
+                        ) : (
+                            <div className={["flex mx-auto w-full aspect-square p-5 bg-blue-600 overflow-y-auto"].join(" ")}>
+                                <p className="m-auto text-center text-white">{newRightSwipedCard.description}</p>
+                            </div>
+                        )}
+                        <h1 className="font-bold md:max-w-sm text-4xl mx-auto text-center mt-3">{newRightSwipedCard.title}</h1>
+
                         {/* <p className="text-center text-[4vh]">
                             {newRightSwipedCard.hashtags.map((hashtag) => (
                                 <span key={hashtag._id} className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 my-2">
@@ -112,26 +119,24 @@ function VoteCard({ surveyId, rightSwipedCards, setPlayState }: VoteCardProps) {
                     </div>
 
                     <div className="cursor-pointer" onClick={() => handleCardClick(tempRightSwipedCards[voteRandomIndex]._id)}>
-                        <div className="h-52 w-52 md:h-[30vw] md:w-[30vw] relative mx-auto">
-                            <Image
-                                src={tempRightSwipedCards[voteRandomIndex].imageUrl}
-                                layout="fill"
-                                objectFit="cover"
-                                placeholder="blur"
-                                blurDataURL={LoadingImagePlacepholder}
-                                alt={newRightSwipedCard.title}
-                            />
-                        </div>
-                        <h1 className="font-bold max-w-xs text-[4vh] mx-auto text-center mt-3">
-                            {tempRightSwipedCards[voteRandomIndex].title}
-                            {/* <p className="text-center text-[4vh]">
-                                {tempRightSwipedCards[voteRandomIndex].hashtags.map((hashtag) => (
-                                    <span key={hashtag._id} className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 my-2">
-                                        #{hashtag.title}
-                                    </span>
-                                ))}
-                            </p> */}
-                        </h1>
+                        {tempRightSwipedCards[voteRandomIndex].imageUrl ? (
+                            <div className="flex justify-center">
+                                <img src={tempRightSwipedCards[voteRandomIndex].imageUrl} alt={tempRightSwipedCards[voteRandomIndex].title} className={["w-full aspect-square"].join(" ")} />
+                            </div>
+                        ) : (
+                            <div className={["flex mx-auto w-full aspect-square p-5 bg-blue-600 overflow-y-auto"].join(" ")}>
+                                <p className="m-auto text-center text-white">{tempRightSwipedCards[voteRandomIndex].description}</p>
+                            </div>
+                        )}
+                        <h1 className="font-bold md:max-w-sm text-4xl mx-auto text-center mt-3">{tempRightSwipedCards[voteRandomIndex].title}</h1>
+
+                        {/* <p className="text-center text-[4vh]">
+                            {tempRightSwipedCards[voteRandomIndex].hashtags.map((hashtag) => (
+                                <span key={hashtag._id} className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 my-2">
+                                    #{hashtag.title}
+                                </span>
+                            ))}
+                        </p> */}
                     </div>
                 </div>
             )}
