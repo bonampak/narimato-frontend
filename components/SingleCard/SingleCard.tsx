@@ -126,77 +126,37 @@ function SingleCard({ card, playState, setPlayState }: SingleCardProps) {
 
             {!isLoading && (
                 <>
-                    {/* Potrait View */}
-                    <div className="mt-2 mb-5 p-4 hidden portrait:block">
-                        <TinderCard ref={tinderCardRef} onSwipe={handleSwipe} preventSwipe={["up", "down", setPlayState ? "" : "right", setPlayState ? "" : "left"]}>
-                            <div className="h-52 w-52 lg:h-96 lg:w-96 relative mx-auto">
-                                {card.imageUrl ? (
-                                    <Image src={card.imageUrl} layout="fill" objectFit="cover" placeholder="blur" blurDataURL={LoadingImagePlacepholder} alt={card.title} />
-                                ) : (
-                                    <Image
-                                        src={`/api/text-image?text=${card.description}`}
-                                        layout="fill"
-                                        objectFit="cover"
-                                        placeholder="blur"
-                                        blurDataURL={LoadingImagePlacepholder}
-                                        alt={card.title}
-                                    />
-                                )}
-                            </div>
+                    <div className="p-4 portrait:mt-2 portrait:mb-5">
+                        <div className="landscape:grid landscape:grid-cols-4">
+                            <div className="hidden landscape:flex justify-center my-auto">{setPlayState && <CardNoButton onClickHandler={() => handleAnswerClick(false)} />}</div>
 
-                            <div className="mt-4 mb-8">
-                                <h1 className="font-bold md:max-w-xs text-[4vh] mx-auto text-center">{card.title}</h1>
-                                <p className="font-bold md:max-w-xs text-[2vh] mx-auto text-center">{card.description}</p>
-                                {!setPlayState && (
-                                    <p className="text-center text-[4vh]">
-                                        {card.hashtags.map((hashtag: any) => (
-                                            <span key={hashtag._id} className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
-                                                #{hashtag.title}
-                                            </span>
-                                        ))}
-                                    </p>
-                                )}
-                            </div>
-                        </TinderCard>
-
-                        {setPlayState && (
-                            <div className="flex justify-center mb-4">
-                                <CardNoButton onClickHandler={() => handleAnswerClick(false)} />
-                                <CardYesButton onClickHandler={() => handleAnswerClick(true)} />
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Landscape View */}
-                    <div className="p-4 hidden landscape:block">
-                        <div className="grid grid-cols-4">
-                            {setPlayState && (
-                                <div className="flex justify-center my-auto">
-                                    <CardNoButton onClickHandler={() => handleAnswerClick(false)} />
-                                </div>
-                            )}
-                            <div className={setPlayState ? "col-span-2" : "col-span-full"}>
+                            <div className={setPlayState ? "landscape:col-span-2" : "landscape:col-span-full"}>
                                 <TinderCard ref={tinderCardRef} onSwipe={handleSwipe} preventSwipe={["up", "down", setPlayState ? "" : "right", setPlayState ? "" : "left"]}>
-                                    <div className="h-52 w-52 lg:h-96 lg:w-96 relative mx-auto">
-                                        {card.imageUrl ? (
-                                            <Image src={card.imageUrl} layout="fill" objectFit="cover" placeholder="blur" blurDataURL={LoadingImagePlacepholder} alt={card.title} />
-                                        ) : (
-                                            <Image
-                                                src={`/api/text-image?text=${card.description}`}
-                                                layout="fill"
-                                                objectFit="cover"
-                                                placeholder="blur"
-                                                blurDataURL={LoadingImagePlacepholder}
+                                    {card.imageUrl ? (
+                                        <div className="flex justify-center">
+                                            <img
+                                                src={card.imageUrl}
                                                 alt={card.title}
+                                                className={["w-full portrait:md:w-1/3 aspect-square", !setPlayState && "landscape:w-1/3 portrait:md:w-1/2"].join(" ")}
                                             />
-                                        )}
-                                    </div>
+                                        </div>
+                                    ) : (
+                                        <div
+                                            className={[
+                                                "flex mx-auto w-full portrait:md:w-1/3 aspect-square p-5 bg-blue-600 overflow-y-auto",
+                                                !setPlayState && "landscape:w-1/3 portrait:md:w-1/2"
+                                            ].join(" ")}
+                                        >
+                                            <p className="m-auto text-center text-white">{card.description}</p>
+                                        </div>
+                                    )}
 
-                                    <div className="mt-4 w-full">
-                                        <h1 className="font-bold md:max-w-xs text-[4vh] mx-auto text-center">{card.title}</h1>
-                                        <p className="font-bold md:max-w-xs text-[2vh] mx-auto text-center">{card.description}</p>
+                                    <div className="mt-4 potrait:mb-8 landscape:w-full">
+                                        <h1 className="font-bold md:max-w-sm text-4xl mx-auto text-center">{card.title}</h1>
+                                        <p className="font-medium md:max-w-sm text-xl mx-auto text-center">{card.description}</p>
+
                                         {!setPlayState && (
-                                            <p className="text-center text-[4vh]">
+                                            <p className="text-center my-3">
                                                 {card.hashtags.map((hashtag: any) => (
                                                     <span key={hashtag._id} className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
                                                         #{hashtag.title}
@@ -208,11 +168,16 @@ function SingleCard({ card, playState, setPlayState }: SingleCardProps) {
                                 </TinderCard>
                             </div>
 
-                            {setPlayState && (
-                                <div className="flex justify-center my-auto">
-                                    <CardYesButton onClickHandler={() => handleAnswerClick(true)} />
-                                </div>
-                            )}
+                            <div className="hidden landscape:flex justify-center my-auto">{setPlayState && <CardYesButton onClickHandler={() => handleAnswerClick(true)} />}</div>
+
+                            <div className="hidden portrait:block">
+                                {setPlayState && (
+                                    <div className="flex justify-center mb-4">
+                                        <CardNoButton onClickHandler={() => handleAnswerClick(false)} />
+                                        <CardYesButton onClickHandler={() => handleAnswerClick(true)} />
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </>

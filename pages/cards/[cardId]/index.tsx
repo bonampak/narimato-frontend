@@ -44,10 +44,6 @@ const SingleCardPage: NextPage = () => {
 
                     {!isLoading && card && (
                         <div className="items-center justify-center">
-                            <div className="mb-4">
-                                <h1 className="text-center text-xl md:text-3xl">{card.title}</h1>
-                            </div>
-
                             <SingleCard card={card} />
                         </div>
                     )}
