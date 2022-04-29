@@ -66,22 +66,23 @@ const CreateHashtag: NextPage = () => {
                 <div className="flex-1 p-10 text-2xl font-bold max-h-screen overflow-y-auto">
                     <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">Create an Hashtag</section>
 
-                    <div className="flex flex-col items-center justify-center">
-                        <div className="mt-2 md:py-10 max-w-lg">
-                            <form onSubmit={handleSubmit}>
-                                <label htmlFor="upload-button">
-                                    <div className="flex justify-center relative">
-                                        <Image src={previewImage || uploadGreyImage} width={500} height={500} alt="hashtag-image" />
-                                        {!previewImage && <div className="absolute w-full py-2.5 bottom-1/3 bg-blue-600 text-white text-xs text-center leading-4">Click here upload</div>}
-                                    </div>
-                                </label>
+                    <div className="flex flex-col md:max-w-xl">
+                        <form onSubmit={handleSubmit}>
+                            <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Hashtag Image</h1>
+                            <div>
                                 <input
                                     type="file"
-                                    id="upload-button"
-                                    style={{ display: "none" }}
+                                    className="border-black border-2 my-2 w-full p-2"
                                     onChange={async (e: any) => {
                                         // Set the Preview Image
                                         const file = e.target.files[0];
+
+                                        if (!file) {
+                                            setPreviewImage(null);
+                                            setImageUrl(null);
+                                            return;
+                                        }
+
                                         const reader = new FileReader();
                                         reader.onload = (e: any) => setPreviewImage(e.target.result);
                                         reader.readAsDataURL(file);
@@ -96,37 +97,35 @@ const CreateHashtag: NextPage = () => {
                                     }}
                                 />
 
-                                <div className="mt-4 mb-8">
-                                    <h1 className="md:text-3xl text-center">Choose Hashtag Image</h1>
+                                {previewImage && <img src={previewImage} alt="card-image" className="w-full md:w-1/2 aspect-square" />}
+                            </div>
 
-                                    <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Hashtag Title</h1>
-                                    <input name="title" type="text" className="border-black border-2 my-2 w-full p-2" required />
+                            <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Hashtag Title</h1>
+                            <input name="title" type="text" className="border-black border-2 my-2 w-full p-2" required />
 
-                                    <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Hashtag Description</h1>
-                                    <input name="description" type="text" className="border-black border-2 my-2 w-full p-2" />
+                            <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Hashtag Description</h1>
+                            <input name="description" type="text" className="border-black border-2 my-2 w-full p-2" />
 
-                                    <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Parent Hashtags (If Any)</h1>
-                                    <Select
-                                        isClearable
-                                        name="parentHashtag"
-                                        className="border-black border-2 my-2 w-full"
-                                        options={hashtags.map((hashtag: any) => {
-                                            return { value: hashtag._id, label: hashtag.title };
-                                        })}
-                                    />
+                            <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Parent Hashtags (If Any)</h1>
+                            <Select
+                                isClearable
+                                name="parentHashtag"
+                                className="border-black border-2 my-2 w-full"
+                                options={hashtags.map((hashtag: any) => {
+                                    return { value: hashtag._id, label: hashtag.title };
+                                })}
+                            />
 
-                                    <div className="flex justify-center mt-8">
-                                        <button
-                                            disabled={isCreatingHashtag}
-                                            type="submit"
-                                            className={["bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg p-2 mt-8 w-full", isCreatingHashtag ? "opacity-50" : "opacity-100"].join(" ")}
-                                        >
-                                            Create
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
+                            <div className="flex justify-center mt-8">
+                                <button
+                                    disabled={isCreatingHashtag}
+                                    type="submit"
+                                    className={["bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg p-2 mt-8 w-full", isCreatingHashtag ? "opacity-50" : "opacity-100"].join(" ")}
+                                >
+                                    Create
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

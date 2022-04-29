@@ -95,48 +95,42 @@ const UpdateProject: NextPage = () => {
                         <div className="flex-1 p-10 text-2xl font-bold max-h-screen overflow-y-auto">
                             <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">Update Project - {project.name}</section>
 
-                            <div className="flex flex-col items-center justify-center">
-                                <div className="mt-2 md:py-10 max-w-lg">
-                                    <form onSubmit={handleSubmit}>
-                                        <div className="mb-8">
-                                            <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Project Name</h1>
-                                            <input name="name" defaultValue={project.name} type="text" className="border-black border-2 my-2 w-full p-2" required />
+                            <div className="flex flex-col md:max-w-xl">
+                                <form onSubmit={handleSubmit}>
+                                    <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Project Name</h1>
+                                    <input name="name" defaultValue={project.name} type="text" className="border-black border-2 my-2 w-full p-2" required />
 
-                                            <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Hashtags (Parent Cards)</h1>
-                                            <Select
-                                                isMulti
-                                                className="border-black border-2 my-2 w-full"
-                                                options={hashtags.map((hashtag: any) => {
-                                                    return { value: hashtag._id, label: hashtag.title };
-                                                })}
-                                                defaultValue={project.hashtags.map((hashtag: any) => ({ value: hashtag._id, label: hashtag.title }))}
-                                                onChange={(selectedHashtags: any) => setSelectedHashtags(selectedHashtags)}
-                                            />
+                                    <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Hashtags (Parent Cards)</h1>
+                                    <Select
+                                        isMulti
+                                        className="border-black border-2 my-2 w-full"
+                                        options={hashtags.map((hashtag: any) => {
+                                            return { value: hashtag._id, label: hashtag.title };
+                                        })}
+                                        defaultValue={project.hashtags.map((hashtag: any) => ({ value: hashtag._id, label: hashtag.title }))}
+                                        onChange={(selectedHashtags: any) => setSelectedHashtags(selectedHashtags)}
+                                    />
 
-                                            <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Organisation</h1>
-                                            <Select
-                                                name="organisation"
-                                                className="border-black border-2 my-2 w-full"
-                                                defaultValue={{ value: project.organisation._id, label: project.organisation.name }}
-                                                options={organisations.map((organisation: any) => {
-                                                    return { value: organisation._id, label: organisation.name };
-                                                })}
-                                            />
+                                    <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Organisation</h1>
+                                    <Select
+                                        name="organisation"
+                                        className="border-black border-2 my-2 w-full"
+                                        defaultValue={{ value: project.organisation._id, label: project.organisation.name }}
+                                        options={organisations.map((organisation: any) => {
+                                            return { value: organisation._id, label: organisation.name };
+                                        })}
+                                    />
 
-                                            <div className="flex justify-center mt-8">
-                                                <button
-                                                    disabled={isUpdatingProject}
-                                                    type="submit"
-                                                    className={["bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg p-2 mt-8 w-full", isUpdatingProject ? "opacity-50" : "opacity-100"].join(
-                                                        " "
-                                                    )}
-                                                >
-                                                    Update
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
+                                    <div className="flex justify-center mt-8">
+                                        <button
+                                            disabled={isUpdatingProject}
+                                            type="submit"
+                                            className={["bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg p-2 mt-8 w-full", isUpdatingProject ? "opacity-50" : "opacity-100"].join(" ")}
+                                        >
+                                            Update
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     )}

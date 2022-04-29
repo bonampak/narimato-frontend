@@ -72,22 +72,23 @@ const UpdateOrganisation: NextPage = () => {
                         <div className="flex-1 p-10 text-2xl font-bold max-h-screen overflow-y-auto">
                             <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">Update Organisation - {organisation.name}</section>
 
-                            <div className="flex flex-col items-center justify-center">
-                                <div className="mt-2 md:py-10 max-w-lg">
-                                    <form onSubmit={handleSubmit}>
-                                        <label htmlFor="upload-button">
-                                            <div className="flex justify-center relative">
-                                                <img src={previewImage || logoUrl} width={500} height={500} alt="organisation-image" />
-                                                {!previewImage && <div className="absolute w-full py-2.5 bottom-1/3 bg-blue-600 text-white text-xs text-center leading-4">Click here upload</div>}
-                                            </div>
-                                        </label>
+                            <div className="flex flex-col md:max-w-xl">
+                                <form onSubmit={handleSubmit}>
+                                    <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Hashtag Image</h1>
+                                    <div>
                                         <input
                                             type="file"
-                                            id="upload-button"
-                                            style={{ display: "none" }}
+                                            className="border-black border-2 my-2 w-full p-2"
                                             onChange={async (e: any) => {
                                                 // Set the Preview Image
                                                 const file = e.target.files[0];
+
+                                                if (!file) {
+                                                    setPreviewImage(null);
+                                                    setLogoUrl(null);
+                                                    return;
+                                                }
+
                                                 const reader = new FileReader();
                                                 reader.onload = (e: any) => setPreviewImage(e.target.result);
                                                 reader.readAsDataURL(file);
@@ -102,37 +103,27 @@ const UpdateOrganisation: NextPage = () => {
                                             }}
                                         />
 
-                                        <div className="mt-4 mb-8">
-                                            <h1 className="md:text-3xl text-center">Choose Company Logo</h1>
+                                        {previewImage && <img src={previewImage} alt="card-image" className="w-full md:w-1/2 aspect-square" />}
 
-                                            <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Organisation Name</h1>
-                                            <input name="name" defaultValue={organisation.name} type="text" className="border-black border-2 my-2 w-full p-2" required />
+                                        {!previewImage && logoUrl && <img src={logoUrl} alt="card-image" className="w-full md:w-1/2 aspect-square" />}
+                                    </div>
 
-                                            <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Organisation Slug Url</h1>
-                                            <input
-                                                name="slugUrl"
-                                                type="text"
-                                                defaultValue={organisation.slugUrl}
-                                                className="border-black border-2 my-2 w-full p-2"
-                                                placeholder="haikoto.com/{slug}"
-                                                required
-                                            />
+                                    <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Organisation Name</h1>
+                                    <input name="name" defaultValue={organisation.name} type="text" className="border-black border-2 my-2 w-full p-2" required />
 
-                                            <div className="flex justify-center mt-8">
-                                                <button
-                                                    disabled={isUpdatingOrganisation}
-                                                    type="submit"
-                                                    className={[
-                                                        "bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg p-2 mt-8 w-full",
-                                                        isUpdatingOrganisation ? "opacity-50" : "opacity-100"
-                                                    ].join(" ")}
-                                                >
-                                                    Update
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
+                                    <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Organisation Slug Url</h1>
+                                    <input name="slugUrl" type="text" defaultValue={organisation.slugUrl} className="border-black border-2 my-2 w-full p-2" placeholder="haikoto.com/{slug}" required />
+
+                                    <div className="flex justify-center mt-8">
+                                        <button
+                                            disabled={isUpdatingOrganisation}
+                                            type="submit"
+                                            className={["bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg p-2 mt-8 w-full", isUpdatingOrganisation ? "opacity-50" : "opacity-100"].join(" ")}
+                                        >
+                                            Update
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     )}
