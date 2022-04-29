@@ -94,7 +94,11 @@ const UpdateCard: NextPage = () => {
                                     <form onSubmit={handleSubmit}>
                                         <label htmlFor="upload-button">
                                             <div className="flex justify-center relative">
-                                                <Image src={previewImage || imageUrl} width={500} height={500} alt="card-image" />
+                                                {card.imageUrl ? (
+                                                    <Image src={previewImage || imageUrl} width={500} height={500} alt="card-image" />
+                                                ) : (
+                                                    <Image src={previewImage || `/api/text-image?text=${card.description}`} width={500} height={500} alt="card-image" />
+                                                )}
                                                 {!previewImage && <div className="absolute w-full py-2.5 bottom-1/3 bg-blue-600 text-white text-xs text-center leading-4">Click here upload</div>}
                                             </div>
                                         </label>

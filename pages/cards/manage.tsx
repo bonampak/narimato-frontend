@@ -145,7 +145,11 @@ const AllCard: NextPage = () => {
                                                     <tr key={card._id}>
                                                         <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{++index}</td>
                                                         <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
-                                                            <Image src={card.imageUrl} alt={card.title} width={50} height={50} quality={5} />
+                                                            {card.imageUrl ? (
+                                                                <Image src={card.imageUrl} alt={card.title} width={50} height={50} quality={5} />
+                                                            ) : (
+                                                                <Image src={`/api/text-image?text=${card.description}`} alt={card.title} width={50} height={50} quality={5} />
+                                                            )}
                                                         </td>
                                                         <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{card.title}</td>
                                                         <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">

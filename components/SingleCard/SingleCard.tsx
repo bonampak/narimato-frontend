@@ -130,7 +130,18 @@ function SingleCard({ card, playState, setPlayState }: SingleCardProps) {
                     <div className="mt-2 mb-5 p-4 hidden portrait:block">
                         <TinderCard ref={tinderCardRef} onSwipe={handleSwipe} preventSwipe={["up", "down", setPlayState ? "" : "right", setPlayState ? "" : "left"]}>
                             <div className="h-52 w-52 lg:h-96 lg:w-96 relative mx-auto">
-                                <Image src={card.imageUrl} layout="fill" objectFit="cover" placeholder="blur" blurDataURL={LoadingImagePlacepholder} alt={card.title} />
+                                {card.imageUrl ? (
+                                    <Image src={card.imageUrl} layout="fill" objectFit="cover" placeholder="blur" blurDataURL={LoadingImagePlacepholder} alt={card.title} />
+                                ) : (
+                                    <Image
+                                        src={`/api/text-image?text=${card.description}`}
+                                        layout="fill"
+                                        objectFit="cover"
+                                        placeholder="blur"
+                                        blurDataURL={LoadingImagePlacepholder}
+                                        alt={card.title}
+                                    />
+                                )}
                             </div>
 
                             <div className="mt-4 mb-8">
@@ -167,7 +178,18 @@ function SingleCard({ card, playState, setPlayState }: SingleCardProps) {
                             <div className={setPlayState ? "col-span-2" : "col-span-full"}>
                                 <TinderCard ref={tinderCardRef} onSwipe={handleSwipe} preventSwipe={["up", "down", setPlayState ? "" : "right", setPlayState ? "" : "left"]}>
                                     <div className="h-52 w-52 lg:h-96 lg:w-96 relative mx-auto">
-                                        <Image src={card.imageUrl} layout="fill" objectFit="cover" placeholder="blur" blurDataURL={LoadingImagePlacepholder} alt={card.title} />
+                                        {card.imageUrl ? (
+                                            <Image src={card.imageUrl} layout="fill" objectFit="cover" placeholder="blur" blurDataURL={LoadingImagePlacepholder} alt={card.title} />
+                                        ) : (
+                                            <Image
+                                                src={`/api/text-image?text=${card.description}`}
+                                                layout="fill"
+                                                objectFit="cover"
+                                                placeholder="blur"
+                                                blurDataURL={LoadingImagePlacepholder}
+                                                alt={card.title}
+                                            />
+                                        )}
                                     </div>
 
                                     <div className="mt-4 w-full">

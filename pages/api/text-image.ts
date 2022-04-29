@@ -24,12 +24,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Text Config
         lineHeight: 50,
-        margin: 50,
+        margin: 70,
         textAlign: "center",
         verticalAlign: "middle",
 
         // Changeable options
-        textColor: "blue",
+        textColor: "#2563eb",
         bgColor: "white"
     });
 
