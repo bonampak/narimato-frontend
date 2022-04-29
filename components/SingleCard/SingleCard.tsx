@@ -1,12 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React from "react";
-import Image from "next/image";
 import { toast } from "react-toastify";
 import { useMutation } from "react-query";
 import TinderCard from "react-tinder-card";
 import { useKeyPressEvent } from "react-use";
 
-import { LoadingImagePlacepholder } from "../../assets";
 import { CardYesButton, CardNoButton, LoadingComponent } from "../../components";
 import { surveyAddRightSwipedCard, surveyAddLeftSwipedCard, surveyNewCard } from "../../api";
 
@@ -153,7 +151,8 @@ function SingleCard({ card, playState, setPlayState }: SingleCardProps) {
 
                                     <div className="mt-4 potrait:mb-8 landscape:w-full">
                                         <h1 className="font-bold md:max-w-sm text-4xl mx-auto text-center">{card.title}</h1>
-                                        <p className="font-medium md:max-w-sm text-xl mx-auto text-center">{card.description}</p>
+
+                                        {card.imageUrl && <p className="font-medium md:max-w-sm text-xl mx-auto text-center">{card.description}</p>}
 
                                         {!setPlayState && (
                                             <p className="text-center my-3">
