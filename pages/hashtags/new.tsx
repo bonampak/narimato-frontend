@@ -1,12 +1,10 @@
 import React from "react";
 import Head from "next/head";
-import Image from "next/image";
 import Select from "react-select";
 import { toast } from "react-toastify";
 import { useMutation, useQuery } from "react-query";
 import { NextRouter, useRouter } from "next/router";
 
-import { uploadGreyImage } from "../../assets";
 import { withAuth, uploadImage } from "../../utils";
 import { NavigationBarComponent } from "../../components";
 import { hashtagGetAllTitles, hashtagCreate } from "../../api";
@@ -17,8 +15,8 @@ import type { AxiosResponse, AxiosError } from "axios";
 const CreateHashtag: NextPage = () => {
     const router: NextRouter = useRouter();
 
-    const [imageUrl, setImageUrl] = React.useState<null | string>(process.env.NODE_ENV !== "production" ? "http://localhost:3000/samp.jpg" : null);
-    const [previewImage, setPreviewImage] = React.useState<null | any>(process.env.NODE_ENV !== "production" ? "http://localhost:3000/samp.jpg" : null);
+    const [imageUrl, setImageUrl] = React.useState<null | string>(null);
+    const [previewImage, setPreviewImage] = React.useState<null | any>(null);
 
     const [hashtags, setHashtags] = React.useState<any[]>([]);
 

@@ -108,56 +108,60 @@ function HashtagCard({ playState, setPlayState }: HashtagCardProps) {
             {isLoading && <LoadingComponent />}
 
             {!isLoading && hashtag && (
-                <>
-                    {/* Potrait */}
-                    <div className="mt-2 mb-5 p-4 hidden portrait:block">
-                        <TinderCard ref={tinderCardRef} onSwipe={handleSwipe} preventSwipe={["up", "down", setPlayState ? "" : "right", setPlayState ? "" : "left"]}>
-                            <div className="h-52 w-52 lg:h-96 lg:w-96 relative mx-auto">
-                                <Image src={hashtag.imageUrl} alt="hashtag-image" layout="fill" objectFit="cover" placeholder="blur" blurDataURL={LoadingImagePlacepholder} />
-                            </div>
+                <div className="p-4 portrait:mt-2 portrait:mb-5">
+                    <div className="landscape:grid landscape:grid-cols-4">
+                        <div className="hidden landscape:flex justify-center my-auto">{setPlayState && <CardNoButton onClickHandler={() => handleHashtagClick(false)} />}</div>
 
-                            <div className="mt-4 mb-8">
-                                <h1 className="font-bold md:max-w-xs text-[5vh] mx-auto text-center">{hashtag.title}</h1>
-                                <p className="font-bold md:max-w-xs text-[2vh] mx-auto text-center">{hashtag.description}</p>
-                            </div>
-                        </TinderCard>
+                        <div className={setPlayState ? "landscape:col-span-2" : "landscape:col-span-full"}>
+                            <TinderCard ref={tinderCardRef} onSwipe={handleSwipe} preventSwipe={["up", "down", setPlayState ? "" : "right", setPlayState ? "" : "left"]}>
+                                {hashtag.imageUrl ? (
+                                    <div className="flex justify-center">
+                                        <img
+                                            src={hashtag.imageUrl}
+                                            alt={hashtag.title}
+                                            className={["w-full portrait:md:w-1/3 aspect-square", !setPlayState && "landscape:w-1/3 portrait:md:w-1/2"].join(" ")}
+                                        />
+                                    </div>
+                                ) : (
+                                    <div
+                                        className={["flex mx-auto w-full portrait:md:w-1/3 aspect-square p-5 bg-blue-600 overflow-y-auto", !setPlayState && "landscape:w-1/3 portrait:md:w-1/2"].join(
+                                            " "
+                                        )}
+                                    >
+                                        <p className="m-auto text-center text-white">{hashtag.description}</p>
+                                    </div>
+                                )}
 
-                        {setPlayState && (
-                            <div className="flex justify-center mb-4">
-                                <CardNoButton onClickHandler={() => handleHashtagClick(false)} />
-                                <CardYesButton onClickHandler={() => handleHashtagClick(true)} />
-                            </div>
-                        )}
-                    </div>
+                                <div className="mt-4 potrait:mb-8 landscape:w-full">
+                                    <h1 className="font-bold md:max-w-sm text-4xl mx-auto text-center">{hashtag.title}</h1>
 
-                    {/* Landscape View */}
-                    <div className="p-4 hidden landscape:block">
-                        <div className="grid grid-cols-4">
-                            {setPlayState && (
-                                <div className="flex justify-center my-auto">
-                                    <CardNoButton onClickHandler={() => handleHashtagClick(false)} />
+                                    {hashtag.imageUrl && <p className="font-medium md:max-w-sm text-xl mx-auto text-center">{hashtag.description}</p>}
+
+                                    {!setPlayState && (
+                                        <p className="text-center my-3">
+                                            {hashtag.hashtags.map((hashtag: any) => (
+                                                <span key={hashtag._id} className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
+                                                    #{hashtag.title}
+                                                </span>
+                                            ))}
+                                        </p>
+                                    )}
                                 </div>
-                            )}
-                            <div className={setPlayState ? "col-span-2" : "col-span-full"}>
-                                <TinderCard ref={tinderCardRef} onSwipe={handleSwipe} preventSwipe={["up", "down", setPlayState ? "" : "right", setPlayState ? "" : "left"]}>
-                                    <div className="h-52 w-52 lg:h-96 lg:w-96 relative mx-auto">
-                                        <Image src={hashtag.imageUrl} layout="fill" objectFit="cover" placeholder="blur" blurDataURL={LoadingImagePlacepholder} alt="hashtag" />
-                                    </div>
+                            </TinderCard>
+                        </div>
 
-                                    <div className="mt-4 w-full">
-                                        <h1 className="font-bold md:max-w-xs text-[5vh] mx-auto text-center">{hashtag.title}</h1>
-                                        <p className="font-bold md:max-w-xs text-[2vh] mx-auto text-center">{hashtag.description}</p>
-                                    </div>
-                                </TinderCard>
-                            </div>
+                        <div className="hidden landscape:flex justify-center my-auto">{setPlayState && <CardYesButton onClickHandler={() => handleHashtagClick(true)} />}</div>
+
+                        <div className="hidden portrait:block">
                             {setPlayState && (
-                                <div className="flex justify-center my-auto">
+                                <div className="flex justify-center mb-4">
+                                    <CardNoButton onClickHandler={() => handleHashtagClick(false)} />
                                     <CardYesButton onClickHandler={() => handleHashtagClick(true)} />
                                 </div>
                             )}
                         </div>
                     </div>
-                </>
+                </div>
             )}
         </>
     );

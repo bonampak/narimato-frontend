@@ -77,7 +77,7 @@ const AllHashtag: NextPage = () => {
                                                     <tr key={hashtag._id}>
                                                         <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{++index}</td>
                                                         <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
-                                                            <Image src={hashtag.imageUrl} alt={hashtag.title} width={50} height={50} quality={5} />
+                                                            {hashtag.imageUrl ? <Image src={hashtag.imageUrl} alt={hashtag.title} width={50} height={50} quality={5} /> : "------"}
                                                         </td>
                                                         <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{hashtag.title}</td>
                                                         <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{hashtag.parentHashtag ? hashtag.parentHashtag.title : "---"}</td>
