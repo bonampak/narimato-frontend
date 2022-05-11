@@ -66,11 +66,11 @@ const CompanyLoginOrSignup: NextPage = () => {
 
             {!isLoading && organisation && (
                 <div className="w-full flex flex-wrap">
-                    <div className="w-full md:w-1/2 flex flex-col">
-                        <div className="flex justify-center md:justify-start pt-12 md:pl-12 md:-mb-24">
-                            <img src={organisation.logoUrl} className="max-h-20" alt="organisation-logo" />
+                    <div className="w-full md:w-1/2 flex flex-col my-auto">
+                        <div className="flex justify-center pt-12">
+                            <img src={organisation.logoUrl} className="w-28 aspect-square" alt="organisation-logo" />
                         </div>
-                        <div className="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
+                        <div className="flex flex-col justify-center pt-8 md:pt-5 px-8 md:px-24 lg:px-32">
                             <p className="text-center text-3xl">Login | Signup</p>
                             <form className="flex flex-col pt-3 md:pt-8" onSubmit={handleSubmit}>
                                 <div className="flex flex-col pt-4">
