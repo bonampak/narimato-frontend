@@ -104,7 +104,7 @@ function VoteCard({ surveyId, rightSwipedCards, setPlayState }: VoteCardProps) {
                             </div>
                         ) : (
                             <div className={["flex mx-auto w-full portrait:w-2/3 aspect-square p-5 bg-blue-600 overflow-y-auto"].join(" ")}>
-                                <p className="m-auto text-center text-white">{newRightSwipedCard.description}</p>
+                                <p className="m-auto text-center text-white text-[1.5em] leading-normal">{newRightSwipedCard.description}</p>
                             </div>
                         )}
                         <h1 className="font-bold md:max-w-sm text-4xl mx-auto text-center my-3">{newRightSwipedCard.title}</h1>
@@ -129,7 +129,7 @@ function VoteCard({ surveyId, rightSwipedCards, setPlayState }: VoteCardProps) {
                             </div>
                         ) : (
                             <div className={["flex mx-auto w-full portrait:w-2/3 aspect-square p-5 bg-blue-600 overflow-y-auto"].join(" ")}>
-                                <p className="m-auto text-center text-white">{tempRightSwipedCards[voteRandomIndex].description}</p>
+                                <p className="m-auto text-center text-white text-[1.5em] leading-normal">{tempRightSwipedCards[voteRandomIndex].description}</p>
                             </div>
                         )}
                         <h1 className="font-bold md:max-w-sm text-4xl mx-auto text-center my-3">{tempRightSwipedCards[voteRandomIndex].title}</h1>

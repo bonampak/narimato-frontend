@@ -128,7 +128,7 @@ function HashtagCard({ playState, setPlayState }: HashtagCardProps) {
                                             " "
                                         )}
                                     >
-                                        <p className="m-auto text-center text-white">{hashtag.description}</p>
+                                        <p className="m-auto text-center text-white text-[1.5em] leading-normal">{hashtag.description}</p>
                                     </div>
                                 )}
 
