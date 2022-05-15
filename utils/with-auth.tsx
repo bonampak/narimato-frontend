@@ -25,8 +25,8 @@ const withAuth = (WrappedComponent: React.FC) => {
         useQuery("auth-user", userGetMe, {
             onError: (error: AxiosError) => {
                 const message = error.response ? error.response.data.message : error.message;
-                // Handle invalid auth token error and redirect somewhere
-                router.push("/");
+                // Handle invalid auth token error and redirect to logout
+                router.push("/auth/logout");
             },
             enabled: !!authToken
         });
