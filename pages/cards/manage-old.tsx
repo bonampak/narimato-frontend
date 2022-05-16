@@ -19,13 +19,11 @@ const AllCard: NextPage = () => {
     const router = useRouter();
 
     const [cards, setCards] = React.useState<null | any[]>(null);
-    const [filteredData, setFilteredData] = React.useState<null | any[]>(cards);
 
     const { isLoading } = useQuery(["cards", "with-hashtags"], cardGetAllWithHashtags, {
         onSuccess: (response: AxiosResponse) => {
             const { data } = response.data;
             setCards(data);
-            setFilteredData(data);
         },
         onError: (error: AxiosError) => {
             toast.error(error.response ? error.response.data.message : error.message);
@@ -37,7 +35,6 @@ const AllCard: NextPage = () => {
         onSuccess: (response: AxiosResponse) => {
             const { data } = response.data;
             setCards((cards as any[]).filter((card: any) => card._id !== data._id));
-            setFilteredData((filteredData as any[]).filter((card: any) => card._id !== data._id));
         },
         onError: (error: AxiosError) => {
             toast.error(error.response ? error.response.data.message : error.message);
@@ -48,13 +45,71 @@ const AllCard: NextPage = () => {
         if (confirm("Are you sure you want to delete this card?")) deleteCard(cardId);
     }
 
-    const handleSearch = (event: any) => {
-        const value = event.target.value.toLowerCase();
-        const result = cards?.filter((card) => {
-            return JSON.stringify(card).toLowerCase().includes(value);
-        });
-        setFilteredData(result as any[]);
-    };
+    // React-Table Setup
+    // const columns = React.useMemo(
+    //     () => [
+    //         { Header: "Column 1", accessor: "col1" },
+    //         { Header: "Column 2", accessor: "col2" }
+    //     ],
+    //     []
+    // );
+    // const data = React.useMemo(
+    //     () => [
+    //         { col1: "Hello", col2: "World" },
+    //         { col1: "react-table", col2: "rocks" },
+    //         { col1: "whatever", col2: "you want" }
+    //     ],
+    //     []
+    // );
+    // const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data }, useSortBy);
+
+    // return (
+    //     // apply the table props
+    //     <table className="table-auto w-full" {...getTableProps()}>
+    //         <thead className="bg-blue-600">
+    //             {/* // Loop over the header rows */}
+    //             {headerGroups.map((headerGroup) => (
+    //                 // Apply the header row props
+    //                 <tr {...headerGroup.getHeaderGroupProps()}>
+    //                     {/* // Loop over the headers in each row */}
+    //                     {headerGroup.headers.map((column) => (
+    //                         // Apply the header cell props
+    //                         <th className="px-4 py-2 text-xs text-white text-left" {...column.getHeaderProps(column.getSortByToggleProps())}>
+    //                             {/* // Render the header */}
+    //                             {column.render("Header")}
+    //                             <span className="mx-2">{column.isSorted ? "🔼" : "🔽"}</span>
+    //                         </th>
+    //                     ))}
+    //                 </tr>
+    //             ))}
+    //         </thead>
+    //         {/* Apply the table body props */}
+    //         <tbody {...getTableBodyProps()}>
+    //             {
+    //                 // Loop over the table rows
+    //                 rows.map((row) => {
+    //                     // Prepare the row for display
+    //                     prepareRow(row);
+    //                     return (
+    //                         // Apply the row props
+    //                         <tr {...row.getRowProps()}>
+    //                             {/* // Loop over the rows cells */}
+    //                             {row.cells.map((cell) => {
+    //                                 // Apply the cell props
+    //                                 return (
+    //                                     <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium" {...cell.getCellProps()}>
+    //                                         {/* // Render the cell contents */}
+    //                                         {cell.render("Cell")}
+    //                                     </td>
+    //                                 );
+    //                             })}
+    //                         </tr>
+    //                     );
+    //                 })
+    //             }
+    //         </tbody>
+    //     </table>
+    // );
 
     return (
         <>
@@ -66,15 +121,15 @@ const AllCard: NextPage = () => {
                 <NavigationBarComponent />
 
                 <div className="flex-1 p-10 text-2xl font-bold max-h-screen overflow-y-auto">
-                    {isLoading && !filteredData && <LoadingComponent />}
+                    {isLoading && !cards && <LoadingComponent />}
 
-                    {!isLoading && filteredData && (
+                    {!isLoading && cards && (
                         <div className="items-center justify-center">
                             <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">All Cards</section>
 
                             <div className="mb-10">
                                 <div className="overflow-x-auto">
-                                    <input type="search" placeholder="Search..." className="border-black border-2 my-2 w-full p-1" onChange={handleSearch} />
+                                    <input type="search" placeholder="Search..." className="border-black border-2 my-2 w-full p-1" />
                                     <table className="table-auto w-full">
                                         <thead className="bg-blue-600">
                                             <tr>
@@ -86,7 +141,7 @@ const AllCard: NextPage = () => {
                                             </tr>
                                         </thead>
                                         <tbody className="text-sm">
-                                            {filteredData.map((card: any, index: number) => {
+                                            {cards.map((card: any, index: number) => {
                                                 return (
                                                     <tr key={card._id}>
                                                         <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{++index}</td>
