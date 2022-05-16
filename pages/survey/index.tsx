@@ -55,36 +55,29 @@ const StartASurvey: NextPage = () => {
                     <div className="items-center justify-center">
                         <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">Available Projects</section>
 
-                        {!user?.organisation && (
-                            <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">
-                                <ul className="list-inside list-disc">
-                                    <li>
-                                        <Link href="/survey/play">
-                                            <a className="text- underline">Start: Default Survey</a>
+                        {!isLoadingOrganisationProjects && !isLoadingDefaultProjects && projects ? (
+                            <>
+                                {projects.length === 0 && user.organisation && <p className="p-5 bg-red-200">Your organisation has no survey project yet.</p>}
+
+                                {/* <div className="my-2 w-full p-5 rounded bg-blue-200">
+                                    <Link href={`/survey/play`}>
+                                        <a className="w-full">Start: Default Survey</a>
+                                    </Link>
+                                </div> */}
+
+                                {projects.map((project: any, index: number) => (
+                                    <div key={project._id} className="my-2 w-full p-5 rounded bg-blue-200">
+                                        <Link href={`/survey/play?projectId=${project._id}`}>
+                                            <a className="w-full">
+                                                {++index}.&nbsp; {project.name}
+                                            </a>
                                         </Link>
-                                    </li>
-                                </ul>
-                            </section>
+                                    </div>
+                                ))}
+                            </>
+                        ) : (
+                            "Loading..."
                         )}
-
-                        <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">
-                            {!isLoadingOrganisationProjects && !isLoadingDefaultProjects && projects ? (
-                                <ul className="list-inside list-disc">
-                                    {/* Show "no organisation project message" if user is in an organisation */}
-                                    {projects.length === 0 && user.organisation && <p>Your organisation has no survey project yet.</p>}
-
-                                    {projects.map((project: any, index: number) => (
-                                        <li className="mb-2" key={project._id}>
-                                            <Link href={`/survey/play?projectId=${project._id}`}>
-                                                <a className="text- underline">Start: {project.name}</a>
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </ul>
-                            ) : (
-                                "Loading..."
-                            )}
-                        </section>
                     </div>
                 </div>
             </div>
