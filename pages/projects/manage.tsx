@@ -75,7 +75,7 @@ const ManageProject: NextPage = () => {
                                                     <tr key={project._id}>
                                                         <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{++index}</td>
                                                         <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{project.name}</td>
-                                                        <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{project.organisation.name}</td>
+                                                        <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{project.organisation ? project.organisation.name : "--DEFAULT--"}</td>
                                                         <td className="border px-4 py-2 text-yellow-600 border-blue-500 font-medium">
                                                             <div className="divide-x-2 divide-neutral-900 divide-double">
                                                                 <Link href={`/projects/${project._id}`}>

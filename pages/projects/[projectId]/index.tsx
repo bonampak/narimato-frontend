@@ -61,7 +61,7 @@ const SingleProject: NextPage = () => {
                                     </p>
                                     <p className="text-2xl border-b-2 border-black mb-4">
                                         Organisation: <br />
-                                        {project.organisation.name}
+                                        {project.organisation ? project.organisation.name : "--DEFAULT--"}
                                     </p>
                                 </section>
                             </div>

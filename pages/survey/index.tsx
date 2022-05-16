@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { useQuery } from "react-query";
 import { NextRouter, useRouter } from "next/router";
 
-import { projectGetAllByOrganisation } from "../../api";
+import { projectGetAllByOrganisation, projectGetDefaults } from "../../api";
 import { useUser, withAuth } from "../../utils";
 import { NavigationBarComponent } from "../../components";
 
@@ -18,7 +18,7 @@ const StartASurvey: NextPage = () => {
 
     const [projects, setProjects] = React.useState<null | any[]>(null);
 
-    const { isLoading } = useQuery(["projects", user?.organisation?._id], () => projectGetAllByOrganisation(user.organisation?._id as string), {
+    const { isLoading: isLoadingOrganisationProjects } = useQuery(["projects", user?.organisation?._id], () => projectGetAllByOrganisation(user.organisation?._id as string), {
         onSuccess: (response: AxiosResponse) => {
             const { data } = response.data;
             setProjects(data);
@@ -27,7 +27,19 @@ const StartASurvey: NextPage = () => {
             toast.error(error.response ? error.response.data.message : error.message);
             router.push("/dashboard");
         },
-        enabled: !!user?.organisation
+        enabled: user && typeof user.organisation !== "undefined" ? true : false
+    });
+
+    const { isLoading: isLoadingDefaultProjects } = useQuery(["projects", "default"], projectGetDefaults, {
+        onSuccess: (response: AxiosResponse) => {
+            const { data } = response.data;
+            setProjects(data);
+        },
+        onError: (error: AxiosError) => {
+            toast.error(error.response ? error.response.data.message : error.message);
+            router.push("/dashboard");
+        },
+        enabled: user && typeof user.organisation === "undefined" ? true : false
     });
 
     return (
@@ -55,25 +67,24 @@ const StartASurvey: NextPage = () => {
                             </section>
                         )}
 
-                        {user?.organisation && (
-                            <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">
-                                {!isLoading && projects ? (
-                                    <ul className="list-inside list-disc">
-                                        {projects.length === 0 && <p>Your organisation has no survey project yet.</p>}
+                        <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">
+                            {!isLoadingOrganisationProjects && !isLoadingDefaultProjects && projects ? (
+                                <ul className="list-inside list-disc">
+                                    {/* Show "no organisation project message" if user is in an organisation */}
+                                    {projects.length === 0 && user.organisation && <p>Your organisation has no survey project yet.</p>}
 
-                                        {projects.map((project: any, index: number) => (
-                                            <li className="mb-2" key={project._id}>
-                                                <Link href={`/survey/play?projectId=${project._id}`}>
-                                                    <a className="text- underline">Start: {project.name}</a>
-                                                </Link>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                ) : (
-                                    "Loading..."
-                                )}
-                            </section>
-                        )}
+                                    {projects.map((project: any, index: number) => (
+                                        <li className="mb-2" key={project._id}>
+                                            <Link href={`/survey/play?projectId=${project._id}`}>
+                                                <a className="text- underline">Start: {project.name}</a>
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                "Loading..."
+                            )}
+                        </section>
                     </div>
                 </div>
             </div>

@@ -57,6 +57,7 @@ export const hashtagUpdate = async (hashtagId: string, data: any) => await $http
 
 export const projectGetAll = async () => await $http.get(`/projects/`);
 export const projectGetAllByOrganisation = async (organisationId: string) => await $http.get(`/projects/org/${organisationId}`);
+export const projectGetDefaults = async () => await $http.get(`/projects/defaults`);
 export const projectCreate = async (data: any) => await $http.post(`/projects/`, data);
 export const projectGetOne = async (projectId: string) => await $http.get(`/projects/${projectId}`);
 export const projectDelete = async (projectId: string) => await $http.delete(`/projects/${projectId}`);

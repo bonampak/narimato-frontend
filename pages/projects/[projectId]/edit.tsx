@@ -115,7 +115,7 @@ const UpdateProject: NextPage = () => {
                                     <Select
                                         name="organisation"
                                         className="border-black border-2 my-2 w-full"
-                                        defaultValue={{ value: project.organisation._id, label: project.organisation.name }}
+                                        defaultValue={project.organisation && { value: project.organisation._id, label: project.organisation.name }}
                                         options={organisations.map((organisation: any) => {
                                             return { value: organisation._id, label: organisation.name };
                                         })}
