@@ -16,11 +16,13 @@ import type { AxiosResponse, AxiosError } from "axios";
 const AllHashtag: NextPage = () => {
     const router = useRouter();
 
+    const [orginalData, setOriginalData] = React.useState<null | any[]>(null);
     const [hashtags, setHashtags] = React.useState<null | any[]>(null);
 
     const { isLoading } = useQuery("hashtags", hashtagGetAllWithParents, {
         onSuccess: (response: AxiosResponse) => {
             const { data } = response.data;
+            setOriginalData(data);
             setHashtags(data);
         },
         onError: (error: AxiosError) => {
@@ -32,6 +34,7 @@ const AllHashtag: NextPage = () => {
     const { mutate: deleteHashtag } = useMutation(hashtagDelete, {
         onSuccess: (response: AxiosResponse) => {
             const { data } = response.data;
+            setOriginalData((orginalData as any[]).filter((hashtag: any) => hashtag._id !== data._id));
             setHashtags((hashtags as any[]).filter((hashtag: any) => hashtag._id !== data._id));
         },
         onError: (error: AxiosError) => {
@@ -42,6 +45,14 @@ const AllHashtag: NextPage = () => {
     async function handleDeleteHashtag(hashtagId: string) {
         if (confirm("Are you sure you want to delete this hashtag?")) deleteHashtag(hashtagId);
     }
+
+    const handleSearch = (event: any) => {
+        const value = event.target.value.toLowerCase();
+        const result = orginalData?.filter((data) => {
+            return JSON.stringify(data).toLowerCase().includes(value);
+        });
+        setHashtags(result as any[]);
+    };
 
     return (
         <>
@@ -60,6 +71,8 @@ const AllHashtag: NextPage = () => {
                             <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">All Hashtags</section>
 
                             <div className="mb-10">
+                                <input type="search" placeholder="Search..." className="border-black border-2 my-2 w-full p-1" onChange={handleSearch} />
+                                
                                 <div className="overflow-x-auto">
                                     <table className="table-auto w-full">
                                         <thead className="bg-blue-600">

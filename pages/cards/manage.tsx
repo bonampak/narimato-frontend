@@ -71,8 +71,9 @@ const AllCard: NextPage = () => {
                             <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">All Cards</section>
 
                             <div className="mb-10">
+                                <input type="search" placeholder="Search..." className="border-black border-2 my-2 w-full p-1" onChange={handleSearch} />
+
                                 <div className="overflow-x-auto">
-                                    <input type="search" placeholder="Search..." className="border-black border-2 my-2 w-full p-1" onChange={handleSearch} />
                                     <table className="table-auto w-full">
                                         <thead className="bg-blue-600">
                                             <tr>

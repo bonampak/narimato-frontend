@@ -14,11 +14,13 @@ import type { AxiosError, AxiosResponse } from "axios";
 const ManageUser: NextPage = () => {
     const router = useRouter();
 
+    const [orginalData, setOriginalData] = React.useState<null | any[]>(null);
     const [users, setUsers] = React.useState<null | any[]>(null);
 
     const { isLoading: isLoadingUsers } = useQuery("users", userGetAll, {
         onSuccess: (response: AxiosResponse) => {
             const { data } = response.data;
+            setOriginalData(data);
             setUsers(data);
         },
         onError: (error: AxiosError) => {
@@ -31,6 +33,7 @@ const ManageUser: NextPage = () => {
     const { mutate: deleteUser } = useMutation(userDelete, {
         onSuccess: (response: AxiosResponse) => {
             const { data } = response.data;
+            setOriginalData((orginalData as any[]).filter((user: any) => user._id !== data._id));
             setUsers((users as any).filter((user: any) => user._id !== data._id));
         },
         onError: (error: AxiosError) => {
@@ -60,6 +63,14 @@ const ManageUser: NextPage = () => {
         if (confirm("Are you sure you want to make user admin?")) upgradeUser({ userId, data: { role: "admin" } });
     }
 
+    const handleSearch = (event: any) => {
+        const value = event.target.value.toLowerCase();
+        const result = orginalData?.filter((data) => {
+            return JSON.stringify(data).toLowerCase().includes(value);
+        });
+        setUsers(result as any[]);
+    };
+
     return (
         <>
             <Head>
@@ -77,6 +88,8 @@ const ManageUser: NextPage = () => {
                             <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">All Users</section>
 
                             <div className="mb-10">
+                                <input type="search" placeholder="Search..." className="border-black border-2 my-2 w-full p-1" onChange={handleSearch} />
+
                                 <div className="overflow-x-auto">
                                     <table className="table-auto w-full">
                                         <thead className="bg-blue-600">

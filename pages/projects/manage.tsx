@@ -15,11 +15,13 @@ import type { AxiosResponse, AxiosError } from "axios";
 const ManageProject: NextPage = () => {
     const router = useRouter();
 
+    const [orginalData, setOriginalData] = React.useState<null | any[]>(null);
     const [projects, setProjects] = React.useState<null | any[]>(null);
 
     const { isLoading } = useQuery("projects", projectGetAll, {
         onSuccess: (response: AxiosResponse) => {
             const { data } = response.data;
+            setOriginalData(data);
             setProjects(data);
         },
         onError: (error: AxiosError) => {
@@ -31,6 +33,7 @@ const ManageProject: NextPage = () => {
     const { mutate: deleteProject } = useMutation(projectDelete, {
         onSuccess: (response: AxiosResponse) => {
             const { data } = response.data;
+            setOriginalData((orginalData as any[]).filter((card: any) => card._id !== data._id));
             setProjects((projects as any[]).filter((project: any) => project._id !== data._id));
         },
         onError: (error: AxiosError) => {
@@ -41,6 +44,14 @@ const ManageProject: NextPage = () => {
     async function handleDeleteProject(projectId: string) {
         if (confirm("Are you sure you want to delete this project?")) deleteProject(projectId);
     }
+
+    const handleSearch = (event: any) => {
+        const value = event.target.value.toLowerCase();
+        const result = orginalData?.filter((data) => {
+            return JSON.stringify(data).toLowerCase().includes(value);
+        });
+        setProjects(result as any[]);
+    };
 
     return (
         <>
@@ -59,6 +70,8 @@ const ManageProject: NextPage = () => {
                             <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">All Projects</section>
 
                             <div className="mb-10">
+                                <input type="search" placeholder="Search..." className="border-black border-2 my-2 w-full p-1" onChange={handleSearch} />
+
                                 <div className="overflow-x-auto">
                                     <table className="table-auto w-full">
                                         <thead className="bg-blue-600">
@@ -75,7 +88,9 @@ const ManageProject: NextPage = () => {
                                                     <tr key={project._id}>
                                                         <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{++index}</td>
                                                         <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{project.name}</td>
-                                                        <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{project.organisation ? project.organisation.name : "--DEFAULT--"}</td>
+                                                        <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
+                                                            {project.organisation ? project.organisation.name : "--DEFAULT--"}
+                                                        </td>
                                                         <td className="border px-4 py-2 text-yellow-600 border-blue-500 font-medium">
                                                             <div className="divide-x-2 divide-neutral-900 divide-double">
                                                                 <Link href={`/projects/${project._id}`}>
