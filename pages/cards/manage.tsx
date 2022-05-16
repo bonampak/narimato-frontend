@@ -17,7 +17,7 @@ const AllCard: NextPage = () => {
     const router = useRouter();
 
     const [cards, setCards] = React.useState<null | any[]>(null);
-    const [filteredData, setFilteredData] = React.useState<null | any[]>(cards);
+    const [filteredData, setFilteredData] = React.useState<null | any[]>(null);
 
     const { isLoading } = useQuery(["cards", "with-hashtags"], cardGetAllWithHashtags, {
         onSuccess: (response: AxiosResponse) => {
