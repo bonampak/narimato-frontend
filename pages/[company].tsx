@@ -68,7 +68,7 @@ const CompanyLoginOrSignup: NextPage = () => {
                 <div className="w-full flex flex-wrap">
                     <div className="w-full md:w-1/2 flex flex-col my-auto">
                         <div className="flex justify-center pt-12">
-                            <img src={organisation.logoUrl} className="w-1/2 aspect-square" alt="organisation-logo" />
+                            <img src={organisation.logoUrl} className="w-1/2 aspect-square object-contain" alt="organisation-logo" />
                         </div>
                         <div className="flex flex-col justify-center pt-8 md:pt-5 px-8 md:px-24 lg:px-32">
                             <p className="text-center text-3xl">Login | Signup</p>
