@@ -1,11 +1,9 @@
-/* eslint-disable react/jsx-key */
 import React from "react";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
-import { useSortBy, useTable } from "react-table";
 import { useMutation, useQuery } from "react-query";
 
 import { withAuth } from "../../utils";
