@@ -106,6 +106,9 @@ const CreateCard: NextPage = () => {
                             <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Card Description</h1>
                             <input name="description" type="text" className="border-black border-2 my-2 w-full p-2" />
 
+                            <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Card BG Color</h1>
+                            <input name="bgColor" type="color" className="border-black border-2 w-full" />
+
                             <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Hashtags (Parent Cards)</h1>
                             <Select
                                 isMulti

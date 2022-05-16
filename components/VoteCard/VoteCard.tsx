@@ -103,7 +103,10 @@ function VoteCard({ surveyId, rightSwipedCards, setPlayState }: VoteCardProps) {
                                 <img src={newRightSwipedCard.imageUrl} alt={newRightSwipedCard.title} className={["w-full portrait:w-2/3 aspect-square"].join(" ")} />
                             </div>
                         ) : (
-                            <div className={["flex mx-auto w-full portrait:w-2/3 aspect-square p-5 bg-blue-600 overflow-y-auto"].join(" ")}>
+                            <div
+                                className={["flex mx-auto w-full portrait:w-2/3 aspect-square p-5 bg-blue-600 overflow-y-auto"].join(" ")}
+                                style={{ backgroundColor: newRightSwipedCard.bgColor && newRightSwipedCard.bgColor }}
+                            >
                                 <p className="m-auto text-center text-white text-[1.5em] leading-normal">{newRightSwipedCard.description}</p>
                             </div>
                         )}
@@ -128,7 +131,10 @@ function VoteCard({ surveyId, rightSwipedCards, setPlayState }: VoteCardProps) {
                                 />
                             </div>
                         ) : (
-                            <div className={["flex mx-auto w-full portrait:w-2/3 aspect-square p-5 bg-blue-600 overflow-y-auto"].join(" ")}>
+                            <div
+                                className={["flex mx-auto w-full portrait:w-2/3 aspect-square p-5 bg-blue-600 overflow-y-auto"].join(" ")}
+                                style={{ backgroundColor: tempRightSwipedCards[voteRandomIndex].bgColor && tempRightSwipedCards[voteRandomIndex].bgColor }}
+                            >
                                 <p className="m-auto text-center text-white text-[1.5em] leading-normal">{tempRightSwipedCards[voteRandomIndex].description}</p>
                             </div>
                         )}

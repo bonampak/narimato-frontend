@@ -127,6 +127,7 @@ function HashtagCard({ playState, setPlayState }: HashtagCardProps) {
                                         className={["flex mx-auto w-full portrait:md:w-1/3 aspect-square p-5 bg-blue-600 overflow-y-auto", !setPlayState && "landscape:w-1/3 portrait:md:w-1/2"].join(
                                             " "
                                         )}
+                                        // style={{ backgroundColor: hashtag.bgColor && hashtag.bgColor }}
                                     >
                                         <p className="m-auto text-center text-white text-[1.5em] leading-normal">{hashtag.description}</p>
                                     </div>
