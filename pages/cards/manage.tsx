@@ -16,14 +16,14 @@ import type { AxiosResponse, AxiosError } from "axios";
 const AllCard: NextPage = () => {
     const router = useRouter();
 
+    const [orginalData, setOriginalData] = React.useState<null | any[]>(null);
     const [cards, setCards] = React.useState<null | any[]>(null);
-    const [filteredData, setFilteredData] = React.useState<null | any[]>(null);
 
     const { isLoading } = useQuery(["cards", "with-hashtags"], cardGetAllWithHashtags, {
         onSuccess: (response: AxiosResponse) => {
             const { data } = response.data;
+            setOriginalData(data);
             setCards(data);
-            setFilteredData(data);
         },
         onError: (error: AxiosError) => {
             toast.error(error.response ? error.response.data.message : error.message);
@@ -34,8 +34,8 @@ const AllCard: NextPage = () => {
     const { mutate: deleteCard } = useMutation(cardDelete, {
         onSuccess: (response: AxiosResponse) => {
             const { data } = response.data;
+            setOriginalData((orginalData as any[]).filter((card: any) => card._id !== data._id));
             setCards((cards as any[]).filter((card: any) => card._id !== data._id));
-            setFilteredData((filteredData as any[]).filter((card: any) => card._id !== data._id));
         },
         onError: (error: AxiosError) => {
             toast.error(error.response ? error.response.data.message : error.message);
@@ -48,10 +48,10 @@ const AllCard: NextPage = () => {
 
     const handleSearch = (event: any) => {
         const value = event.target.value.toLowerCase();
-        const result = cards?.filter((card) => {
-            return JSON.stringify(card).toLowerCase().includes(value);
+        const result = orginalData?.filter((data) => {
+            return JSON.stringify(data).toLowerCase().includes(value);
         });
-        setFilteredData(result as any[]);
+        setCards(result as any[]);
     };
 
     return (
@@ -64,9 +64,9 @@ const AllCard: NextPage = () => {
                 <NavigationBarComponent />
 
                 <div className="flex-1 p-10 text-2xl font-bold max-h-screen overflow-y-auto">
-                    {isLoading && !filteredData && <LoadingComponent />}
+                    {isLoading && !cards && <LoadingComponent />}
 
-                    {!isLoading && filteredData && (
+                    {!isLoading && cards && (
                         <div className="items-center justify-center">
                             <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">All Cards</section>
 
@@ -84,7 +84,7 @@ const AllCard: NextPage = () => {
                                             </tr>
                                         </thead>
                                         <tbody className="text-sm">
-                                            {filteredData.map((card: any, index: number) => {
+                                            {cards.map((card: any, index: number) => {
                                                 return (
                                                     <tr key={card._id}>
                                                         <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">{++index}</td>
