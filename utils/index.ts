@@ -1,11 +1,12 @@
+// All utils must be re-exported from this file.
+
 // Custom HOC
-export { default as withAuth } from "./with-auth";
-export { default as withoutAuth } from "./without-auth";
+export { withAuth, withoutAuth } from "./auth-guard";
 
 // Custom Hooks
 export { default as useUser } from "./use-user";
-export { default as useMergeState } from "./use-merge-state";
 
-// Util Funcs
-export { default as ArrayMethods } from "./array-methods";
-export { default as uploadImage } from "./upload-image";
+// Custom Mehtods
+export { default as dateMethods } from "./date-methods";
+export { default as arrayMethods } from "./array-methods";
+export { default as stringMethods } from "./string-methods";

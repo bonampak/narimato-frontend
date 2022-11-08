@@ -1,62 +1,51 @@
 import React from "react";
-import Head from "next/head";
 import Select from "react-select";
 import { toast } from "react-toastify";
-import { useMutation, useQuery } from "react-query";
 import { NextRouter, useRouter } from "next/router";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { withAuth, uploadImage } from "../../../utils";
-import { LoadingComponent, NavigationBarComponent } from "../../../components";
-import { hashtagGetAllTitles, cardGetOne, cardUpdate } from "../../../api";
+import { withAuth } from "../../../utils";
+import { Loading, NavigationBar } from "../../../components";
+import { cardGetOne, cardUpdate, hashtagGetAllTitles } from "../../../http";
 
 import type { NextPage } from "next";
-import type { AxiosResponse, AxiosError } from "axios";
+import type { AxiosError, AxiosResponse } from "axios";
 
-const UpdateCard: NextPage = () => {
+const EditCard: NextPage = ({ query }: any) => {
     const router: NextRouter = useRouter();
+    const { cardId } = query;
 
-    const { cardId } = router.query;
     const [card, setCard] = React.useState<null | any>(null);
 
-    const [imageUrl, setImageUrl] = React.useState<null | string>(null);
-    const [previewImage, setPreviewImage] = React.useState<null | any>(null);
-
     const [hashtags, setHashtags] = React.useState<any[]>([]);
-    const [selectedHashtags, setSelectedHashtags] = React.useState<any[]>([]);
+    const [selectedHashtags, setSelectedHashtags] = React.useState<any>([]);
+    const [base64Image, setBase64Image] = React.useState<null | string>(null);
 
-    const { isLoading: isLoadingCard } = useQuery(["card", cardId], () => cardGetOne(cardId as string), {
+    const {} = useQuery(["card", cardId], () => cardGetOne(cardId as string), {
         onSuccess: (response: AxiosResponse) => {
             const { data } = response.data;
-            setImageUrl(data.imageUrl);
-            setSelectedHashtags(data.hashtags.map((hashtag: any) => hashtag._id));
             setCard(data);
+            setSelectedHashtags(data.hashtagRefs.map((hashtag: any) => ({ label: hashtag.title, value: hashtag._id })));
         },
-        onError: (error: AxiosError) => {
-            toast.error(error.response ? error.response.data.message : error.message, {
-                onClose: () => router.push("/dashboard")
-            });
+        onError: (error: AxiosError<any>) => {
+            toast.error(error.response ? error.response.data.message : error.message);
+            router.push("/dashboard");
         },
         enabled: !!cardId
     });
 
-    const { isLoading: isLoadingHashtag } = useQuery("hashtags", hashtagGetAllTitles, {
+    const { isLoading: isLoadingHashtagTitles } = useQuery(["hashtags", "titles"], hashtagGetAllTitles, {
         onSuccess: (response: AxiosResponse) => {
             const { data } = response.data;
             setHashtags(data);
-        },
-        onError: (error: AxiosError) => {
-            toast.error(error.response ? error.response.data.message : error.message);
-            router.push("/dashboard");
         }
     });
 
-    const { isLoading: isUpdatingCard, mutate: updateCard } = useMutation((context) => cardUpdate(cardId as string, context), {
+    const { isLoading, mutate } = useMutation((context: any) => cardUpdate(cardId as string, context), {
         onSuccess: (response: AxiosResponse) => {
-            const { message } = response.data;
-            toast.success(message);
-            router.push(`/cards/manage`);
+            toast.success(response.data.message);
         },
-        onError: (error: AxiosError) => {
+        onError: (error: AxiosError<any>) => {
             toast.error(error.response ? error.response.data.message : error.message);
         }
     });
@@ -64,98 +53,92 @@ const UpdateCard: NextPage = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const formData = new FormData(e.target as HTMLFormElement);
-        const formDataToJSON: any = Object.fromEntries(formData);
+        const formDataToJSON = Object.fromEntries(formData);
 
-        formDataToJSON["imageUrl"] = imageUrl;
-        formDataToJSON["hashtags"] = selectedHashtags.map((hashtag) => hashtag.value || hashtag);
+        // Append Image
+        if (base64Image) Object.assign(formDataToJSON, { base64: base64Image.split(",")[1] });
 
-        updateCard(formDataToJSON);
+        // Append muti-selected hashtags
+        formDataToJSON["hashtagRefs"] = selectedHashtags.map((hashtag: any) => hashtag.value);
+
+        mutate(formDataToJSON);
     };
 
     return (
         <>
-            <Head>
-                <title>Update Card - Haikoto</title>
-            </Head>
+            <div className="relative min-h-screen lg:flex">
+                <NavigationBar />
 
-            <div className="relative min-h-screen md:flex">
-                <NavigationBarComponent />
+                <div className="flex-1 p-5 md:pt-10 max-h-screen overflow-y-auto">
+                    {!card && <Loading isParent={false} />}
 
-                <div className="flex-1 text-2xl font-bold max-h-screen overflow-y-auto">
-                    {isLoadingCard || isLoadingHashtag || (!card && <LoadingComponent />)}
+                    {card && (
+                        <>
+                            <section className="w-full bg-gray-200 rounded text-xl md:text-3xl text-black font-bold my-4 p-5">Edit Card</section>
 
-                    {!isLoadingCard && !isLoadingHashtag && card && (
-                        <div className="flex-1 p-10 text-2xl font-bold max-h-screen overflow-y-auto">
-                            <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">Update Card - {card.title}</section>
-
-                            <div className="flex flex-col md:max-w-xl">
-                                <form onSubmit={handleSubmit}>
-                                    <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Card Image</h1>
+                            <div className="w-full max-w-lg">
+                                <form className="my-5 space-y-3" onSubmit={handleSubmit}>
                                     <div>
+                                        <label htmlFor="title" className="label">
+                                            <span className="label-text text-base">Title</span>
+                                        </label>
+                                        <input type="text" defaultValue={card.title} name="title" className="input input-bordered rounded focus:border-primary-300 w-full" required />
+                                    </div>
+
+                                    <div>
+                                        <label htmlFor="description" className="label">
+                                            <span className="label-text text-base">Description</span>
+                                        </label>
+                                        <textarea defaultValue={card.description} name="description" className="textarea textarea-bordered rounded focus:border-primary-300 w-full" />
+                                    </div>
+
+                                    {/* Image update disabled for now */}
+                                    {/* <div>
+                                        <label htmlFor="imageUrl" className="label">
+                                            <span className="label-text text-base">Image</span>
+                                        </label>
                                         <input
                                             type="file"
-                                            className="border-black border-2 my-2 w-full p-2"
-                                            onChange={async (e: any) => {
-                                                // Set the Preview Image
-                                                const file = e.target.files[0];
+                                            className="file-input file-input-bordered rounded focus:border-primary-300 w-full"
+                                            onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
+                                                setBase64Image(null);
+                                                const file = e.target.files![0];
 
-                                                if (!file) {
-                                                    setPreviewImage(null);
-                                                    setImageUrl(null);
-                                                    return;
-                                                }
+                                                // If no file was uploaded return
+                                                if (!file) return;
 
+                                                // check file size
+                                                if (file.size / 1024 / 1024 > 5) return window.alert("file is too large: > 5mb");
+
+                                                // convert to base64
                                                 const reader = new FileReader();
-                                                reader.onload = (e: any) => setPreviewImage(e.target.result);
+                                                reader.onloadend = () => setBase64Image(reader.result as string);
                                                 reader.readAsDataURL(file);
-
-                                                const uploadImg = await uploadImage(file);
-                                                if (uploadImg.success) setImageUrl(uploadImg.url);
-
-                                                if (!uploadImg.success) {
-                                                    toast.error("Image Upload Failed. Please try again.");
-                                                    setPreviewImage(null);
-                                                }
                                             }}
                                         />
+                                        {base64Image && <img src={base64Image} alt="preEdit-image" className="w-full object-contain py-2" />}
+                                    </div> */}
 
-                                        {previewImage && <img src={previewImage} alt="card-image" className="w-full md:w-1/2 aspect-square" />}
-
-                                        {!previewImage && imageUrl && <img src={imageUrl} alt="card-image" className="w-full md:w-1/2 aspect-square" />}
+                                    <div>
+                                        <label htmlFor="bgColor" className="label">
+                                            <span className="label-text text-base">Background Color</span>
+                                        </label>
+                                        <input type="color" defaultValue={card.bgColor} name="bgColor" className="input input-bordered rounded focus:border-primary-300 w-full" />
                                     </div>
 
-                                    <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Card Title</h1>
-                                    <input name="title" type="text" defaultValue={card.title} className="border-black border-2 my-2 w-full p-2" required />
-
-                                    <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Card Description</h1>
-                                    <input name="description" type="text" defaultValue={card.description} className="border-black border-2 my-2 w-full p-2" />
-
-                                    <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Card BG Color</h1>
-                                    <input name="bgColor" type="color" defaultValue={card.bgColor} className="border-black border-2 w-full" />
-
-                                    <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Hashtags (Parent Cards)</h1>
-                                    <Select
-                                        isMulti
-                                        className="border-black border-2 my-2 w-full"
-                                        options={hashtags.map((hashtag: any) => {
-                                            return { value: hashtag._id, label: hashtag.title };
-                                        })}
-                                        onChange={(selectedHashtags: any) => setSelectedHashtags(selectedHashtags)}
-                                        defaultValue={card.hashtags.map((hashtag: any) => ({ value: hashtag._id, label: hashtag.title }))}
-                                    />
-
-                                    <div className="flex justify-center mt-8">
-                                        <button
-                                            disabled={isUpdatingCard}
-                                            type="submit"
-                                            className={["bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg p-2 mt-8 w-full", isUpdatingCard ? "opacity-50" : "opacity-100"].join(" ")}
-                                        >
-                                            Update
-                                        </button>
+                                    <div>
+                                        <label htmlFor="hashtagRefs" className="label">
+                                            <span className="label-text text-base">Hashtag (Parent Cards)</span>
+                                        </label>
+                                        <Select isMulti instanceId="hashtags" defaultValue={selectedHashtags} options={hashtags ? hashtags.map((hashtag) => ({ value: hashtag._id, label: hashtag.title })) : []} isLoading={isLoadingHashtagTitles} onChange={(selectedHashtags) => setSelectedHashtags(selectedHashtags)} classNamePrefix="react-select" isClearable />
                                     </div>
+
+                                    <button type="submit" disabled={isLoading} className={["btn rounded bg-blue-600 hover:bg-blue-700 text-white w-full no-animation", isLoading && "loading"].join(" ")}>
+                                        Save Changes
+                                    </button>
                                 </form>
                             </div>
-                        </div>
+                        </>
                     )}
                 </div>
             </div>
@@ -163,4 +146,4 @@ const UpdateCard: NextPage = () => {
     );
 };
 
-export default withAuth(UpdateCard);
+export default withAuth(EditCard);

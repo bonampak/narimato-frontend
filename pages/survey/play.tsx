@@ -1,118 +1,346 @@
 import React from "react";
-import Head from "next/head";
 import { toast } from "react-toastify";
-import { useMutation } from "react-query";
 import { NextRouter, useRouter } from "next/router";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { useMergeState, withAuth, ArrayMethods } from "../../utils";
-import { SingleCard, VoteCard, HashtagCard, LoadingComponent, NavigationBarComponent } from "../../components";
+import { useImmer } from "use-immer";
+import { withAuth } from "../../utils";
+import { surveyCreate, surveyGetNewCard, surveyGetNewHashtag, surveyUpdate, surveyUpdateLeftSwipedCardRefs, surveyUpdateLeftSwipedHashtagRefs, surveyUpdateRightSwipedCardRefs, surveyUpdateRightSwipedHashtagRefs } from "../../http";
+import { Loading, NavigationBar, SingleCard, SingleHashtag, VoteCard } from "../../components";
 
 import type { NextPage } from "next";
-import { surveyCreate, surveyNewCard } from "../../api";
-import { AxiosResponse, AxiosError } from "axios";
+import type { AxiosResponse, AxiosError } from "axios";
 
-const PlaySurvey: NextPage = () => {
+const Play: NextPage = ({ query }: any) => {
+    const { projectId } = query;
     const router: NextRouter = useRouter();
 
-    const [playState, setPlayState] = useMergeState({
-        isLoading: false,
+    const [surveyState, updateSurveyState] = useImmer<{
+        id: string;
+        uniqeId: string;
+        projectRef: string;
 
-        // Survey
-        surveyId: null,
-        allCards: [],
-        rightSwipedCards: [],
-        leftSwipedCards: [],
-        currentCard: 0,
-        finalHashTagSwipeMode: false,
+        leftSwipedCardRefs: Array<{
+            _id: string;
+            title: string;
+            description?: string;
+            imageUrl?: string;
+            bgColor?: string;
+            hashtagRefs: Array<any>;
+        }>;
+        rightSwipedCardRefs: Array<{
+            _id: string;
+            title: string;
+            description?: string;
+            imageUrl?: string;
+            bgColor?: string;
+            hashtagRefs: Array<any>;
+        }>;
+        leftSwipedHashtagRefs: Array<{
+            _id: string;
+            title: string;
+            description?: string;
+            imageUrl?: string;
+            bgColor?: string;
+            parentHashtagRef?: any;
+        }>;
+        rightSwipedHashtagRefs: Array<{
+            _id: string;
+            title: string;
+            description?: string;
+            imageUrl?: string;
+            bgColor?: string;
+            parentHashtagRef?: any;
+        }>;
 
-        // Mode
-        surveyMode: "hashtag"
+        // Game State
+        currentMode: null | "card" | "hashtag" | "vote";
+        currentCard: null | {
+            _id: string;
+            title: string;
+            description?: string;
+            imageUrl?: string;
+            bgColor?: string;
+            hashtagRefs: Array<any>;
+        };
+        currentHashtag: null | {
+            _id: string;
+            title: string;
+            description?: string;
+            imageUrl?: string;
+            bgColor?: string;
+            parentHashtagRef?: any;
+        };
+        isFinalHashtag: boolean;
+    }>({
+        id: "",
+        uniqeId: "",
+        projectRef: projectId,
+
+        leftSwipedCardRefs: [],
+        rightSwipedCardRefs: [],
+        leftSwipedHashtagRefs: [],
+        rightSwipedHashtagRefs: [],
+
+        currentMode: null,
+        currentCard: null,
+        currentHashtag: null,
+        isFinalHashtag: false
     });
 
-    const { projectId } = router.query;
-
-    const { isLoading, surveyId, allCards, rightSwipedCards, currentCard, surveyMode } = playState;
-
-    const { isLoading: isCreatingSurvey, mutate: startSurvey } = useMutation(surveyCreate, {
+    const { isLoading: isCreatingSurvey } = useQuery(["survey"], () => surveyCreate({ projectRef: projectId }), {
         onSuccess: (response: AxiosResponse) => {
             const { data } = response.data;
 
-            // Check if we're continuing a survey
-            if (data.continue) {
-                const allCards = data.leftSwipedCards.concat(data.rightSwipedCards);
+            updateSurveyState((prev) => {
+                prev.id = data._id;
+                prev.uniqeId = data.uniqueId;
 
-                setPlayState({
-                    surveyId: data._id,
-                    allCards: allCards,
-                    rightSwipedCards: data.rightSwipedCards,
-                    leftSwipedCards: data.leftSwipedCards,
-                    currentCard: allCards.length,
-                    surveyMode: allCards.length > 0 ? "swipe" : "hashtag"
-                });
-            }
+                prev.leftSwipedCardRefs = data.leftSwipedCardRefs;
+                prev.rightSwipedCardRefs = data.rightSwipedCardRefs;
+                prev.leftSwipedHashtagRefs = data.leftSwipedHashtagRefs;
+                prev.rightSwipedHashtagRefs = data.rightSwipedHashtagRefs;
 
-            // Check if we're not continuing a survey
-            if (!data.continue) {
-                // Set SurveyId and continue play flow
-                setPlayState({ surveyId: data._id });
-            }
+                prev.currentMode = data.leftSwipedCardRefs.concat(data.rightSwipedCardRefs).length > 0 ? "card" : "hashtag";
+            });
+
+            // Commenting status updates toasts
+            // toast.success(`survey ${data.status == "new" ? "started" : "resumed"}`);
         },
-        onError: (error: AxiosError) => {
-            toast.error(error.response ? error.response.data.message : error.message);
-            router.push("/dashboard");
-        }
+        enabled: !!projectId
     });
 
-    const { isLoading: isAddingNewCard, mutateAsync: addNewCard } = useMutation(surveyNewCard, {
+    const { isLoading: isFetchingNewCard, mutate: fetchNewCard } = useMutation(() => surveyGetNewCard(surveyState.id), {
         onSuccess: (response: AxiosResponse) => {
-            const { data, success } = response.data;
+            const { data } = response.data;
 
-            if (success) {
-                const functionNewCards = ArrayMethods.getUnique([...allCards, data], "_id");
-                setPlayState({ allCards: functionNewCards, currentCard: functionNewCards.length });
+            if (data !== null) {
+                updateSurveyState((prev) => {
+                    prev.currentCard = data;
+                });
+                return;
             }
-        },
-        onError: (error: AxiosError) => {
-            // Out of Cards for the Hashtag, Enter hashTagSwipeMode
-            setPlayState({ isLoading: true, surveyMode: "hashtag" });
 
-            console.log(error.response ? error.response.data.message : error.message);
+            // Last Card Vote
+            // if (surveyState.rightSwipedCardRefs.length >= 2) {
+            //     // Enter Vote mode to rank rightSwipedCardRefs
+            //     updateSurveyState((prev) => {
+            //         prev.currentMode = "vote";
+            //     });
+            //     return;
+            // }
+
+            updateSurveyState((prev) => {
+                prev.currentCard = null;
+                // Out of Cards for the Hashtag, get new hashtag
+                prev.currentMode = "hashtag";
+            });
+        },
+        onError: (error: AxiosError<any>) => {
+            toast.error(error.response ? error.response.data.message : error.message);
         }
     });
 
-    // Create a Survey or Continue a survey
-    React.useEffect(() => {
-        if (!router.isReady) return;
-        startSurvey({ project: projectId });
-    }, [router.isReady]);
+    const { isLoading: isFetchingNewHashtag, mutate: fetchNewHashtag } = useMutation(() => surveyGetNewHashtag(surveyState.id), {
+        onSuccess: (response: AxiosResponse) => {
+            const { data } = response.data;
 
-    // @ts-ignore
-    React.useEffect(async () => {
-        if (surveyMode === "swipe") await addNewCard(surveyId);
-        setPlayState({ isLoading: false });
-    }, [surveyMode]);
+            if (data !== null) {
+                updateSurveyState((prev) => {
+                    prev.currentHashtag = data;
+                });
+                return;
+            }
+
+            updateSurveyState((prev) => {
+                prev.currentHashtag = null;
+                // Out of Hashtag, switch to cards and set isFinalHashtag
+                prev.currentMode = "card";
+                prev.isFinalHashtag = true;
+            });
+        },
+        onError: (error: AxiosError<any>) => {
+            toast.error(error.response ? error.response.data.message : error.message);
+        }
+    });
+
+    const { isLoading: isUpdatingRightSwipedHashtagRefs, mutateAsync: updateRightSwipedHashtagRefs } = useMutation((context: any) => surveyUpdateRightSwipedHashtagRefs(surveyState.id, context), {
+        onSuccess: (response: AxiosResponse) => {
+            updateSurveyState((prev) => {
+                prev.currentMode = "card";
+            });
+            // Commenting status updates toasts
+            // toast.success("right swiped hashtags updated");
+        },
+        onError: (error: AxiosError) => {
+            toast.error("Something went wrong, please try again.");
+        }
+    });
+
+    const { isLoading: isUpdatingLeftSwipedHashtagRefs, mutateAsync: updateLeftSwipedHashtagRefs } = useMutation((context: any) => surveyUpdateLeftSwipedHashtagRefs(surveyState.id, context), {
+        onSuccess: (response: AxiosResponse) => {
+            // Commenting status updates toasts
+            // toast.success("left swiped hashtags updated");
+        },
+        onError: (error: AxiosError) => {
+            toast.error("Something went wrong, please try again.");
+        }
+    });
+
+    const { isLoading: isUpdatingRightSwipedCardRefs, mutateAsync: updateRightSwipedCardRefs } = useMutation((context: any) => surveyUpdateRightSwipedCardRefs(surveyState.id, context), {
+        onSuccess: (response: AxiosResponse) => {
+            // Commenting status updates toasts
+            // toast.success("right swiped cards updated");
+        },
+        onError: (error: AxiosError) => {
+            toast.error("Something went wrong, please try again.");
+        }
+    });
+
+    const { isLoading: isUpdatingLeftSwipedCardRefs, mutateAsync: updateLeftSwipedCardRefs } = useMutation((context: any) => surveyUpdateLeftSwipedCardRefs(surveyState.id, context), {
+        onSuccess: (response: AxiosResponse) => {
+            // Commenting status updates toasts
+            // toast.success("left swiped cards updated");
+        },
+        onError: (error: AxiosError) => {
+            toast.error("Something went wrong, please try again.");
+        }
+    });
+
+    const { isLoading: isUpdatingSurvey, mutate: updateSurvey } = useMutation((context) => surveyUpdate(surveyState.id as string, context), {
+        onSuccess: (response: AxiosResponse) => {
+            const { data } = response.data;
+            // Commenting status updates toasts
+            // toast.success(`update made to survey`);
+        },
+        onError: (error: AxiosError<any>) => {
+            toast.error(error.response ? error.response.data.message : error.message);
+        }
+    });
+
+    React.useEffect(() => {
+        if (!surveyState.currentMode) return;
+
+        if (surveyState.currentMode === "card") {
+            // Get a new card
+            fetchNewCard();
+        }
+
+        if (surveyState.currentMode === "hashtag") {
+            // If about to load a new hashtag and the isFinalHashtag has already been set, then just redirect to result
+            if (surveyState.isFinalHashtag === true) {
+                toast.success("Survey complete, Generating result...");
+                setTimeout(() => router.push(`/surveys/${surveyState.id}`), 1200);
+                return;
+            }
+
+            // Get a new Hashtag
+            fetchNewHashtag();
+        }
+    }, [surveyState.currentMode]);
 
     return (
         <>
-            <Head>
-                <title>Play Cards - Haikoto</title>
-            </Head>
+            <div className="relative min-h-screen lg:flex">
+                <NavigationBar />
 
-            <div className="relative min-h-screen md:flex">
-                <NavigationBarComponent />
+                <div className="flex-1 p-5 md:pt-10 max-h-screen overflow-y-auto">
+                    {/* <section className="w-full bg-gray-200 rounded text-xl md:text-3xl text-black font-bold my-4 p-5">Play - {projectId}</section> */}
 
-                <div className="flex-1 p-10 text-2xl font-bold max-h-screen overflow-y-auto">
-                    {isCreatingSurvey || isAddingNewCard || isLoading ? <LoadingComponent /> : null}
+                    {isCreatingSurvey || isUpdatingSurvey || isFetchingNewCard || isFetchingNewHashtag || isUpdatingRightSwipedHashtagRefs || isUpdatingLeftSwipedHashtagRefs || isUpdatingRightSwipedCardRefs || isUpdatingLeftSwipedCardRefs ? <Loading isParent={true} /> : null}
 
-                    {surveyId && !isCreatingSurvey && !isAddingNewCard && !isLoading && (
+                    {!isCreatingSurvey && !isUpdatingSurvey && !isFetchingNewCard && !isFetchingNewHashtag && !isUpdatingRightSwipedHashtagRefs && !isUpdatingLeftSwipedHashtagRefs && !isUpdatingRightSwipedCardRefs && !isUpdatingLeftSwipedCardRefs && (
                         <>
-                            {/* <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">Play Cards</section> */}
-
-                            {surveyMode === "swipe" && typeof allCards[currentCard - 1] !== undefined && (
-                                <SingleCard card={allCards[currentCard - 1]} playState={playState} setPlayState={setPlayState} />
+                            {surveyState.currentMode === "vote" && (
+                                <VoteCard
+                                    // Breaker
+                                    showTitle={true}
+                                    surveyState={surveyState}
+                                    updateSurveyState={updateSurveyState}
+                                    updateRightSwipedCardRefs={updateRightSwipedCardRefs}
+                                />
                             )}
-                            {surveyMode === "vote" && <VoteCard surveyId={surveyId} setPlayState={setPlayState} rightSwipedCards={rightSwipedCards} />}
-                            {surveyMode === "hashtag" && <HashtagCard playState={playState} setPlayState={setPlayState} />}
+
+                            {surveyState.currentMode === "card" && surveyState.currentCard && (
+                                <SingleCard
+                                    // breaker
+                                    card={surveyState.currentCard}
+                                    showTitle={true}
+                                    showButtons={true}
+                                    showHashtags={false}
+                                    activeControls={true}
+                                    leftSwipeHandler={async () => {
+                                        const leftSwipedCardRefs: any[] = [surveyState.currentCard].concat(surveyState.leftSwipedCardRefs);
+
+                                        // State update
+                                        updateSurveyState((prev) => {
+                                            prev.leftSwipedCardRefs = leftSwipedCardRefs;
+                                        });
+
+                                        // API Update call
+                                        await updateLeftSwipedCardRefs({ ids: leftSwipedCardRefs.map((card) => card._id) });
+
+                                        // Get a new card
+                                        fetchNewCard();
+                                    }}
+                                    rightSwipeHandler={async () => {
+                                        const rightSwipedCardRefs: any[] = [surveyState.currentCard].concat(surveyState.rightSwipedCardRefs);
+
+                                        // State update
+                                        updateSurveyState((prev) => {
+                                            prev.rightSwipedCardRefs = rightSwipedCardRefs;
+                                        });
+
+                                        // API Update call
+                                        await updateRightSwipedCardRefs({ ids: rightSwipedCardRefs.map((card) => card._id) });
+
+                                        // If number of cards in rightSwipedCardRefs bucket is greater than 2
+                                        if (rightSwipedCardRefs.length >= 2) {
+                                            // Enter Vote mode to rank rightSwipedCardRefs
+                                            updateSurveyState((prev) => {
+                                                prev.currentMode = "vote";
+                                            });
+                                            return;
+                                        }
+
+                                        // Get a new card
+                                        fetchNewCard();
+                                    }}
+                                />
+                            )}
+
+                            {surveyState.currentMode === "hashtag" && surveyState.currentHashtag && (
+                                <SingleHashtag
+                                    // breaker
+                                    hashtag={surveyState.currentHashtag}
+                                    showTitle={true}
+                                    showButtons={true}
+                                    showHashtags={false}
+                                    activeControls={true}
+                                    leftSwipeHandler={async () => {
+                                        const leftSwipedHashtagRefs: any[] = [surveyState.currentHashtag].concat(surveyState.leftSwipedHashtagRefs);
+
+                                        // State update
+                                        updateSurveyState((prev) => {
+                                            prev.leftSwipedHashtagRefs = leftSwipedHashtagRefs;
+                                        });
+
+                                        // API Update call
+                                        await updateLeftSwipedHashtagRefs({ ids: leftSwipedHashtagRefs.map((hashtag) => hashtag._id) });
+                                    }}
+                                    rightSwipeHandler={async () => {
+                                        const rightSwipedHashtagRefs: any[] = [surveyState.currentHashtag].concat(surveyState.rightSwipedHashtagRefs);
+
+                                        // State update
+                                        updateSurveyState((prev) => {
+                                            prev.rightSwipedHashtagRefs = rightSwipedHashtagRefs;
+                                        });
+
+                                        // API Update call
+                                        await updateRightSwipedHashtagRefs({ ids: rightSwipedHashtagRefs.map((hashtag) => hashtag._id) });
+                                    }}
+                                />
+                            )}
                         </>
                     )}
                 </div>
@@ -121,4 +349,4 @@ const PlaySurvey: NextPage = () => {
     );
 };
 
-export default withAuth(PlaySurvey);
+export default withAuth(Play);

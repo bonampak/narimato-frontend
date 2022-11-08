@@ -1,20 +1,19 @@
 import React from "react";
-import Head from "next/head";
-import { useQuery } from "react-query";
 import { toast } from "react-toastify";
+import { useQuery } from "@tanstack/react-query";
 import { NextRouter, useRouter } from "next/router";
 
 import { withAuth } from "../../../utils";
-import { hashtagGetOne } from "../../../api";
-import { LoadingComponent, NavigationBarComponent } from "../../../components";
+import { hashtagGetOne } from "../../../http";
+import { Loading, NavigationBar, SingleHashtag } from "../../../components";
 
 import type { NextPage } from "next";
-import type { AxiosResponse, AxiosError } from "axios";
+import type { AxiosError, AxiosResponse } from "axios";
 
-const SingleHashtagPage: NextPage = () => {
+const ViewHashtag: NextPage = ({ query }: any) => {
     const router: NextRouter = useRouter();
+    const { hashtagId } = query;
 
-    const { hashtagId } = router.query;
     const [hashtag, setHashtag] = React.useState<null | any>(null);
 
     const { isLoading } = useQuery(["hashtag", hashtagId], () => hashtagGetOne(hashtagId as string), {
@@ -22,32 +21,34 @@ const SingleHashtagPage: NextPage = () => {
             const { data } = response.data;
             setHashtag(data);
         },
-        onError: (error: AxiosError) => {
-            toast.error(error.response ? error.response.data.message : error.message, {
-                onClose: () => router.push("/dashboard")
-            });
+        onError: (error: AxiosError<any>) => {
+            toast.error(error.response ? error.response.data.message : error.message);
+            router.push("/dashboard");
         },
         enabled: !!hashtagId
     });
 
     return (
         <>
-            <Head>
-                <title>Single Hashtag - Haikoto</title>
-            </Head>
+            <div className="relative min-h-screen lg:flex">
+                <NavigationBar />
 
-            <div className="relative min-h-screen md:flex">
-                <NavigationBarComponent />
+                <div className="flex-1 p-5 md:pt-10 max-h-screen overflow-y-auto">
+                    {!hashtag && <Loading isParent={false} />}
 
-                <div className="flex-1 p-10 text-2xl font-bold max-h-screen overflow-y-auto">
-                    {isLoading && !hashtag && <LoadingComponent />}
+                    {hashtag && (
+                        <>
+                            <section className="w-full bg-gray-200 rounded text-xl md:text-3xl text-black font-bold my-4 p-5">Hashtag - {hashtag._id}</section>
 
-                    {!isLoading && hashtag && (
-                        <div className="items-center justify-center">
-                            <div className="mb-4">
-                                <h1 className="text-center text-xl md:text-3xl">{hashtag.title}</h1>
-                            </div>
-                        </div>
+                            <SingleHashtag
+                                // breaker
+                                hashtag={hashtag}
+                                showTitle={true}
+                                showButtons={false}
+                                showHashtags={true}
+                                activeControls={false}
+                            />
+                        </>
                     )}
                 </div>
             </div>
@@ -55,4 +56,4 @@ const SingleHashtagPage: NextPage = () => {
     );
 };
 
-export default withAuth(SingleHashtagPage);
+export default withAuth(ViewHashtag);

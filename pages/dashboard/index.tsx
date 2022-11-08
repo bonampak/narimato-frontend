@@ -1,9 +1,8 @@
 import React from "react";
-import Head from "next/head";
 import Link from "next/link";
 
 import { useUser, withAuth } from "../../utils";
-import { NavigationBarComponent } from "../../components";
+import { NavigationBar } from "../../components";
 
 import type { NextPage } from "next";
 
@@ -12,39 +11,23 @@ const Dashboard: NextPage = () => {
 
     return (
         <>
-            <Head>
-                <title>My Dashboard - Haikoto</title>
-            </Head>
+            <div className="relative min-h-screen lg:flex">
+                <NavigationBar />
 
-            <div className="relative min-h-screen md:flex">
-                <NavigationBarComponent />
-
-                <div className="flex-1 p-10 text-2xl font-bold max-h-screen overflow-y-auto">
-                    <section className="my-4 w-full p-5 rounded bg-blue-600">
-                        <span className="text-white">
-                            Hi there, <b>@{user?.codeName}</b> 👋
-                        </span>
+                <div className="flex-1 p-5 md:pt-10 max-h-screen overflow-y-auto">
+                    <section className="w-full bg-blue-600 rounded text-xl md:text-3xl text-white font-bold my-4 p-5">
+                        Hi there, <b>{user?.codeName}</b> 👋
                     </section>
 
-                    {user?.organisation && (
-                        <section className="my-4 w-full p-5 rounded bg-blue-200 bg-opacity-90">
-                            <p className="text-lg">You are currently signed in with organisation &rsquo;{user.organisation.name}&rsquo;</p>
-                        </section>
-                    )}
+                    {user?.organisationRef && <section className="w-full bg-blue-200 rounded text-lg text-black font-medium my-4 p-5">You are currently signed in with organisation &rsquo;{user.organisationRef.name}&rsquo;</section>}
 
-                    {!user?.organisation && (
-                        <section className="my-4 w-full p-5 rounded bg-blue-200 bg-opacity-90">
-                            <p className="text-lg">You are not signed in with any organisation</p>
-                        </section>
-                    )}
+                    {!user?.organisationRef && <section className="w-full bg-blue-200 rounded text-lg text-black font-medium my-4 p-5">You are not signed in with any organisation</section>}
 
-                    <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">
-                        <ul className="list-inside list-disc">
-                            <li>
-                                <Link href="/survey">
-                                    <a className="text- underline">Start A Survey</a>
-                                </Link>
-                            </li>
+                    <section className="w-full bg-gray-200 rounded text-xl text-black font-medium my-4 p-5">
+                        <ul className="list-inside list-disc space-y-5">
+                            <Link href="/survey" className="list-item underline">
+                                Start A Survey
+                            </Link>
                         </ul>
                     </section>
                 </div>

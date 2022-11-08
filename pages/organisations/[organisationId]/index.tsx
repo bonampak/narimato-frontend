@@ -1,20 +1,19 @@
 import React from "react";
-import Head from "next/head";
-import { useQuery } from "react-query";
 import { toast } from "react-toastify";
+import { useQuery } from "@tanstack/react-query";
 import { NextRouter, useRouter } from "next/router";
 
 import { withAuth } from "../../../utils";
-import { organisationGetOne } from "../../../api";
-import { LoadingComponent, NavigationBarComponent } from "../../../components";
+import { organisationGetOne } from "../../../http";
+import { Loading, NavigationBar } from "../../../components";
 
 import type { NextPage } from "next";
-import type { AxiosResponse, AxiosError } from "axios";
+import type { AxiosError, AxiosResponse } from "axios";
 
-const SingleOrganisation: NextPage = () => {
+const ViewOrganisation: NextPage = ({ query }: any) => {
     const router: NextRouter = useRouter();
+    const { organisationId } = query;
 
-    const { organisationId } = router.query;
     const [organisation, setOrganisation] = React.useState<null | any>(null);
 
     const { isLoading } = useQuery(["organisation", organisationId], () => organisationGetOne(organisationId as string), {
@@ -22,32 +21,53 @@ const SingleOrganisation: NextPage = () => {
             const { data } = response.data;
             setOrganisation(data);
         },
-        onError: (error: AxiosError) => {
-            toast.error(error.response ? error.response.data.message : error.message, {
-                onClose: () => router.push("/dashboard")
-            });
+        onError: (error: AxiosError<any>) => {
+            toast.error(error.response ? error.response.data.message : error.message);
+            router.push("/dashboard");
         },
         enabled: !!organisationId
     });
 
     return (
         <>
-            <Head>
-                <title>Single Organisation - Haikoto</title>
-            </Head>
+            <div className="relative min-h-screen lg:flex">
+                <NavigationBar />
 
-            <div className="relative min-h-screen md:flex">
-                <NavigationBarComponent />
+                <div className="flex-1 p-5 md:pt-10 max-h-screen overflow-y-auto">
+                    {!organisation && <Loading isParent={false} />}
 
-                <div className="flex-1 p-10 text-2xl font-bold max-h-screen overflow-y-auto">
-                    {isLoading && !organisation && <LoadingComponent />}
+                    {organisation && (
+                        <>
+                            <section className="w-full bg-gray-200 rounded text-xl md:text-3xl text-black font-bold my-4 p-5">Organisation - {organisation._id}</section>
 
-                    {!isLoading && organisation && (
-                        <div className="items-center justify-center">
-                            <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">Organisation - {organisation.name}</section>
+                            <div className="w-full max-w-lg">
+                                <div className="my-5 space-y-3">
+                                    <div>
+                                        <label htmlFor="name" className="label">
+                                            <span className="label-text text-base">Name</span>
+                                        </label>
+                                        <input type="text" defaultValue={organisation.name} name="name" className="input input-bordered rounded focus:border-primary-300 w-full" disabled />
+                                    </div>
 
-                            <div className="mb-10"></div>
-                        </div>
+                                    <div>
+                                        <label htmlFor="slug" className="label">
+                                            <span className="label-text text-base">
+                                                Slug
+                                                <span className="block text-xs font-bold">haikoto.com/slug</span>
+                                            </span>
+                                        </label>
+                                        <input type="text" defaultValue={organisation.slug} name="slug" className="input input-bordered rounded focus:border-primary-300 w-full" disabled />
+                                    </div>
+
+                                    <div>
+                                        <label htmlFor="slug" className="label">
+                                            <span className="label-text text-base">Logo</span>
+                                        </label>
+                                        <img src={organisation.logoUrl} alt="preEdit-image" className="w-full object-contain py-2" />
+                                    </div>
+                                </div>
+                            </div>
+                        </>
                     )}
                 </div>
             </div>
@@ -55,4 +75,4 @@ const SingleOrganisation: NextPage = () => {
     );
 };
 
-export default withAuth(SingleOrganisation);
+export default withAuth(ViewOrganisation);

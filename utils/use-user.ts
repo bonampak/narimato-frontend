@@ -1,29 +1,37 @@
-import React from "react";
-import { useQuery } from "react-query";
-import { getCookie } from "cookies-next";
-import type { AxiosResponse } from "axios";
+import { useQuery } from "@tanstack/react-query";
 import jwtDecode, { JwtPayload } from "jwt-decode";
+import { getCookie, hasCookie } from "cookies-next";
 
-import { userGetMe } from "../api";
+import { userGetMe } from "../http";
 
 const useUser = () => {
-	const [userData, setUserData] = React.useState<null | object | any>(null);
+    const {
+        isError,
+        isLoading,
+        isRefetching,
+        data: User,
+        refetch
+    } = useQuery(["auth-user"], userGetMe, {
+        cacheTime: Infinity,
+        staleTime: 60000 * 10 /* 10 mins */
+    });
 
-	const { isLoading, isError } = useQuery("auth-user", userGetMe, {
-		onSuccess: (response: AxiosResponse) => setUserData(response.data.data),
-		onError: () => {
-			const decodeJwt: JwtPayload = jwtDecode((getCookie("auth-token") as string) || "");
-			delete decodeJwt.iat;
-			delete decodeJwt.exp;
-			setUserData(decodeJwt);
-		},
-	});
+    if (isError && hasCookie("auth-token")) {
+        const decodeJwt: JwtPayload = jwtDecode((getCookie("auth-token") as string) || "");
+        delete decodeJwt.iat;
+        delete decodeJwt.exp;
 
-	return {
-		isLoading,
-		user: userData,
-		isError,
-	};
+        return {
+            isLoadingUser: isLoading || isRefetching,
+            user: decodeJwt || null
+        };
+    }
+
+    return {
+        isLoadingUser: isLoading || isRefetching,
+        user: User?.data.data || null,
+        refreshAuthState: refetch
+    };
 };
 
 export default useUser;

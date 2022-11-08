@@ -3,7 +3,7 @@ import { removeCookies } from "cookies-next";
 import { NextRouter, useRouter } from "next/router";
 
 import { withAuth } from "../../utils";
-import { LoadingComponent } from "../../components";
+import { Loading } from "../../components";
 
 import type { NextPage } from "next";
 
@@ -14,11 +14,14 @@ const Logout: NextPage = () => {
         // Delete auth-token cookie
         removeCookies("auth-token");
 
+        // Clear local storage
+        localStorage.clear();
+
         // Redirect to login page
-        setTimeout(() => router.replace("/"), 2000);
+        setTimeout(() => router.push("/auth/login"), 1500);
     }, []);
 
-    return <LoadingComponent text="Logging out.." description="You will be redirected to the homepage in a few seconds." />;
+    return <Loading text="Logging out.." description="You will be redirected to the homepage in a few seconds." isParent={true} />;
 };
 
 export default withAuth(Logout);

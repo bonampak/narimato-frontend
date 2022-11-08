@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: true,
+    swcMinify: true,
     env: {
         BACKEND_BASE_URL: process.env.BACKEND_BASE_URL || "http://localhost:4000"
     },
@@ -12,12 +13,12 @@ const nextConfig = {
             {
                 source: "/login",
                 destination: "/auth/login",
-                permanent: true
+                permanent: false
             },
             {
                 source: "/logout",
                 destination: "/auth/logout",
-                permanent: true
+                permanent: false
             }
         ];
     }

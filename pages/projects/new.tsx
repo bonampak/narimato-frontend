@@ -1,53 +1,40 @@
 import React from "react";
-import Head from "next/head";
 import Select from "react-select";
 import { toast } from "react-toastify";
-import { useMutation, useQuery } from "react-query";
-import { NextRouter, useRouter } from "next/router";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { withAuth } from "../../utils";
-import { NavigationBarComponent } from "../../components";
-import { hashtagGetAllWithParents, organisationGetAll, projectCreate } from "../../api";
+import { NavigationBar } from "../../components";
+import { hashtagGetAllTitles, organisationGetAll, projectCreate } from "../../http";
 
 import type { NextPage } from "next";
-import type { AxiosResponse, AxiosError } from "axios";
+import type { AxiosError, AxiosResponse } from "axios";
 
-const CreateProject: NextPage = () => {
-    const router: NextRouter = useRouter();
+const NewProject: NextPage = () => {
+    const [organisations, setOrganisation] = React.useState<any[]>([]);
+
+    const { isLoading: isLoadingOrganisations } = useQuery(["organisations"], organisationGetAll, {
+        onSuccess: (response: AxiosResponse) => {
+            const { data } = response.data;
+            setOrganisation(data);
+        }
+    });
 
     const [hashtags, setHashtags] = React.useState<any[]>([]);
-    const [organisations, setOrganisations] = React.useState<any[]>([]);
-    const [selectedHashtags, setSelectedHashtags] = React.useState<any[]>([]);
+    const [selectedHashtags, setSelectedHashtags] = React.useState<any>([]);
 
-    const {} = useQuery("hashtags", hashtagGetAllWithParents, {
+    const { isLoading: isLoadingHashtagTitles } = useQuery(["hashtags", "titles"], hashtagGetAllTitles, {
         onSuccess: (response: AxiosResponse) => {
             const { data } = response.data;
-            setHashtags(data.filter((hashtag: any) => hashtag.parentHashtag === null));
-        },
-        onError: (error: AxiosError) => {
-            toast.error(error.response ? error.response.data.message : error.message);
-            router.push("/dashboard");
+            setHashtags(data);
         }
     });
 
-    const {} = useQuery("organisations", organisationGetAll, {
+    const { isLoading, mutate } = useMutation(projectCreate, {
         onSuccess: (response: AxiosResponse) => {
-            const { data } = response.data;
-            setOrganisations(data);
+            toast.success(response.data.message);
         },
-        onError: (error: AxiosError) => {
-            toast.error(error.response ? error.response.data.message : error.message);
-            router.push("/dashboard");
-        }
-    });
-
-    const { isLoading: isCreatingProject, mutate: createProject } = useMutation(projectCreate, {
-        onSuccess: (response: AxiosResponse) => {
-            const { message } = response.data;
-            toast.success(message);
-            router.push("/projects/manage");
-        },
-        onError: (error: AxiosError) => {
+        onError: (error: AxiosError<any>) => {
             toast.error(error.response ? error.response.data.message : error.message);
         }
     });
@@ -55,58 +42,55 @@ const CreateProject: NextPage = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const formData = new FormData(e.target as HTMLFormElement);
-        const formDataToJSON: any = Object.fromEntries(formData);
+        const formDataToJSON = Object.fromEntries(formData);
 
-        formDataToJSON["hashtags"] = selectedHashtags.map((hashtag) => hashtag.value);
+        // Append muti-selected hashtags
+        formDataToJSON["hashtagRefs"] = selectedHashtags.map((hashtag: any) => hashtag.value);
 
-        createProject(formDataToJSON);
+        mutate(formDataToJSON);
     };
 
     return (
         <>
-            <Head>
-                <title>Create Project - Haikoto</title>
-            </Head>
+            <div className="relative min-h-screen lg:flex">
+                <NavigationBar />
 
-            <div className="relative min-h-screen md:flex">
-                <NavigationBarComponent />
+                <div className="flex-1 p-5 md:pt-10 max-h-screen overflow-y-auto">
+                    <section className="w-full bg-gray-200 rounded text-xl md:text-3xl text-black font-bold my-4 p-5">New Project</section>
 
-                <div className="flex-1 p-10 text-2xl font-bold max-h-screen overflow-y-auto">
-                    <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">Create an Project</section>
-
-                    <div className="flex flex-col md:max-w-xl">
-                        <form onSubmit={handleSubmit}>
-                            <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Project Name</h1>
-                            <input name="name" type="text" className="border-black border-2 my-2 w-full p-2" required />
-
-                            <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Hashtags (Parent Cards)</h1>
-                            <Select
-                                isMulti
-                                className="border-black border-2 my-2 w-full"
-                                options={hashtags.map((hashtag: any) => {
-                                    return { value: hashtag._id, label: hashtag.title };
-                                })}
-                                onChange={(selectedHashtags: any) => setSelectedHashtags(selectedHashtags)}
-                            />
-
-                            <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">Organisation</h1>
-                            <Select
-                                name="organisation"
-                                className="border-black border-2 my-2 w-full"
-                                options={organisations.map((organisation: any) => {
-                                    return { value: organisation._id, label: organisation.name };
-                                })}
-                            />
-
-                            <div className="flex justify-center mt-8">
-                                <button
-                                    disabled={isCreatingProject}
-                                    type="submit"
-                                    className={["bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg p-2 mt-8 w-full", isCreatingProject ? "opacity-50" : "opacity-100"].join(" ")}
-                                >
-                                    Create
-                                </button>
+                    <div className="w-full max-w-lg">
+                        <form className="my-5 space-y-3" onSubmit={handleSubmit}>
+                            <div>
+                                <label htmlFor="name" className="label">
+                                    <span className="label-text text-base">Name</span>
+                                </label>
+                                <input type="text" name="name" className="input input-bordered rounded focus:border-primary-300 w-full" required />
                             </div>
+
+                            <div>
+                                <label htmlFor="deadline" className="label">
+                                    <span className="label-text text-base">Deadline</span>
+                                </label>
+                                <input type="date" name="deadline" className="input input-bordered rounded focus:border-primary-300 w-full" />
+                            </div>
+
+                            <div>
+                                <label htmlFor="hashtagRefs" className="label">
+                                    <span className="label-text text-base">Hashtags</span>
+                                </label>
+                                <Select isMulti instanceId="hashtags" options={hashtags ? hashtags.map((hashtag) => ({ value: hashtag._id, label: hashtag.title })) : []} isLoading={isLoadingHashtagTitles} onChange={(selectedHashtags) => setSelectedHashtags(selectedHashtags)} classNamePrefix="react-select" isClearable />
+                            </div>
+
+                            <div>
+                                <label htmlFor="organisationRef" className="label">
+                                    <span className="label-text text-base">Organisation</span>
+                                </label>
+                                <Select instanceId="organisations" name="organisationRef" options={organisations ? organisations.map((organisation) => ({ value: organisation._id, label: organisation.name })) : []} isLoading={isLoadingOrganisations} classNamePrefix="react-select" isClearable />
+                            </div>
+
+                            <button type="submit" disabled={isLoading} className={["btn rounded bg-blue-600 hover:bg-blue-700 text-white w-full no-animation", isLoading && "loading"].join(" ")}>
+                                Create
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -115,4 +99,4 @@ const CreateProject: NextPage = () => {
     );
 };
 
-export default withAuth(CreateProject);
+export default withAuth(NewProject);

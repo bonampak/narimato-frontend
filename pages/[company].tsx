@@ -1,47 +1,26 @@
+import axios from "axios";
 import React from "react";
-import Head from "next/head";
 import { toast } from "react-toastify";
-import Lottie from "react-lottie-player";
 import { setCookies } from "cookies-next";
+import { useMutation } from "@tanstack/react-query";
 import { NextRouter, useRouter } from "next/router";
-import { useMutation, useQuery } from "react-query";
 
-import { withoutAuth } from "../utils";
-import { LoadingComponent } from "../components";
-import { LottieLoginAnimationData } from "../assets";
-import { authLogin, organisationGetOneBySlugUrl } from "../api";
+import { authLogin, organisationGetOneBySlug } from "../http";
 
-import type { AxiosError, AxiosResponse } from "axios";
-import type { NextPage } from "next";
+import type { AxiosError } from "axios";
+import type { NextPage, NextPageContext } from "next";
 
-const CompanyLoginOrSignup: NextPage = () => {
+const CompanyLogin: NextPage = ({ organisation }: any) => {
     const router: NextRouter = useRouter();
 
-    const { company } = router.query;
-
-    const [organisation, setOrganisation] = React.useState<null | any>(null);
-
-    const { isLoading } = useQuery(["organisation", company], () => organisationGetOneBySlugUrl(company as string), {
-        onSuccess: (response: AxiosResponse) => {
-            const { data } = response.data;
-            setOrganisation(data);
+    const { isLoading, mutate } = useMutation(authLogin, {
+        onSuccess: (response: any) => {
+            const { token } = response.data.data;
+            setCookies("auth-token", token, { maxAge: 60 * 60 });
+            toast.success("Login successful, redirecting...");
+            setTimeout(() => router.push("/dashboard"), 1500);
         },
-        onError: (error: AxiosError) => {
-            toast.error(error.response ? error.response.data.message : error.message);
-            router.push("/");
-        },
-        enabled: !!company
-    });
-
-    const { isLoading: isLoadingLogin, mutate: mutateLogin } = useMutation(authLogin, {
-        onSuccess: (response: AxiosResponse) => {
-            const { data, message } = response.data;
-            setCookies("auth-token", data.token, { maxAge: 60 * 60 });
-            toast.success(message);
-            // setInterval(() => router.reload(), 2000);
-            setInterval(() => window.location.replace("/dashboard"), 2000);
-        },
-        onError: (error: AxiosError) => {
+        onError: (error: AxiosError<any>) => {
             toast.error(error.response ? error.response.data.message : error.message);
         }
     });
@@ -49,57 +28,61 @@ const CompanyLoginOrSignup: NextPage = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const formData = new FormData(e.target as HTMLFormElement);
-        const formDataToJSON: any = Object.fromEntries(formData);
+        const formDataToJSON = Object.fromEntries(formData);
 
-        formDataToJSON["organisation"] = organisation._id;
+        formDataToJSON["organisationRef"] = organisation._id;
 
-        mutateLogin(formDataToJSON);
+        mutate(formDataToJSON);
     };
 
     return (
         <>
-            <Head>
-                <title>Login | Signup - Haikoto</title>
-            </Head>
-
-            {isLoading && <LoadingComponent text="" description="" />}
-
-            {!isLoading && organisation && (
-                <div className="w-full flex flex-wrap">
-                    <div className="w-full md:w-1/2 flex flex-col my-auto">
-                        <div className="flex justify-center pt-12">
-                            <img src={organisation.logoUrl} className="w-1/2 aspect-square object-contain" alt="organisation-logo" />
-                        </div>
-                        <div className="flex flex-col justify-center pt-8 md:pt-5 px-8 md:px-24 lg:px-32">
-                            <p className="text-center text-3xl">Login | Signup</p>
-                            <form className="flex flex-col pt-3 md:pt-8" onSubmit={handleSubmit}>
-                                <div className="flex flex-col pt-4">
-                                    <label className="text-lg">Email</label>
-                                    <input
-                                        type="text"
-                                        name="codeName"
-                                        className="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
-                                        required
-                                    />
-                                </div>
-                                <button
-                                    disabled={isLoadingLogin}
-                                    type="submit"
-                                    className={["bg-blue-600 text-white font-bold text-lg hover:bg-blue-700 p-2 mt-8", isLoadingLogin ? "opacity-50" : "opacity-100"].join(" ")}
-                                >
-                                    Proceed
-                                </button>
-                            </form>
-                        </div>
+            <div className="w-full flex flex-wrap">
+                <div className="w-full md:w-1/2 flex flex-col my-auto">
+                    <div className="flex justify-center pt-12">
+                        <img src={organisation.logoUrl} className="h-32 aspect-video object-contain" alt="logo" />
                     </div>
 
-                    <div className="w-1/2 shadow-2xl">
-                        <Lottie className="object-cover w-full h-screen hidden md:block" animationData={LottieLoginAnimationData} loop={true} play={true} />
+                    <div className="flex flex-col justify-center pt-8 md:pt-5 px-8 md:px-24 lg:px-32">
+                        <h2 className="block text-center text-2xl font-bold">{organisation.name}</h2>
+
+                        <form className="my-5 space-y-3" onSubmit={handleSubmit}>
+                            <div>
+                                <label htmlFor="codeName" className="label">
+                                    <span className="label-text text-base">Email</span>
+                                </label>
+                                <input type="text" name="codeName" className="input input-bordered rounded w-full" required />
+                            </div>
+
+                            <button type="submit" disabled={isLoading} className={["btn btn-block rounded bg-blue-600 hover:bg-blue-700 border-none no-animation", isLoading && "loading"].join(" ")}>
+                                Get Started
+                            </button>
+                        </form>
                     </div>
                 </div>
-            )}
+
+                <div className="w-1/2 hidden md:block">
+                    <img src="/assets/images/loginOrSignupBanner.png" className="object-cover w-full h-screen" alt="login-banner" />
+                </div>
+            </div>
         </>
     );
 };
 
-export default withoutAuth(CompanyLoginOrSignup);
+// This gets called on every request
+export async function getServerSideProps(context: NextPageContext) {
+    const { company } = context.query;
+
+    try {
+        // Run Axios check
+        const { data: response } = await organisationGetOneBySlug(company as string);
+
+        // Pass data to the page via props
+        return { props: { organisation: response.data } };
+    } catch (error) {
+        // If not found, throw 404 page
+        return { notFound: true };
+    }
+}
+
+export default CompanyLogin;

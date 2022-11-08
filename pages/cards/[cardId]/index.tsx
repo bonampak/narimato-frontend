@@ -1,20 +1,19 @@
 import React from "react";
-import Head from "next/head";
-import { useQuery } from "react-query";
 import { toast } from "react-toastify";
+import { useQuery } from "@tanstack/react-query";
 import { NextRouter, useRouter } from "next/router";
 
 import { withAuth } from "../../../utils";
-import { cardGetOne } from "../../../api";
-import { LoadingComponent, NavigationBarComponent, SingleCard } from "../../../components";
+import { cardGetOne } from "../../../http";
+import { Loading, NavigationBar, SingleCard } from "../../../components";
 
 import type { NextPage } from "next";
-import type { AxiosResponse, AxiosError } from "axios";
+import type { AxiosError, AxiosResponse } from "axios";
 
-const SingleCardPage: NextPage = () => {
+const ViewCard: NextPage = ({ query }: any) => {
     const router: NextRouter = useRouter();
+    const { cardId } = query;
 
-    const { cardId } = router.query;
     const [card, setCard] = React.useState<null | any>(null);
 
     const { isLoading } = useQuery(["card", cardId], () => cardGetOne(cardId as string), {
@@ -22,30 +21,34 @@ const SingleCardPage: NextPage = () => {
             const { data } = response.data;
             setCard(data);
         },
-        onError: (error: AxiosError) => {
-            toast.error(error.response ? error.response.data.message : error.message, {
-                onClose: () => router.push("/dashboard")
-            });
+        onError: (error: AxiosError<any>) => {
+            toast.error(error.response ? error.response.data.message : error.message);
+            router.push("/dashboard");
         },
         enabled: !!cardId
     });
 
     return (
         <>
-            <Head>
-                <title>Single Card - Haikoto</title>
-            </Head>
+            <div className="relative min-h-screen lg:flex">
+                <NavigationBar />
 
-            <div className="relative min-h-screen md:flex">
-                <NavigationBarComponent />
+                <div className="flex-1 p-5 md:pt-10 max-h-screen overflow-y-auto">
+                    {!card && <Loading isParent={false} />}
 
-                <div className="flex-1 p-10 text-2xl font-bold max-h-screen overflow-y-auto">
-                    {isLoading && !card && <LoadingComponent />}
+                    {card && (
+                        <>
+                            <section className="w-full bg-gray-200 rounded text-xl md:text-3xl text-black font-bold my-4 p-5">Card - {card?._id}</section>
 
-                    {!isLoading && card && (
-                        <div className="items-center justify-center">
-                            <SingleCard card={card} />
-                        </div>
+                            <SingleCard
+                                // breaker
+                                card={card}
+                                showTitle={true}
+                                showButtons={false}
+                                showHashtags={true}
+                                activeControls={false}
+                            />
+                        </>
                     )}
                 </div>
             </div>
@@ -53,4 +56,4 @@ const SingleCardPage: NextPage = () => {
     );
 };
 
-export default withAuth(SingleCardPage);
+export default withAuth(ViewCard);
