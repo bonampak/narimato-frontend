@@ -17,7 +17,7 @@ const Home: NextPage = () => {
 
                     <p className="max-w-3xl text-center text-sm md:text-xl font-normal">We are creating a unique workspace culture! We help you to build your SKILL MAP! Choose the cards that best suit you!</p>
 
-                    <Link className="btn btn-lg btn-wide bg-blue-600 hover:bg-blue-700 border-none" href={"/login"}>
+                    <Link className="btn btn-lg btn-wide bg-blue-600 hover:bg-blue-700 border-none" href={"/auth/login"}>
                         Get Started
                     </Link>
                 </div>
