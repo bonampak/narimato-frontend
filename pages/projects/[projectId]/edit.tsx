@@ -65,6 +65,9 @@ const EditProject: NextPage = ({ query }: any) => {
 
         if (formDataToJSON.organisationRef === "") formDataToJSON["organisationRef"] = null;
 
+        // Append muti-selected hashtags
+        formDataToJSON["hashtagRefs"] = selectedHashtags.map((hashtag: any) => hashtag.value);
+
         mutate(formDataToJSON);
     };
 
