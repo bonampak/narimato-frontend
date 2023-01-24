@@ -62,7 +62,7 @@ const SingleCard = ({ card, showTitle, showButtons, showHashtags, activeControls
                     ) : (
                         // For Text
                         <div className="h-full w-full min-w-[20rem] min-h-[20rem] aspect-square bg-black" style={{ backgroundColor: card.bgColor && card.bgColor }}>
-                            <Textfit mode="multi" style={{ height: "100%" }} className="m-auto text-center text-white leading-normal p-5">
+                            <Textfit mode="multi" style={{ height: "100%", width: "100%" }} className="m-auto text-center text-white leading-normal p-5">
                                 {card.description}
                             </Textfit>
                         </div>

@@ -64,7 +64,7 @@ const SingleHashtag = ({ hashtag, showTitle, showButtons, showHashtags, activeCo
                     ) : (
                         // For Text
                         <div className="h-full w-full aspect-square min-w-[20rem] min-h-[20rem] bg-black" style={{ backgroundColor: hashtag.bgColor && hashtag.bgColor }}>
-                            <Textfit mode="multi" style={{ height: "100%" }} className="m-auto text-center text-white leading-normal p-5">
+                            <Textfit mode="multi" style={{ height: "100%", width: "100%" }} className="m-auto text-center text-white leading-normal p-5">
                                 {hashtag.description}
                             </Textfit>
                         </div>

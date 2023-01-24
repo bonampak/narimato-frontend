@@ -224,7 +224,6 @@ const Play: NextPage = ({ query }: any) => {
         if (surveyState.currentMode === "card") {
             // Get a new card
             fetchNewCard();
-            return;
         }
 
         if (surveyState.currentMode === "hashtag") {
