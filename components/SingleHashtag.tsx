@@ -58,12 +58,12 @@ const SingleHashtag = ({ hashtag, showTitle, showButtons, showHashtags, activeCo
                 <SwipeableHashtag onSwipe={handleSwipe} preventSwipe={["up", "down", ...(!activeControls ? ["left", "right"] : [])]} flickOnSwipe={false}>
                     {hashtag.imageUrl ? (
                         // For Image
-                        <div className="h-full w-full aspect-square">
+                        <div className="h-full w-full aspect-square min-w-[20rem] min-h-[20rem]">
                             <img src={hashtag.imageUrl} alt="hashtag-image" className="w-full h-full object-contain" />
                         </div>
                     ) : (
                         // For Text
-                        <div className="h-full w-full aspect-square bg-black" style={{ backgroundColor: hashtag.bgColor && hashtag.bgColor }}>
+                        <div className="h-full w-full aspect-square min-w-[20rem] min-h-[20rem] bg-black" style={{ backgroundColor: hashtag.bgColor && hashtag.bgColor }}>
                             <Textfit mode="multi" style={{ height: "100%" }} className="m-auto text-center text-white leading-normal p-5">
                                 {hashtag.description}
                             </Textfit>

@@ -56,12 +56,12 @@ const SingleCard = ({ card, showTitle, showButtons, showHashtags, activeControls
                 <SwipeableCard onSwipe={handleSwipe} preventSwipe={["up", "down", ...(!activeControls ? ["left", "right"] : [])]} flickOnSwipe={false}>
                     {card.imageUrl ? (
                         // For Image
-                        <div className="h-full w-full aspect-square">
+                        <div className="h-full w-full aspect-square min-w-[20rem] min-h-[20rem]">
                             <img src={card.imageUrl} alt="card-image" className="w-full h-full object-contain" />
                         </div>
                     ) : (
                         // For Text
-                        <div className="h-full w-full aspect-square bg-black" style={{ backgroundColor: card.bgColor && card.bgColor }}>
+                        <div className="h-full w-full min-w-[20rem] min-h-[20rem] aspect-square bg-black" style={{ backgroundColor: card.bgColor && card.bgColor }}>
                             <Textfit mode="multi" style={{ height: "100%" }} className="m-auto text-center text-white leading-normal p-5">
                                 {card.description}
                             </Textfit>
