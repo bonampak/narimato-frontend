@@ -1,6 +1,7 @@
 import React from "react";
 import { useImmer } from "use-immer";
 import { Textfit } from "react-textfit";
+import { useKeyPressEvent } from "react-use";
 
 import { arrayMethods } from "../utils";
 
@@ -21,6 +22,10 @@ const VoteCard = ({ showTitle, surveyState, updateSurveyState, updateRightSwiped
         randomVoteIndex: arrayMethods.getRandomIndex(surveyState.rightSwipedCardRefs.slice(1)),
         rightSwipedCardRefsFilteredByHashtag: surveyState.rightSwipedCardRefs.slice(1)
     });
+
+    // Key Press Event Handlers
+    useKeyPressEvent("ArrowRight", () => handleClick(voteState.currentCard._id));
+    useKeyPressEvent("ArrowLeft", () => handleClick(voteState.rightSwipedCardRefsFilteredByHashtag[voteState.randomVoteIndex]._id));
 
     const handleClick = async (cardId: string) => {
         // If picked cardId is currentCard, set tempStore to upper half of randomVoteIndex in rightSwipedCardRefsFilteredByHashtag
@@ -71,12 +76,12 @@ const VoteCard = ({ showTitle, surveyState, updateSurveyState, updateRightSwiped
             <div className="flex flex-col justify-center items-center max-w-lg w-full gap-3 mx-auto cursor-pointer" onClick={() => handleClick(voteState.currentCard._id)}>
                 {voteState.currentCard.imageUrl ? (
                     // For Image
-                    <div className="h-full w-full aspect-square">
+                    <div className="h-full w-full aspect-square max-w-[15rem] max-h-[15rem] md:max-w-full md:max-h-full">
                         <img src={voteState.currentCard.imageUrl} alt="card-image" className="w-full h-full object-contain" />
                     </div>
                 ) : (
                     // For Text
-                    <div className="h-full w-full aspect-square bg-black" style={{ backgroundColor: voteState.currentCard.bgColor && voteState.currentCard.bgColor }}>
+                    <div className="h-full w-full aspect-square max-w-[15rem] max-h-[15rem] md:max-w-full md:max-h-full bg-black" style={{ backgroundColor: voteState.currentCard.bgColor && voteState.currentCard.bgColor }}>
                         <Textfit mode="multi" style={{ height: "100%" }} className="m-auto text-center text-white leading-normal p-5">
                             {voteState.currentCard.description}
                         </Textfit>
@@ -89,12 +94,12 @@ const VoteCard = ({ showTitle, surveyState, updateSurveyState, updateRightSwiped
             <div className="flex flex-col justify-center items-center max-w-lg w-full gap-3 mx-auto cursor-pointer" onClick={() => handleClick(voteState.rightSwipedCardRefsFilteredByHashtag[voteState.randomVoteIndex]._id)}>
                 {voteState.rightSwipedCardRefsFilteredByHashtag[voteState.randomVoteIndex].imageUrl ? (
                     // For Image
-                    <div className="h-full w-full aspect-square">
+                    <div className="h-full w-full aspect-square max-w-[15rem] max-h-[15rem] md:max-w-full md:max-h-full">
                         <img src={voteState.rightSwipedCardRefsFilteredByHashtag[voteState.randomVoteIndex].imageUrl} alt="card-image" className="w-full h-full object-contain" />
                     </div>
                 ) : (
                     // For Text
-                    <div className="h-full w-full aspect-square bg-black" style={{ backgroundColor: voteState.rightSwipedCardRefsFilteredByHashtag[voteState.randomVoteIndex].bgColor && voteState.rightSwipedCardRefsFilteredByHashtag[voteState.randomVoteIndex].bgColor }}>
+                    <div className="h-full w-full aspect-square max-w-[15rem] max-h-[15rem] md:max-w-full md:max-h-full bg-black" style={{ backgroundColor: voteState.rightSwipedCardRefsFilteredByHashtag[voteState.randomVoteIndex].bgColor && voteState.rightSwipedCardRefsFilteredByHashtag[voteState.randomVoteIndex].bgColor }}>
                         <Textfit mode="multi" style={{ height: "100%" }} className="m-auto text-center text-white leading-normal p-5">
                             {voteState.rightSwipedCardRefsFilteredByHashtag[voteState.randomVoteIndex].description}
                         </Textfit>
