@@ -48,7 +48,7 @@ const Cards: NextPage = () => {
                                         <tr>
                                             <th className="text-sm">#</th>
                                             <th className="text-sm">Title</th>
-                                            <th className="text-sm">Description</th>
+                                            {/* <th className="text-sm">Description</th> */}
                                             <th className="text-sm">Hashtags</th>
                                             <th className="text-sm">Thumbnail</th>
                                             <th className="text-sm">Date Created</th>
@@ -60,7 +60,7 @@ const Cards: NextPage = () => {
                                             <tr key={card._id}>
                                                 <th>{++index}</th>
                                                 <td>{card.title}</td>
-                                                <td>{card.description}</td>
+                                                {/* <td>{card.description}</td> */}
                                                 <td>{card.hashtagRefs.length > 0 ? card.hashtagRefs.map((hashtag: any) => `${hashtag.title}, `) : "---"}</td>
                                                 <td>{card.imageUrl ? <Image src={card.imageUrl} alt={card.title} width={50} height={50} quality={5} /> : "---"}</td>
                                                 <td>{dateMethods.parseMonthDateYearTime(card.createdAt)}</td>
