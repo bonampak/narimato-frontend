@@ -53,23 +53,25 @@ const SingleCard = ({ card, showTitle, showButtons, showHashtags, activeControls
             )}
 
             <div className="flex flex-col justify-center items-center max-w-xl -order-1 md:order-none w-full md:w-2/4 gap-3">
-                <SwipeableCard onSwipe={handleSwipe} preventSwipe={["up", "down", ...(!activeControls ? ["left", "right"] : [])]} flickOnSwipe={false}>
-                    {card.imageUrl ? (
-                        // For Image
+                {card.imageUrl ? (
+                    // For Image
+                    <SwipeableCard onSwipe={handleSwipe} preventSwipe={["up", "down", ...(!activeControls ? ["left", "right"] : [])]} flickOnSwipe={false}>
                         <div className="h-full w-full aspect-square min-w-[20rem] min-h-[20rem]">
                             <img src={card.imageUrl} alt="card-image" className="w-full h-full object-contain" />
                         </div>
-                    ) : (
-                        // For Text
+                    </SwipeableCard>
+                ) : (
+                    // For Text
+                    <SwipeableCard onSwipe={handleSwipe} preventSwipe={["up", "down", ...(!activeControls ? ["left", "right"] : [])]} flickOnSwipe={false}>
                         <div className="h-full w-full min-w-[20rem] min-h-[20rem] aspect-square bg-black" style={{ backgroundColor: card.bgColor && card.bgColor }}>
                             <Textfit mode="multi" style={{ height: "100%", width: "100%" }} className="m-auto text-center text-white leading-normal p-5">
                                 {card.description}
                             </Textfit>
                         </div>
-                    )}
+                    </SwipeableCard>
+                )}
 
-                    {showTitle && <h2 className="text-center text-3xl font-bold">{card.title}</h2>}
-                </SwipeableCard>
+                {showTitle && <h2 className="text-center text-3xl font-bold">{card.title}</h2>}
 
                 {showHashtags && (
                     <div className="flex justify-center flex-nowrap md:flex-wrap w-full overflow-x-scroll gap-5">
