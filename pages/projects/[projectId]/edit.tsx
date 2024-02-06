@@ -121,7 +121,7 @@ const EditProject: NextPage = ({ query }: any) => {
                                         />
                                     </div>
 
-                                    <button type="submit" disabled={isLoading} className={["btn rounded bg-blue-600 hover:bg-blue-700 text-white w-full no-animation", isLoading && "loading"].join(" ")}>
+                                    <button type="submit" disabled={isLoading} className={["btn rounded bg-red-600 hover:bg-red-700 text-white w-full no-animation", isLoading && "loading"].join(" ")}>
                                         Save Changes
                                     </button>
                                 </form>

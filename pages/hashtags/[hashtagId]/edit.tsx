@@ -130,7 +130,7 @@ const EditHashtag: NextPage = ({ query }: any) => {
                                         <Select instanceId="hashtags" defaultValue={hashtag.parentHashtagRef ? { label: hashtag.parentHashtagRef.title, value: hashtag.parentHashtagRef._id } : {}} name="parentHashtagRef" options={hashtags ? hashtags.map((hashtag) => ({ value: hashtag._id, label: hashtag.title })) : []} isLoading={isLoadingHashtagTitles} classNamePrefix="react-select" isClearable />
                                     </div>
 
-                                    <button type="submit" disabled={isLoading} className={["btn rounded bg-blue-600 hover:bg-blue-700 text-white w-full no-animation", isLoading && "loading"].join(" ")}>
+                                    <button type="submit" disabled={isLoading} className={["btn rounded bg-red-600 hover:bg-red-700 text-white w-full no-animation", isLoading && "loading"].join(" ")}>
                                         Save Changes
                                     </button>
                                 </form>

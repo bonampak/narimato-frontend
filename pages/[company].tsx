@@ -54,7 +54,7 @@ const CompanyLogin: NextPage = ({ organisation }: any) => {
                                 <input type="text" name="codeName" className="input input-bordered rounded w-full" required />
                             </div>
 
-                            <button type="submit" disabled={isLoading} className={["btn btn-block rounded bg-blue-600 hover:bg-blue-700 border-none no-animation", isLoading && "loading"].join(" ")}>
+                            <button type="submit" disabled={isLoading} className={["btn btn-block rounded bg-red-600 hover:bg-red-700 border-none no-animation", isLoading && "loading"].join(" ")}>
                                 Get Started
                             </button>
                         </form>

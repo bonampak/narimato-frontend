@@ -82,7 +82,7 @@ const Organisations: NextPage = () => {
                                                 </td>
                                                 <td>
                                                     <div className="flex flex-row gap-4">
-                                                        <Link href={`/organisations/${organisation._id}`} className="text-blue-500">
+                                                        <Link href={`/organisations/${organisation._id}`} className="text-red-500">
                                                             View
                                                         </Link>
                                                         <Link href={`/organisations/${organisation._id}/edit`} className="text-yellow-500">

@@ -66,7 +66,7 @@ const Cards: NextPage = () => {
                                                 <td>{dateMethods.parseMonthDateYearTime(card.createdAt)}</td>
                                                 <td>
                                                     <div className="flex flex-row gap-4">
-                                                        <Link href={`/cards/${card._id}`} className="text-blue-500">
+                                                        <Link href={`/cards/${card._id}`} className="text-red-500">
                                                             View
                                                         </Link>
                                                         <Link href={`/cards/${card._id}/edit`} className="text-yellow-500">

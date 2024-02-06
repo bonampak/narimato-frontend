@@ -76,7 +76,7 @@ const SingleCard = ({ card, showTitle, showButtons, showHashtags, activeControls
                 {showHashtags && (
                     <div className="flex justify-center flex-nowrap md:flex-wrap w-full overflow-x-scroll gap-5">
                         {card.hashtagRefs.map((hashtag, index) => (
-                            <span key={index} className="w-max bg-blue-600 rounded p-2 text-white text-sm font-medium">
+                            <span key={index} className="w-max bg-red-600 rounded p-2 text-white text-sm font-medium">
                                 #{hashtag.title}
                             </span>
                         ))}

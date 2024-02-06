@@ -7,7 +7,7 @@ const LandingPageTopNavigationBar = () => {
     return (
         <nav className="flex flex-col md:flex-row w-full max-w-7xl justify-between md:items-center gap-5 m-auto p-5">
             <div className="flex items-center justify-between">
-                <Link href="/" className="text-2xl font-black text-blue-600 md:text-3xl">
+                <Link href="/" className="text-2xl font-black text-red-600 md:text-3xl">
                     Narimato
                 </Link>
 
@@ -21,15 +21,15 @@ const LandingPageTopNavigationBar = () => {
             </div>
 
             <div className={["flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-10 md:block", isMobileNavExpanded ? "block" : "hidden"].join(" ")}>
-                <Link href="/" className="text-black text-base hover:text-blue-600">
+                <Link href="/" className="text-black text-base hover:text-red-600">
                     Home
                 </Link>
-                <Link href={`mailto:hello@narimato.com`} className="text-black text-base hover:text-blue-600">
+                <Link href={`mailto:hello@narimato.com`} className="text-black text-base hover:text-red-600">
                     Contact us
                 </Link>
             </div>
 
-            <Link href="/auth/login" className={["btn bg-blue-600 hover:bg-blue-700 border-none rounded no-animation md:flex", isMobileNavExpanded ? "flex" : "hidden"].join(" ")}>
+            <Link href="/auth/login" className={["btn bg-red-600 hover:bg-red-700 border-none rounded no-animation md:flex", isMobileNavExpanded ? "flex" : "hidden"].join(" ")}>
                 Get Started
             </Link>
         </nav>

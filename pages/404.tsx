@@ -10,7 +10,7 @@ const Custom404: NextPage = () => {
                 <title>404 - Narimato</title>
             </Head>
 
-            <div className="flex items-center justify-center min-h-screen bg-blue-700">
+            <div className="flex items-center justify-center min-h-screen bg-red-700">
                 <div className="container">
                     <div className="text-white text-center">
                         <div className="relative">

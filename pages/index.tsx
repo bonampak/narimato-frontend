@@ -12,18 +12,18 @@ const Home: NextPage = () => {
             <main className="flex flex-col items-center">
                 <div className="flex flex-col w-full items-center space-y-10 bg-gray-100 p-10 md:py-24">
                     <h2 className="max-w-4xl text-center text-3xl md:text-6xl font-bold">
-                        <span className="text-blue-600">Know More</span> about your soft skills and get ready for your next <span className="text-blue-600">JOB</span>
+                        <span className="text-red-600">Know More</span> about your soft skills and get ready for your next <span className="text-red-600">JOB</span>
                     </h2>
 
                     <p className="max-w-3xl text-center text-sm md:text-xl font-normal">We are creating a unique workspace culture! We help you to build your SKILL MAP! Choose the cards that best suit you!</p>
 
-                    <Link className="btn btn-lg btn-wide bg-blue-600 hover:bg-blue-700 border-none" href={"/auth/login"}>
+                    <Link className="btn btn-lg btn-wide bg-red-600 hover:bg-red-700 border-none" href={"/auth/login"}>
                         Get Started
                     </Link>
                 </div>
 
                 <div className="flex flex-col w-full max-w-7xl items-center p-10 md:py-24">
-                    <h2 className="lg:text-6xl text-4xl font-black leading-10 text-center text-gray-800">How It Works!</h2>
+                    <h2 className="lg:text-6xl text-4xl font-black leading-10 text-center text-gray-800">How It Works:</h2>
 
                     <div className="flex flex-col md:flex-row justify-between items-center gap-5 mt-10">
                         <div className="shadow border bg-white p-10">

@@ -54,7 +54,7 @@ const StartASurvey: NextPage = () => {
                                     <>
                                         {!moment().isAfter(moment(project.deadline)) && (
                                             <Link href={`/survey/play?projectId=${project._id}`}>
-                                                <section className="w-full bg-blue-200 rounded text-xl text-black font-medium my-4 p-5">
+                                                <section className="w-full bg-red-200 rounded text-xl text-black font-medium my-4 p-5">
                                                     {++index}.&nbsp; {project.name}
                                                     {project.deadline && (
                                                         <>

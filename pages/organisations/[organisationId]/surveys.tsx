@@ -66,7 +66,7 @@ const SurveysByOrganisation: NextPage = ({ query }: any) => {
                                                 <td>{dateMethods.parseMonthDateYearTime(survey.createdAt)}</td>
                                                 <td>
                                                     <div className="flex flex-row gap-4">
-                                                        <Link href={`/surveys/${survey._id}`} className="text-blue-500">
+                                                        <Link href={`/surveys/${survey._id}`} className="text-red-500">
                                                             View
                                                         </Link>
                                                         {/* <Link href={`/surveys/${survey._id}/edit`} className="text-yellow-500">

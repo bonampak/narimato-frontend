@@ -66,7 +66,7 @@ const Hashtags: NextPage = () => {
                                                 <td>{dateMethods.parseMonthDateYearTime(hashtag.createdAt)}</td>
                                                 <td>
                                                     <div className="flex flex-row gap-4">
-                                                        <Link href={`/hashtags/${hashtag._id}`} className="text-blue-500">
+                                                        <Link href={`/hashtags/${hashtag._id}`} className="text-red-500">
                                                             View
                                                         </Link>
                                                         <Link href={`/hashtags/${hashtag._id}/edit`} className="text-yellow-500">

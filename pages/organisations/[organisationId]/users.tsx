@@ -66,7 +66,7 @@ const UsersByOrganisation: NextPage = ({ query }: any) => {
                                                 <td>{dateMethods.parseMonthDateYearTime(user.createdAt)}</td>
                                                 <td>
                                                     <div className="flex flex-row gap-4">
-                                                        {/* <Link href={`/users/${user._id}`} className="text-blue-500">
+                                                        {/* <Link href={`/users/${user._id}`} className="text-red-500">
                                                             View
                                                         </Link> */}
                                                         {/* <Link href={`/users/${user._id}/edit`} className="text-yellow-500">
