@@ -3,11 +3,12 @@ const nextConfig = {
     reactStrictMode: true,
     swcMinify: true,
     env: {
-        BACKEND_BASE_URL: process.env.BACKEND_BASE_URL || "http://localhost:4000"
+        BACKEND_BASE_URL: process.env.BACKEND_BASE_URL
     },
     images: {
         domains: ["i.ibb.co", "localhost"]
     },
+    output: 'standalone',
     async redirects() {
         return [
             {

@@ -7,7 +7,7 @@ const Custom500: NextPage = () => {
     return (
         <>
             <Head>
-                <title>500 - Haikoto</title>
+                <title>500 - Narimato</title>
             </Head>
 
             <div className="flex items-center justify-center min-h-screen bg-blue-700">

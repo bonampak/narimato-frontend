@@ -1,4 +1,4 @@
-# Haikoto Frontend
+# Narimato Frontend
 
 Creating a unique workplace culture
 
@@ -13,3 +13,9 @@ Create Skill Cards in different topics such as
 Swipe and Vote Cards to build your Skill Matrix
 
 Stack: NextJS x TailwindCSS
+
+# Building
+
+```bash 
+docker build -t narimato-frontend:latest .
+```

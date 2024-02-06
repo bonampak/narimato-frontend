@@ -61,7 +61,7 @@ const Organisations: NextPage = () => {
                                                 <td>{organisation.name}</td>
                                                 <td>
                                                     <Link href={organisation.slug} target="_blank" className="underline font-bold">
-                                                        haikoto.com/{organisation.slug}
+                                                        narimato.com/{organisation.slug}
                                                     </Link>
                                                 </td>
                                                 <td>{dateMethods.parseMonthDateYearTime(organisation.createdAt)}</td>

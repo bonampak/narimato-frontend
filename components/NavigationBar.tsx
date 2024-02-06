@@ -12,10 +12,10 @@ const TopNavigationBar = () => {
             <div>
                 {/* Top Nav, Hidden on PC */}
                 <nav className="w-full flex flex-row justify-between items-center bg-blue-800 sticky lg:hidden px-5">
-                    <img className="h-7 w-auto" src="/assets/logo/icon.svg" alt="haikoto-logo-icon" />
+                    <img className="h-7 w-auto" src="/assets/logo/icon.svg" alt="narimato-logo-icon" />
 
                     <Link href="/dashboard" className="block p-4 text-white font-bold">
-                        Haikoto
+                        Narimato
                     </Link>
 
                     <button className="p-2" onClick={() => setIsMobileNavExpanded(!isMobileNavExpanded)}>
@@ -29,7 +29,7 @@ const TopNavigationBar = () => {
                 <div className={["w-64 h-screen lg:max-h-screen shadow fixed lg:relative inset-y-0 left-0 overflow-y-auto transform lg:translate-x-0 transition duration-200 bg-blue-800 py-5 px-4 z-50", !isMobileNavExpanded && "-translate-x-full"].join(" ")}>
                     <div className="flex text-white text-3xl font-bold p-1 py-2 mb-5 gap-4">
                         <img src="/assets/logo/icon.svg" className="w-8 h-8" alt="Logo" />
-                        Haikoto
+                        Narimato
                     </div>
 
                     <div className="space-y-3">

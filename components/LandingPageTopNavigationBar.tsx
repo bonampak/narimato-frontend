@@ -8,7 +8,7 @@ const LandingPageTopNavigationBar = () => {
         <nav className="flex flex-col md:flex-row w-full max-w-7xl justify-between md:items-center gap-5 m-auto p-5">
             <div className="flex items-center justify-between">
                 <Link href="/" className="text-2xl font-black text-blue-600 md:text-3xl">
-                    Haikoto
+                    Narimato
                 </Link>
 
                 <div className="flex md:hidden">
@@ -24,7 +24,7 @@ const LandingPageTopNavigationBar = () => {
                 <Link href="/" className="text-black text-base hover:text-blue-600">
                     Home
                 </Link>
-                <Link href={`mailto:hello@haikoto.com`} className="text-black text-base hover:text-blue-600">
+                <Link href={`mailto:hello@narimato.com`} className="text-black text-base hover:text-blue-600">
                     Contact us
                 </Link>
             </div>

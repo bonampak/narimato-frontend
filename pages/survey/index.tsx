@@ -33,7 +33,7 @@ const StartASurvey: NextPage = () => {
     return (
         <>
             <Head>
-                <title>Start A Survey - Haikoto</title>
+                <title>Start A Survey - Narimato</title>
             </Head>
 
             <div className="relative min-h-screen lg:flex">

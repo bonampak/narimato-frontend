@@ -7,7 +7,7 @@ const Custom404: NextPage = () => {
     return (
         <>
             <Head>
-                <title>404 - Haikoto</title>
+                <title>404 - Narimato</title>
             </Head>
 
             <div className="flex items-center justify-center min-h-screen bg-blue-700">

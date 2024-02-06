@@ -19,25 +19,25 @@ function App({ Component, pageProps }: AppProps) {
     return (
         <>
             <Head>
-                <title>Haikoto - Creating a unique workplace culture</title>
+                <title>Narimato - Creating a unique workplace culture</title>
 
                 <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
-                <meta name="title" content="Haikoto - Creating a unique workplace culture" />
+                <meta name="title" content="Narimato - Creating a unique workplace culture" />
                 <meta name="description" content="Creating a unique workspace culture to build your SKILL Map by choosing cards that best suits you!" />
 
-                <link rel="icon" href="https://haikoto.com/assets/logo/icon.png" />
+                <link rel="icon" href="https://narimato.com/assets/logo/icon.png" />
 
                 <meta property="og:type" content="website" />
-                <meta property="og:url" content="https://haikoto.com/" />
-                <meta property="og:title" content="Haikoto - Creating a unique workplace culture" />
+                <meta property="og:url" content="https://narimato.com/" />
+                <meta property="og:title" content="Narimato - Creating a unique workplace culture" />
                 <meta property="og:description" content="Creating a unique workspace culture to build your SKILL Map by choosing cards that best suits you!" />
-                <meta property="og:image" content="https://haikoto.com/assets/site-metaimage.png" />
+                <meta property="og:image" content="https://narimato.com/assets/site-metaimage.png" />
 
                 <meta property="twitter:card" content="summary_large_image" />
-                <meta property="twitter:url" content="https://haikoto.com/" />
-                <meta property="twitter:title" content="Haikoto - Creating a unique workplace culture" />
+                <meta property="twitter:url" content="https://narimato.com/" />
+                <meta property="twitter:title" content="Narimato - Creating a unique workplace culture" />
                 <meta property="twitter:description" content="Creating a unique workspace culture to build your SKILL Map by choosing cards that best suits you!" />
-                <meta property="twitter:image" content="https://haikoto.com/assets/site-metaimage.png" />
+                <meta property="twitter:image" content="https://narimato.com/assets/site-metaimage.png" />
             </Head>
 
             <ToastContainer newestOnTop={true} pauseOnHover={false} autoClose={3000} />

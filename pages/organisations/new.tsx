@@ -53,7 +53,7 @@ const NewOrganisation: NextPage = () => {
                                 <label htmlFor="slug" className="label">
                                     <span className="label-text text-base">
                                         Slug
-                                        <span className="block text-xs font-bold">haikoto.com/slug</span>
+                                        <span className="block text-xs font-bold">narimato.com/slug</span>
                                     </span>
                                 </label>
                                 <input type="text" name="slug" className="input input-bordered rounded focus:border-primary-300 w-full" required />
