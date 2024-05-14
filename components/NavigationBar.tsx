@@ -96,16 +96,6 @@ const TopNavigationBar = () => {
                             <Link href="/surveys" className="block rounded transition duration-200 hover:bg-red-700 text-white capitalize py-2.5 px-4">
                                 Manage Surveys
                             </Link>
-
-                            <span className="block py-2.5 px-4 text-white opacity-40 text-xs uppercase border-y-[0.5px] my-2">In Preview</span>
-
-                            <a href="https://hexa-mypd.herokuapp.com/app.html" className="block rounded transition duration-200 hover:bg-red-700 text-white capitalize py-2.5 px-4">
-                                Use Hexa
-                            </a>
-
-                            <a href="https://hexa-mypd.herokuapp.com/train.html" className="block rounded transition duration-200 hover:bg-red-700 text-white capitalize py-2.5 px-4">
-                                Train Hexa
-                            </a>
                         </>
                     )}
 
