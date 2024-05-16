@@ -181,6 +181,9 @@ const Play: NextPage = ({ query }: any) => {
         onSuccess: (response: AxiosResponse) => {
             // Commenting status updates toasts
             // toast.success("left swiped hashtags updated");
+
+            // fetch new hashtag because mode does not change so useEffect will not be called
+            fetchNewHashtag()
         },
         onError: (error: AxiosError) => {
             toast.error("Something went wrong, please try again.");
