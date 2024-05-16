@@ -17,7 +17,7 @@ const Play: NextPage = ({ query }: any) => {
 
     const [surveyState, updateSurveyState] = useImmer<{
         id: string;
-        uniqeId: string;
+        uniqueId: string;
         projectRef: string;
 
         leftSwipedCardRefs: Array<{
@@ -74,7 +74,7 @@ const Play: NextPage = ({ query }: any) => {
         isFinalHashtag: boolean;
     }>({
         id: "",
-        uniqeId: "",
+        uniqueId: "",
         projectRef: projectId,
 
         leftSwipedCardRefs: [],
@@ -94,7 +94,7 @@ const Play: NextPage = ({ query }: any) => {
 
             updateSurveyState((prev) => {
                 prev.id = data._id;
-                prev.uniqeId = data.uniqueId;
+                prev.uniqueId = data.uniqueId;
 
                 prev.leftSwipedCardRefs = data.leftSwipedCardRefs;
                 prev.rightSwipedCardRefs = data.rightSwipedCardRefs;
